@@ -20,17 +20,19 @@
 
 ## 当前状态
 
-- **阶段**：ATL-3A — 本地 scaffold-only（benchmax 安装阻塞）
-- **目标**：本地验证 dataset loader 和 rule-based reward，不调用 Castform API
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — Local scaffold ready; benchmax blocked
+- **阶段**：ATL-3B — Python 3.12 venv/pip repair + benchmax import
+- **目标**：本地修复 venv/pip，成功 import benchmax（不调用 Castform API）
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — benchmax import ready; validate_env not run
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
   - check_secrets.py PASS
   - dataset_loader.py PASS（42 train + 7 eval）
   - run_local_reward_smoke.py PASS（5/5）
-  - run_validate_env_stub.py SKIPPED_WITH_REASON（benchmax unavailable）
+  - run_validate_env_stub.py BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN（未伪造 validate_env 成功）
   - validate_castform_local_scaffold.py PASS
+  - benchmax import PASS（benchmax 0.1.2.dev33，命名空间包）
+- **Python 3.12 venv/pip**：通过 `python3.12 -m venv --without-pip` + `/tmp/get-pip.py` 引导（未使用 sudo apt）
 - **未调用 Castform API** / **未上传数据** / **未训练模型**
 
 ## 本地运行

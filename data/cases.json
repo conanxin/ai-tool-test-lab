@@ -3,13 +3,13 @@
     {
       "slug": "castform-hermes-phase-closer-v0",
       "title": "Castform — Hermes Phase Closer v0",
-      "status": "Local scaffold ready; benchmax blocked",
+      "status": "benchmax import ready; validate_env not run",
       "category": "Model fine-tuning platform / RL post-training",
-      "phase": "ATL-3A local scaffold-only",
-      "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run",
+      "phase": "ATL-3B Python venv and benchmax repair",
+      "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run、Python 3.12 venv/pip 修复",
       "cloud_role": "GPU training / Castform run",
-      "summary": "为 Castform Hermes Phase Closer v0 准备 42 条训练样本 + 7 条评估样本，全部脱敏，validate_jsonl PASS。",
-      "updated_at": "2025-06-12"
+      "summary": "Python 3.12 venv/pip 修复完成（without-pip + /tmp/get-pip.py），benchmax 0.1.2.dev33 安装成功并可 import；validate_env 仍未运行。42 条训练样本 + 7 条评估样本，全部脱敏，validate_jsonl PASS。",
+      "updated_at": "2026-06-13"
     }
   ]
 }

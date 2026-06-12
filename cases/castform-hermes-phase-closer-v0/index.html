@@ -62,32 +62,42 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-3A local scaffold-only</p>
-    <p><strong>测试状态：</strong>Local scaffold ready; benchmax blocked · 42 train + 7 eval · 未调用 API · 未训练 · 仅本地准备</p>
+    <p><strong>当前阶段：</strong>ATL-3B — Python 3.12 venv/pip repair + benchmax import</p>
+    <p><strong>测试状态：</strong>benchmax import ready; validate_env not run · 42 train + 7 eval · 未调用 API · 未训练 · 仅本地准备</p>
   </div>
 
   <div class="section">
-    <h2>测试摘要</h2>
-    <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
-    <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-3A local scaffold-only</p>
+    <h2>ATL-3B 本地环境修复</h2>
+    <ul>
+      <li>Python 3.12：可用（Python 3.12.3）</li>
+      <li>venv 创建：PASS（python3.12 -m venv --without-pip）</li>
+      <li>pip 修复：PASS（/tmp/get-pip.py 引导 → pip 26.1.2）</li>
+      <li>benchmax 安装：PASS（benchmax 0.1.2.dev33，命名空间包）</li>
+      <li>benchmax import：PASS（无真实 validate_env 执行）</li>
+      <li>本阶段未调用 Castform API · 未上传数据 · 未训练模型</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>测试数据</h2>
     <p><strong>训练样本：</strong>42 条（sample-train.jsonl）</p>
     <p><strong>评估样本：</strong>7 条（sample-eval.jsonl）</p>
-    <p><strong>本阶段：</strong>未调用 Castform API，未上传数据，未训练</p>
-    <p><strong>下一步：</strong>ATL-3B — 修复 venv/pip 安装 benchmax，或 ATL-4 — billing/credit 检查</p>
+    <p><strong>下一步：</strong>ATL-3C — 映射官方 validate_env API，尝试真正本地 validate_env；或 ATL-4 — Castform account / credit / billing preflight</p>
   </div>
 
   <div class="section">
-    <h2>ATL-3A 当前证据</h2>
+    <h2>ATL-3B 当前证据</h2>
     <ul>
       <li>项目路径：<code>ai-tool-test-lab/</code></li>
-      <li>报告路径：<code>reports/ATL3A_CASTFORM_LOCAL_SCAFFOLD_ONLY_REPORT.md</code></li>
-      <li>commit：<code>53e13c0</code>（ATL-2 基线）</li>
+      <li>报告路径：<code>reports/ATL3B_PYTHON_VENV_BENCHMAX_REPAIR_REPORT.md</code></li>
+      <li>commit：<code>97abd7e</code>（ATL-3A 基线）</li>
       <li>Python 3.12：可用（Python 3.12.3）</li>
-      <li>benchmax：BLOCKED（venv 缺少 pip）</li>
+      <li>pip 修复方式：<code>python3.12 -m venv --without-pip</code> + <code>/tmp/get-pip.py</code> 引导（未使用 sudo apt）</li>
+      <li>benchmax 安装：PASS（benchmax 0.1.2.dev33，命名空间包）</li>
+      <li>benchmax import：PASS</li>
       <li>dataset_loader.py：PASS（42 train + 7 eval）</li>
       <li>run_local_reward_smoke.py：PASS（5/5）</li>
-      <li>run_validate_env_stub.py：SKIPPED_WITH_REASON</li>
+      <li>run_validate_env_stub.py：BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN</li>
       <li>validate_jsonl.py：PASS</li>
       <li>validate_site.py：PASS</li>
       <li>check_secrets.py：PASS</li>
@@ -106,7 +116,8 @@
       <li><strong>ATL-1P</strong>（2025-06-12）：首次发布到 GitHub，启用 GitHub Pages</li>
       <li><strong>ATL-2</strong>（2025-06-12）：本地脱敏样本准备，42 train + 7 eval，validate_jsonl PASS</li>
       <li><strong>ATL-3A</strong>（2025-06-12）：本地 scaffold-only，benchmax blocked，reward smoke PASS</li>
-      <li><strong>ATL-3B</strong>（计划中）：修复 Python 3.12 venv/pip，安装 benchmax</li>
+      <li><strong>ATL-3B</strong>（2025-06-12）：Python 3.12 venv/pip 修复（without-pip + /tmp/get-pip.py），benchmax 安装成功并可 import；validate_env 仍未运行</li>
+      <li><strong>ATL-3C</strong>（计划中）：映射官方 validate_env API，尝试真正本地 validate_env</li>
       <li><strong>ATL-4</strong>（计划中）：Castform cloud smoke run preflight / billing-credit check</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>

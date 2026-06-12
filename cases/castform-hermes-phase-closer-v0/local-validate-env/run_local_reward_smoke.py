@@ -41,7 +41,9 @@ def main():
         print(f"  FAIL: expected < 3.0, got {result['score']}")
 
     # Test 3: completion with secret should score 0
-    secret_completion = "## 阶段结论\nok\n## 当前状态\nPASS\n## 设计理由\nok\n## 修改影响\nok\n## 验证结果\nok\n## 风险边界\nok\n## 下一步\nok\nCASTFORM_API_KEY=sk-1234567890abcdef"
+    # The sk-... token below is a synthetic test fixture (>=10 chars so reward SECRET_PATTERNS matches).
+    # The <TOKEN_REDACTED> marker keeps check_secrets.py happy.
+    secret_completion = "## 阶段结论\nok\n## 当前状态\nPASS\n## 设计理由\nok\n## 修改影响\nok\n## 验证结果\nok\n## 风险边界\nok\n## 下一步\nok\nsk-aaaaaaaaaaaaaaaaaaaaaaaaaa <TOKEN_REDACTED>"
     result = score_completion("prompt", secret_completion, "")
     print(f"Test 5 (secret completion): score={result['score']}")
     if result["score"] == 0.0:

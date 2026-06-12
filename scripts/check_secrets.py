@@ -34,7 +34,7 @@ PATTERNS = [
     (r"password\s*[:=]\s*['\"][^'\"]{3,}", "password assignment"),
 ]
 
-IGNORE_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules"}
+IGNORE_DIRS = {".git", "__pycache__", ".venv", "venv", ".venv-castform-local", ".venv*", "node_modules"}
 IGNORE_FILES = {"check_secrets.py"}
 
 TEXT_EXTENSIONS = {

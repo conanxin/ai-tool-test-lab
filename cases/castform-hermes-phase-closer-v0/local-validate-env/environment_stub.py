@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-environment_stub.py — ATL-3A scaffold only
+environment_stub.py — ATL-3B scaffold only
 Do not launch cloud training from this file.
 """
 
-# ATL-3A: benchmax is blocked (venv lacks pip).
-# This file is a placeholder for future ATL-3B/ATL-4 integration.
-# Do not import benchmax here until venv/pip is fixed.
-# Do not call upload_training_run, launch_training_run, or TrainerClient.
+# ATL-3B: benchmax imports cleanly (no real validate_env executed).
+# This file is a placeholder for future ATL-3C/ATL-4 integration.
+# Do not import benchmax here. Do not call any Castform cloud training
+# functions (e.g. the three call sites listed in the safety contract).
 
 
 def validate_environment_stub() -> dict:

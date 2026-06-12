@@ -1,33 +1,62 @@
 #!/usr/bin/env python3
 """
-run_validate_env_stub.py — validate_env stub
-标准库 only。
+run_validate_env_stub.py — validate_env stub (ATL-3B).
+
+Three explicit, non-deceptive states:
+
+  SKIPPED_WITH_REASON               — benchmax unavailable
+  BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN  — benchmax imports, but no real validate_env was executed
+  VALIDATE_ENV_LOCAL_PASS           — only if a true local validate_env runs without API key / upload / training
+
+This stage (ATL-3B) targets the second state only. It MUST NOT fabricate cloud
+or validate_env success.
 """
 
+from __future__ import annotations
 
-def main():
-    # Try to import benchmax (expected to fail in ATL-3A)
-    benchmax_available = False
+import importlib
+import sys
+
+
+def _try_import_benchmax():
     try:
-        import benchmax
-        benchmax_available = True
-        print("benchmax: available")
-    except ImportError:
+        m = importlib.import_module("benchmax")
+        return True, m
+    except Exception as e:  # pragma: no cover - explicit error reporting
+        return False, e
+
+
+def main() -> int:
+    available, mod_or_err = _try_import_benchmax()
+
+    if not available:
         print("benchmax: unavailable")
+        print(f"benchmax import error: {mod_or_err!r}")
+        print()
+        print("STATUS: SKIPPED_WITH_REASON")
+        print("REASON: benchmax unavailable — Python 3.12 venv pip still missing or install incomplete")
+        print("NO_CASTFORM_API_CALL")
+        print("NO_UPLOAD")
+        print("NO_TRAINING")
+        print("NO_VALIDATE_ENV_LOCAL_PASS")
+        return 0
 
-    if not benchmax_available:
-        print("\nSKIPPED_WITH_REASON: benchmax unavailable because Python 3.12 venv lacks pip")
-        print("no Castform API call")
-        print("no upload")
-        print("no training")
-        print("\nNote: ATL-3A scaffold only. Install benchmax in ATL-3B to run real validate_env.")
-        return
-
-    # If benchmax is available, run validate_env (not expected in ATL-3A)
-    print("benchmax is available. Running validate_env...")
-    # Placeholder for real validate_env call
-    # Do not call upload_training_run, launch_training_run, or TrainerClient
+    m = mod_or_err
+    print("benchmax: available")
+    print(f"benchmax module: {m}")
+    print(f"benchmax file: {getattr(m, '__file__', '')}")
+    print(f"benchmax version: {getattr(m, '__version__', '')}")
+    print()
+    print("STATUS: BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN")
+    print("REASON: benchmax imports cleanly, but this stub did NOT execute a real validate_env")
+    print("        (no API call, no upload, no training, no API key required).")
+    print("        A true local validate_env will be attempted in ATL-3C by mapping the official API.")
+    print("NO_CASTFORM_API_CALL")
+    print("NO_UPLOAD")
+    print("NO_TRAINING")
+    print("NO_VALIDATE_ENV_LOCAL_PASS")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

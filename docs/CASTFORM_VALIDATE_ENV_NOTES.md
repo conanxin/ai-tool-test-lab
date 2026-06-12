@@ -1,53 +1,88 @@
-# ATL-3A: Castform local validate_env scaffold 笔记
+# Castform validate_env — 本地验证笔记
 
-## 阶段结论
+本文件记录 ATL-3B 关于 `validate_env` 与 `benchmax` 的本地观察，
+以及为什么本阶段不运行真实 cloud validate_env。
 
-ATL-3A 已完成本地 scaffold-only 阶段。benchmax 安装因 Python 3.12 venv 缺少 pip 而阻塞，但本地 dataset loader 和 rule-based reward smoke 均已通过验证。
+## ATL-3B 结论
 
-## Python 3.12 状态
+| 项 | 状态 | 备注 |
+|----|------|------|
+| Python 3.12 venv | PASS | `python3.12 -m venv --without-pip` |
+| pip 修复 | PASS | `/tmp/get-pip.py` 引导（未使用 sudo apt） |
+| benchmax 安装 | PASS | benchmax 0.1.2.dev33，命名空间包 |
+| benchmax import | PASS | `import benchmax` 通过 |
+| 真实 validate_env | **未运行** | 本阶段仅 import，未执行 cloud validate_env |
 
-- **可用**：Python 3.12.3（系统安装）
-- **venv 创建**：成功（使用 `--without-pip` 创建）
-- **pip 缺失**：`python3.12-venv` 包未完整安装，`sudo dpkg --configure -a` 超时
-- **不继续修复**：遵循 ATL-3A 硬性边界，不运行 sudo apt/dpkg
+## pip 修复路径
 
-## benchmax 状态
+### 失败路径 A：`python3.12 -m venv` + `ensurepip`
 
-- **BLOCKED**：venv 缺少 pip，无法安装 benchmax
-- **不伪造成功**：run_validate_env_stub.py 明确输出 SKIPPED_WITH_REASON
-- **不调用 Castform API**：未设置 CASTFORM_API_KEY，未调用任何云端 API
+WSL 上 Debian 默认不安装 `python3.12-venv`，`ensurepip` 不可用。
+错误信息原文：
 
-## 本地 reward smoke 与真实 validate_env 的区别
+> The virtual environment was not created successfully because ensurepip is not
+> available. On Debian/Ubuntu systems, you need to install the python3.12-venv package.
 
-| 维度 | 本地 reward smoke | 真实 validate_env |
-|------|-------------------|-------------------|
-| 依赖 | 标准库 only | benchmax / Castform SDK |
-| 输入 | 本地 JSONL 样本 | 云端训练配置 |
-| 输出 | rule-based score | 模型训练指标 |
-| 目标 | 检查评分逻辑 | 验证数据格式和训练环境 |
-| 阶段 | ATL-3A | ATL-3B / ATL-4 |
+**结论**：避免 `sudo apt install python3.12-venv`（硬性边界要求）。
 
-## 为什么 ATL-3A 不设置 API key
+### 成功路径 B：`--without-pip` + `/tmp/get-pip.py`
 
-- 本阶段只验证本地 scaffold，不涉及云端交互
-- API key 只在真实云端 run 前设置（ATL-4）
-- 避免在本地文件中留下真实密钥痕迹
+```bash
+rm -rf .venv-castform-local
+python3.12 -m venv --without-pip .venv-castform-local
+curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+.venv-castform-local/bin/python /tmp/get-pip.py
+.venv-castform-local/bin/python -m pip --version     # pip 26.1.2
+.venv-castform-local/bin/python -m pip install benchmax
+```
 
-## 什么时候才进入 ATL-4
+- `get-pip.py` 仅放在 `/tmp`，不复制进项目目录，不 commit。
+- 整个过程无 `sudo apt` / `sudo dpkg`。
 
-1. ATL-3B 修复 venv/pip 并安装 benchmax（可选，可直接用系统 Python 运行）
-2. 确认 Castform 账号状态、credit、billing
-3. 决定值得投入后，设置 CASTFORM_API_KEY
-4. 运行真实 validate_env 或 cloud smoke run
+## benchmax 包形态
 
-## 现有数据限制
+`benchmax 0.1.2.dev33` 是一个 **namespace package**：
 
-- 样本总数：49 条（42 train + 7 eval）
-- 目标 50 条，差 1 条
-- 合成样本比例：71%
-- 已在 `dataset-notes.md` 中记录为已知限制
+```python
+import benchmax
+# <module 'benchmax' (namespace) from ['.../site-packages/benchmax']>
+# benchmax file: None
+# benchmax version: ''
+```
 
-## 下一步
+namespace package 不带 `__init__.py`，`__file__` 为 `None`，`__version__` 为空。
+`importlib.import_module("benchmax")` 成功即表示入口可达。
 
-- **ATL-3B**：修复 Python 3.12 venv/pip，安装 benchmax
-- **ATL-4**：Castform cloud smoke run preflight / billing-credit check
+## run_validate_env_stub.py 三态
+
+为防止伪造 cloud success，stub 现在显式区分：
+
+| 状态 | 含义 |
+|------|------|
+| `SKIPPED_WITH_REASON` | benchmax 不可导入（pip/venv 异常） |
+| `BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN` | benchmax 可导入，但 stub 未执行真实 validate_env（本阶段目标状态） |
+| `VALIDATE_ENV_LOCAL_PASS` | 只有真正本地 validate_env 且无需 API key / 无上传 / 无训练时才允许 |
+
+本阶段 ATL-3B 输出 `BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN`。
+
+## 为什么本阶段仍不运行 cloud training
+
+- 没有 `CASTFORM_API_KEY`（硬性边界：不读取/不使用/不创建）。
+- 没有 account / credit / billing 验证（属于 ATL-4）。
+- 不调用 `upload_training_run` / `launch_training_run` / `TrainerClient`（硬性边界）。
+- 仅本地 import benchmax ≠ 运行 validate_env ≠ 训练。
+
+## 下一步 ATL-3C 计划（建议）
+
+在 ATL-3C 中尝试映射官方 `validate_env` API：
+1. 通过 PyPI 主页 / GitHub README 找 `benchmax` 的真实入口模块（可能不在根命名空间下）。
+2. 检查官方是否提供 "validate env without uploading" 的纯本地模式。
+3. 若官方仅提供云端路径，本地只能做"伪 validate_env"（导入 + 字段检查），不算 `VALIDATE_ENV_LOCAL_PASS`。
+
+若 ATL-3C 仍无法真正本地 validate_env → 进入 ATL-4 做 Castform account / credit / billing preflight。
+
+## 已知限制
+
+1. namespace package 的 `__version__` 为空，未来若需要版本判定需读 `pyproject.toml` / `pip show benchmax`。
+2. 当前未执行 `benchmax.<some_submodule>`（可能真正入口在 `benchmax.cli` / `benchmax.api` 等子模块），需在 ATL-3C 探索。
+3. 本地未跑 cloud-side smoke run，无网络侧 cost / latency 反馈。
