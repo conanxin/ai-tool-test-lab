@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "slug": "castform-hermes-phase-closer-v0",
+      "title": "Castform — Hermes Phase Closer v0",
+      "status": "Local scaffold ready",
+      "category": "Model fine-tuning platform / RL post-training",
+      "local_role": "数据整理、页面记录、JSONL 样本、reward 脚手架",
+      "cloud_role": "GPU training / Castform run",
+      "phase": "未调用 API，未训练，仅本地准备"
+    }
+  ]
+}

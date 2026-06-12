@@ -1,0 +1,39 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Node (even if not used, guard against accidental commits)
+node_modules/
+package-lock.json
+
+# Secrets — NEVER commit these
+.env
+*.env
+.env.*
+*.key
+*.pem
+*.p12
+secrets/
+config.local.json
+
+# Build artifacts
+dist/
+build/
+*.log
+
+# Reports may contain local paths — review before committing
+reports/*.local.md

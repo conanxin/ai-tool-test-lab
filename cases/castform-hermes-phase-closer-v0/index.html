@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Castform — Hermes Phase Closer v0 | AI Tool Test Lab</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<style>
+  .case-page { max-width: 800px; margin: 0 auto; }
+  .case-page h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .case-page .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 1.5rem; }
+  .notice-box {
+    background: #2d1b1b;
+    border: 1px solid #8b3a3a;
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    color: #e8b4b4;
+  }
+  .notice-box strong { color: #ff7b72; }
+  .notice-box ul { margin: 0.5rem 0 0 1.2rem; }
+  .notice-box li { margin-bottom: 0.3rem; }
+  .section { margin: 2rem 0; }
+  .section h2 { font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 1rem; }
+  .section p, .section li { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .section ul { margin-left: 1.2rem; }
+  .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .status-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.75rem 1rem; }
+  .status-item .label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .status-item .value { font-size: 1rem; color: var(--fg); margin-top: 0.2rem; }
+  .value.ready { color: var(--accent2); }
+  .value.pending { color: #d29922; }
+  .value.blocked { color: #ff7b72; }
+  .back { display: inline-block; margin-bottom: 1rem; color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+  .back:hover { text-decoration: underline; }
+  .file-list { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+  .file-list li { margin-bottom: 0.4rem; }
+  .file-list a { color: var(--accent); text-decoration: none; }
+  .file-list a:hover { text-decoration: underline; }
+  @media (max-width: 560px) { .status-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="case-page">
+  <a href="../../index.html" class="back">← 返回首页</a>
+
+  <h1>Castform — Hermes Phase Closer v0</h1>
+  <p class="subtitle">测试 Castform 作为 Hermes Agent Phase Closer 的 RL post-training 平台</p>
+
+  <div class="notice-box">
+    <strong>⚠ 本阶段声明</strong>
+    <ul>
+      <li>本阶段没有真实训练。</li>
+      <li>本阶段没有调用 Castform API。</li>
+      <li>本阶段没有上传数据。</li>
+      <li>本阶段没有使用真实 CASTFORM_API_KEY。</li>
+      <li>本阶段只是为了建立开源测试记录框架。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>项目概览</h2>
+    <p>Castform 是一个模型微调平台，支持 RL（强化学习）后训练。本项目测试将其用于训练一个 "Hermes Phase Closer" 模型：输入 agent 阶段报告，输出结构化的阶段总结，包含结论、状态、设计理由、修改影响、验证结果、风险边界和下一步。</p>
+  </div>
+
+  <div class="section">
+    <h2>为什么测试 Castform</h2>
+    <ul>
+      <li>现有 Hermes Agent 在 phase 收尾时依赖模板填充，缺乏对上下文的深度理解。</li>
+      <li>希望训练一个专用小模型，专门负责从阶段报告中提取关键信息并生成结构化输出。</li>
+      <li>Castform 提供 RL 训练环境，可能比传统 SFT 更适合这种结构化生成任务。</li>
+      <li>需要评估：成本、数据需求、训练稳定性、输出质量。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>测试目标：Hermes Phase Closer v0</h2>
+    <p>训练一个模型，使其能够：</p>
+    <ul>
+      <li>输入：一份 agent 阶段报告（Markdown 格式，含任务列表、验证结果、问题记录）。</li>
+      <li>输出：JSON 结构化的阶段总结，包含 7 个字段：阶段结论、当前状态、设计理由、修改影响、验证结果、风险边界、下一步。</li>
+      <li>约束：输出中不得出现任何 token、api_key、secret、密码等敏感信息。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>本地电脑能做什么</h2>
+    <ul>
+      <li>整理和清洗训练数据（JSONL 格式）。</li>
+      <li>编写 reward 评分标准（rubric）。</li>
+      <li>本地 dry-run 验证数据格式和样本质量。</li>
+      <li>编写和测试调用 Castform API 的 Python 脚本（stub 阶段）。</li>
+      <li>维护测试记录页面和文档。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>什么必须交给 Castform 云端</h2>
+    <ul>
+      <li>GPU 训练（RL fine-tuning）。</li>
+      <li>模型评估和 playground 测试。</li>
+      <li>大规模推理和 batch 生成。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>测试流程</h2>
+    <ol>
+      <li>Phase 0：本地开源项目 scaffold（当前阶段）。</li>
+      <li>Phase 1：准备 30–50 条脱敏样本。</li>
+      <li>Phase 2：本地 validate_env。</li>
+      <li>Phase 3：确认 Castform 账号、credit、billing。</li>
+      <li>Phase 4：小规模云端 smoke run。</li>
+      <li>Phase 5：playground 评估。</li>
+      <li>Phase 6：决定是否接入 Hermes/OpenClaw。</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>数据准备方案</h2>
+    <p>使用合成脱敏样本。每个样本包含：</p>
+    <ul>
+      <li><code>prompt</code>：虚构的 agent 阶段报告。</li>
+      <li><code>ground_truth</code>：期望的结构化 JSON 输出。</li>
+    </ul>
+    <p>样本覆盖场景：成功阶段、失败阶段、部分完成阶段、需要回滚阶段。</p>
+  </div>
+
+  <div class="section">
+    <h2>样本格式</h2>
+    <p>参见 <a href="sample-train.jsonl">sample-train.jsonl</a> 和 <a href="sample-eval.jsonl">sample-eval.jsonl</a>。</p>
+    <pre style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;overflow-x:auto;font-size:0.85rem;color:var(--fg);">
+{
+  "prompt": "## Phase 2-a 完成报告\n\n任务：实现用户登录模块\n验证：pytest 通过 12/12\n问题：无\n下一步：Phase 2-b 权限管理",
+  "ground_truth": "{\"conclusion\":\"用户登录模块已完成\",\"status\":\"PASS\",\"design_reason\":\"采用JWT token减少session查询\",\"impact\":\"新增依赖pyjwt，修改了auth中间件\",\"validation\":\"pytest 12/12通过\",\"risk\":\"token过期时间需线上调优\",\"next_step\":\"Phase 2-b 权限管理\"}"
+}
+    </pre>
+  </div>
+
+  <div class="section">
+    <h2>reward 评分标准</h2>
+    <p>参见 <a href="reward-rubric.md">reward-rubric.md</a>。</p>
+    <ul>
+      <li>阶段结论正确（1 分）</li>
+      <li>当前状态清楚（1 分）</li>
+      <li>设计理由明确（1 分）</li>
+      <li>修改影响完整（1 分）</li>
+      <li>验证结果具体（1 分）</li>
+      <li>风险边界清楚（1 分）</li>
+      <li>下一步可执行（1 分）</li>
+      <li>出现 token / api_key / secret 直接 0 分（安全红线）</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>本地验证计划</h2>
+    <ul>
+      <li>验证 JSONL 格式正确性（每行合法 JSON，必需字段存在）。</li>
+      <li>验证 prompt 和 ground_truth 不为空。</li>
+      <li>验证 ground_truth JSON 包含全部 7 个字段。</li>
+      <li>扫描敏感信息泄露（token、key、secret、password）。</li>
+      <li>运行 reward rubric 的本地 dry-run（不调用模型，仅检查评分逻辑）。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>云端训练计划</h2>
+    <ul>
+      <li>Phase 4：上传 30 条样本，启动小规模 smoke run（1–2 个 epoch）。</li>
+      <li>观察训练曲线、reward 变化、输出稳定性。</li>
+      <li>Phase 5：在 playground 用 10 条 hold-out 样本评估。</li>
+      <li>对比基线模型（如 GPT-4o-mini）和训练后模型的输出质量。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>成本与限制</h2>
+    <ul>
+      <li>Castform 训练按 token 和 GPU 时间计费，具体价格需查阅官方文档。</li>
+      <li>本地 GTX 1070 8GB 无法运行训练，只能做数据准备。</li>
+      <li>预计首次 smoke run 成本：$5–$20（取决于模型大小和训练步数）。</li>
+      <li>限制：需要有效的 CASTFORM_API_KEY 和足够的 account credit。</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>当前执行状态</h2>
+    <div class="status-grid">
+      <div class="status-item">
+        <div class="label">Phase 0</div>
+        <div class="value ready">✓ 完成</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Phase 1</div>
+        <div class="value pending">○ 待开始</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Phase 2</div>
+        <div class="value pending">○ 待开始</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Phase 3</div>
+        <div class="value pending">○ 待开始</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Phase 4</div>
+        <div class="value blocked">✗ 需 API key</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Phase 5</div>
+        <div class="value blocked">✗ 需训练完成</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Phase 6</div>
+        <div class="value blocked">✗ 需评估完成</div>
+      </div>
+      <div class="status-item">
+        <div class="label">API 调用</div>
+        <div class="value blocked">✗ 未开始</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>下一步</h2>
+    <p>Phase 1：准备 30–50 条合成脱敏样本，覆盖多种阶段场景。</p>
+  </div>
+
+  <div class="section">
+    <h2>结论</h2>
+    <p>本地 scaffold 已完成。项目结构、文档、样本格式、验证脚本、reward rubric 均已就绪。尚未调用 Castform API，尚未开始训练。等待 Phase 1 数据准备完成后，进入 Phase 2 本地验证。</p>
+  </div>
+
+  <div class="section">
+    <h2>相关文件</h2>
+    <ul class="file-list">
+      <li><a href="test-plan.md">test-plan.md</a> — 详细测试计划</li>
+      <li><a href="local-readiness.md">local-readiness.md</a> — 本地环境评估</li>
+      <li><a href="reward-rubric.md">reward-rubric.md</a> — 评分标准</li>
+      <li><a href="sample-train.jsonl">sample-train.jsonl</a> — 训练样本</li>
+      <li><a href="sample-eval.jsonl">sample-eval.jsonl</a> — 评估样本</li>
+      <li><a href="castform-env-stub.py">castform-env-stub.py</a> — 环境 stub</li>
+    </ul>
+  </div>
+</div>
+
+<footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
+  <p>AI Tool Test Lab — ATL-0 本地 scaffold 阶段</p>
+</footer>
+</body>
+</html>
