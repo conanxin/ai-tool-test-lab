@@ -3,13 +3,13 @@
     {
       "slug": "castform-hermes-phase-closer-v0",
       "title": "Castform — Hermes Phase Closer v0",
-      "status": "Local scaffold ready",
+      "status": "Local dataset ready",
       "category": "Model fine-tuning platform / RL post-training",
-      "phase": "ATL-0 local scaffold complete",
-      "local_role": "数据整理、页面记录、JSONL 样本、reward 脚手架",
+      "phase": "ATL-2 local dataset preparation",
+      "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run",
       "cloud_role": "GPU training / Castform run",
-      "summary": "测试 Castform 作为 Hermes Agent Phase Closer 的 RL post-training 平台。当前为本地 scaffold 阶段，未调用 API，未训练。",
-      "updated_at": "2026-06-12"
+      "summary": "为 Castform Hermes Phase Closer v0 准备 42 条训练样本 + 7 条评估样本，全部脱敏，validate_jsonl PASS。",
+      "updated_at": "2025-06-12"
     }
   ]
 }

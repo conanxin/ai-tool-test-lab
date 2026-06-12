@@ -20,10 +20,10 @@
 
 ## 当前状态
 
-- **阶段**：ATL-1 — 公开发布准备
-- **目标**：完善项目展示质量，适合推送到 GitHub 并启用 GitHub Pages
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — Local scaffold ready
-- **验证**：validate_site.py PASS · check_secrets.py PASS
+- **阶段**：ATL-2 — 本地脱敏样本准备
+- **目标**：为 Castform Hermes Phase Closer v0 准备 42 条训练样本 + 7 条评估样本
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — Local dataset ready
+- **验证**：validate_jsonl.py PASS，validate_site.py PASS，check_secrets.py PASS
 
 ## 本地运行
 
