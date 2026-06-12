@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """
-run_validate_env_stub.py — validate_env stub (ATL-3B).
+run_validate_env_stub.py — historical ATL-3B stub.
 
-Three explicit, non-deceptive states:
+This file is kept only as a historical marker for the ATL-3B milestone.
+In ATL-3C we have a real local validate_env attempt; defer to that script:
 
-  SKIPPED_WITH_REASON               — benchmax unavailable
-  BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN  — benchmax imports, but no real validate_env was executed
-  VALIDATE_ENV_LOCAL_PASS           — only if a true local validate_env runs without API key / upload / training
+    cases/castform-hermes-phase-closer-v0/local-validate-env/run_real_validate_env_attempt.py
 
-This stage (ATL-3B) targets the second state only. It MUST NOT fabricate cloud
-or validate_env success.
+This stub MUST NOT claim a real validate_env has succeeded.
 """
 
 from __future__ import annotations
@@ -29,32 +27,24 @@ def _try_import_benchmax():
 def main() -> int:
     available, mod_or_err = _try_import_benchmax()
 
+    print("=== run_validate_env_stub.py (historical, ATL-3B) ===")
+    print("NOTE: ATL-3B reached benchmax import only.")
+    print("NOTE: ATL-3C uses run_real_validate_env_attempt.py for the real local attempt.")
+    print("no Castform API call intended")
+    print("no upload intended")
+    print("no training intended")
+
     if not available:
         print("benchmax: unavailable")
         print(f"benchmax import error: {mod_or_err!r}")
-        print()
         print("STATUS: SKIPPED_WITH_REASON")
-        print("REASON: benchmax unavailable — Python 3.12 venv pip still missing or install incomplete")
-        print("NO_CASTFORM_API_CALL")
-        print("NO_UPLOAD")
-        print("NO_TRAINING")
-        print("NO_VALIDATE_ENV_LOCAL_PASS")
         return 0
 
     m = mod_or_err
-    print("benchmax: available")
-    print(f"benchmax module: {m}")
+    print("benchmax: available (import only)")
     print(f"benchmax file: {getattr(m, '__file__', '')}")
-    print(f"benchmax version: {getattr(m, '__version__', '')}")
-    print()
-    print("STATUS: BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN")
-    print("REASON: benchmax imports cleanly, but this stub did NOT execute a real validate_env")
-    print("        (no API call, no upload, no training, no API key required).")
-    print("        A true local validate_env will be attempted in ATL-3C by mapping the official API.")
-    print("NO_CASTFORM_API_CALL")
-    print("NO_UPLOAD")
-    print("NO_TRAINING")
-    print("NO_VALIDATE_ENV_LOCAL_PASS")
+    print("STATUS: HISTORICAL_ATL3B_STUB_ONLY — defer to run_real_validate_env_attempt.py")
+    print("NO_VALIDATE_ENV_LOCAL_PASS_FROM_THIS_STUB")
     return 0
 
 

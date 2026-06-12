@@ -20,18 +20,20 @@
 
 ## 当前状态
 
-- **阶段**：ATL-3B — Python 3.12 venv/pip repair + benchmax import
-- **目标**：本地修复 venv/pip，成功 import benchmax（不调用 Castform API）
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — benchmax import ready; validate_env not run
+- **阶段**：ATL-3C — SDK validate_env API mapping & real local validate_env attempt
+- **目标**：本地映射 `benchmax.platform.validation.validate_env`，构造满足 SDK 契约的 `HermesPhaseCloserLocalEnv`，跑真实本地 validate_env（不调用 Castform API）
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — local validate_env attempted; result PASS
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
   - check_secrets.py PASS
+  - validate_castform_local_scaffold.py PASS
+  - validate_atl3c_sdk_mapping.py PASS
   - dataset_loader.py PASS（42 train + 7 eval）
   - run_local_reward_smoke.py PASS（5/5）
-  - run_validate_env_stub.py BENCHMAX_IMPORT_PASS_VALIDATE_ENV_NOT_RUN（未伪造 validate_env 成功）
-  - validate_castform_local_scaffold.py PASS
-  - benchmax import PASS（benchmax 0.1.2.dev33，命名空间包）
+  - inspect_benchmax_validate_env.py PASS（introspection，无调用）
+  - run_real_validate_env_attempt.py **VALIDATE_ENV_LOCAL_PASS**（local contract checks 10/10）
+- **benchmax 状态**：`0.1.2.dev33`，`benchmax.platform.validation.validate_env` 真实存在；`api_key=None` + `local=True` → 完全跳过 `RolloutClient`
 - **Python 3.12 venv/pip**：通过 `python3.12 -m venv --without-pip` + `/tmp/get-pip.py` 引导（未使用 sudo apt）
 - **未调用 Castform API** / **未上传数据** / **未训练模型**
 
