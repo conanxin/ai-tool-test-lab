@@ -184,3 +184,13 @@ STATUS: VALIDATE_ENV_LOCAL_PASS
 ### 下一步
 
 - **ATL-4** — Castform account / credit / billing preflight（需要用户显式提供 API key；仍先 preflight 不真实训练）。
+
+---
+
+## ATL-3C 收口与 ATL-4A 衔接（2026-06-13）
+
+- **ATL-3C 已完成**：real local `validate_env` **PASS**（local contract checks **10/10**）。
+- **ATL-4A 转入** Account / Credit / Billing 人工 preflight scaffold。
+- 在进入 cloud smoke run 之前，**必须**先确认 cost、billing、data retention 风险。
+- 任何人未填写 [account-billing-preflight.md](https://github.com/conanxin/ai-tool-test-lab/blob/main/cases/castform-hermes-phase-closer-v0/account-billing-preflight.md) 之前，仓库不引入真实 `CASTFORM_API_KEY`、不调用 `upload_training_run` / `launch_training_run` / `TrainerClient`。
+- 只有 preflight 结论 = `READY_FOR_CLOUD_SMOKE_RUN` 后，才能进入 ATL-4B。

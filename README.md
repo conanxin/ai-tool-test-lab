@@ -20,15 +20,18 @@
 
 ## 当前状态
 
-- **阶段**：ATL-3C — SDK validate_env API mapping & real local validate_env attempt
-- **目标**：本地映射 `benchmax.platform.validation.validate_env`，构造满足 SDK 契约的 `HermesPhaseCloserLocalEnv`，跑真实本地 validate_env（不调用 Castform API）
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — local validate_env attempted; result PASS
+- **阶段**：ATL-4A — Castform account / credit / billing manual preflight (scaffold ready, awaiting human input)
+- **目标**：在进入云端 smoke run 之前建立人工 preflight checklist 与占位字段；不调用 API、不上传、不训练
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — manual preflight scaffold ready
+- **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
+- **ATL-4A 下一阶段**：用户人工登录 Castform，填写 [account-billing-preflight.md](cases/castform-hermes-phase-closer-v0/account-billing-preflight.md) 中的非敏感字段；只有 `READY_FOR_CLOUD_SMOKE_RUN` 后才进入 ATL-4B
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
   - check_secrets.py PASS
   - validate_castform_local_scaffold.py PASS
   - validate_atl3c_sdk_mapping.py PASS
+  - validate_atl4a_preflight_scaffold.py PASS
   - dataset_loader.py PASS（42 train + 7 eval）
   - run_local_reward_smoke.py PASS（5/5）
   - inspect_benchmax_validate_env.py PASS（introspection，无调用）

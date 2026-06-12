@@ -62,8 +62,8 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-3C — SDK validate_env API mapping</p>
-    <p><strong>测试状态：</strong>local validate_env attempted; result PASS · 42 train + 7 eval · 未调用 API · 未训练 · 仅本地准备</p>
+    <p><strong>当前阶段：</strong>ATL-4A — Account / Credit / Billing Manual Preflight (scaffold ready, awaiting human input)</p>
+    <p><strong>测试状态：</strong>manual preflight scaffold ready · ATL-3C 10/10 PASS · 未调用 API · 未训练 · 仅本地准备</p>
   </div>
 
   <div class="section">
@@ -79,10 +79,37 @@
   </div>
 
   <div class="section">
+    <h2>ATL-4A — Account / Credit / Billing Manual Preflight (scaffold ready)</h2>
+    <p><strong>当前阶段：</strong>Account / Credit / Billing Manual Preflight</p>
+    <ul>
+      <li>本阶段<strong>尚未使用</strong> API key。</li>
+      <li>本阶段<strong>未调用</strong> Castform API。</li>
+      <li>本阶段<strong>未上传</strong>数据。</li>
+      <li>本阶段<strong>未训练</strong>任何模型。</li>
+      <li>本阶段只建立人工 preflight checklist + 占位字段，供后续人工填写。</li>
+    </ul>
+    <p><strong>待人工确认事项</strong>（在 <a href="account-billing-preflight.md">account-billing-preflight.md</a> 中逐项打勾或填写非敏感值）：</p>
+    <ul>
+      <li>Login（能否登录、能否看到 workspace、能否看到 API key 页面）</li>
+      <li>Credit（free credit 余额、当前金额）</li>
+      <li>Billing（是否需要绑卡、计费方式）</li>
+      <li>Auto-charge（是否会自动扣费、能否设置上限）</li>
+      <li>Data deletion（能否删除已上传 dataset / training run）</li>
+      <li>Run cancellation（能否取消进行中的 run）</li>
+      <li>Cost visibility（启动前能否看到预计费用）</li>
+    </ul>
+    <p><strong>下一步：</strong></p>
+    <ul>
+      <li>若人工 preflight 结论 = <code>READY_FOR_CLOUD_SMOKE_RUN</code>，进入 ATL-4B（cloud smoke run dry configuration）。</li>
+      <li>若结论为任何 <code>BLOCKED_BY_*</code>，记录 blocked reason，本仓库继续停在 ATL-4A。</li>
+    </ul>
+  </div>
+
+  <div class="section">
     <h2>测试数据</h2>
     <p><strong>训练样本：</strong>42 条（sample-train.jsonl）</p>
     <p><strong>评估样本：</strong>7 条（sample-eval.jsonl）</p>
-    <p><strong>下一步：</strong>ATL-4 — Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</p>
+    <p><strong>下一步：</strong>ATL-4A — Castform account / credit / billing manual preflight (scaffold ready, awaiting human input)</p>
   </div>
 
   <div class="section">
@@ -119,6 +146,7 @@
       <li><strong>ATL-3A</strong>（2025-06-12）：本地 scaffold-only，benchmax blocked，reward smoke PASS</li>
       <li><strong>ATL-3B</strong>（2025-06-12）：Python 3.12 venv/pip 修复（without-pip + /tmp/get-pip.py），benchmax 安装成功并可 import；validate_env 仍未运行</li>
       <li><strong>ATL-3C</strong>（2026-06-13）：映射 <code>benchmax.platform.validation.validate_env</code>，构造 <code>HermesPhaseCloserLocalEnv(BaseEnv)</code>，真实本地 validate_env <strong>10/10 PASS</strong>（api_key=None + local=True → 零网络、零上传、零训练）</li>
+      <li><strong>ATL-4A</strong>（2026-06-13）：Account / Credit / Billing 人工 preflight scaffold 创建完毕；<code>validate_atl4a_preflight_scaffold.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>；等待用户人工填写 <a href="account-billing-preflight.md">account-billing-preflight.md</a> 后才能进入 ATL-4B</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
