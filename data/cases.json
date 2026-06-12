@@ -3,9 +3,9 @@
     {
       "slug": "castform-hermes-phase-closer-v0",
       "title": "Castform — Hermes Phase Closer v0",
-      "status": "Local dataset ready",
+      "status": "Local scaffold ready; benchmax blocked",
       "category": "Model fine-tuning platform / RL post-training",
-      "phase": "ATL-2 local dataset preparation",
+      "phase": "ATL-3A local scaffold-only",
       "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run",
       "cloud_role": "GPU training / Castform run",
       "summary": "为 Castform Hermes Phase Closer v0 准备 42 条训练样本 + 7 条评估样本，全部脱敏，validate_jsonl PASS。",

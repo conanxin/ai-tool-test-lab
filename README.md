@@ -20,10 +20,18 @@
 
 ## 当前状态
 
-- **阶段**：ATL-2 — 本地脱敏样本准备
-- **目标**：为 Castform Hermes Phase Closer v0 准备 42 条训练样本 + 7 条评估样本
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — Local dataset ready
-- **验证**：validate_jsonl.py PASS，validate_site.py PASS，check_secrets.py PASS
+- **阶段**：ATL-3A — 本地 scaffold-only（benchmax 安装阻塞）
+- **目标**：本地验证 dataset loader 和 rule-based reward，不调用 Castform API
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — Local scaffold ready; benchmax blocked
+- **验证**：
+  - validate_jsonl.py PASS
+  - validate_site.py PASS
+  - check_secrets.py PASS
+  - dataset_loader.py PASS（42 train + 7 eval）
+  - run_local_reward_smoke.py PASS（5/5）
+  - run_validate_env_stub.py SKIPPED_WITH_REASON（benchmax unavailable）
+  - validate_castform_local_scaffold.py PASS
+- **未调用 Castform API** / **未上传数据** / **未训练模型**
 
 ## 本地运行
 
