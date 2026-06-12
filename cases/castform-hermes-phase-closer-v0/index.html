@@ -59,6 +59,95 @@
   </div>
 
   <div class="section">
+    <h2>测试摘要</h2>
+    <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
+    <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
+    <p><strong>当前阶段：</strong>ATL-0 local scaffold complete</p>
+    <p><strong>测试状态：</strong>Local scaffold ready · 未调用 API · 未训练 · 仅本地准备</p>
+  </div>
+
+  <div class="section">
+    <h2>当前阶段：ATL-0 local scaffold complete</h2>
+    <p>本阶段完成了开源测试记录框架的建立：</p>
+    <ul>
+      <li>创建 ai-tool-test-lab 项目结构</li>
+      <li>编写首页、案例页面、文档、脚本</li>
+      <li>创建合成样本（5 条训练 + 3 条评估）</li>
+      <li>编写 reward rubric 和测试计划</li>
+      <li>本地验证通过（validate_site.py PASS，check_secrets.py PASS）</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>本地电脑角色</h2>
+    <ul>
+      <li>整理和清洗训练数据（JSONL 格式）</li>
+      <li>编写 reward 评分标准（rubric）</li>
+      <li>本地 dry-run 验证数据格式和样本质量</li>
+      <li>编写和测试调用 Castform API 的 Python 脚本（stub 阶段）</li>
+      <li>维护测试记录页面和文档</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Castform 云端角色</h2>
+    <ul>
+      <li>GPU 训练（RL fine-tuning）</li>
+      <li>模型评估和 playground 测试</li>
+      <li>大规模推理和 batch 生成</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>为什么不在本地训练</h2>
+    <ul>
+      <li>本地 GPU：GTX 1070 8GB，无法运行 RL fine-tuning</li>
+      <li>本地 RAM：WSL 可用约 7.7GB，不足以加载 7B+ 模型</li>
+      <li>本地 CPU：i7-6700 4C/8T，训练速度极慢</li>
+      <li>Castform 提供云端 GPU 和 RL 环境，是更现实的选择</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>测试时间线</h2>
+    <ul>
+      <li><strong>2026-06-12</strong>：ATL-0 — 本地 scaffold（当前）</li>
+      <li><strong>待定</strong>：ATL-1 — 公开发布准备</li>
+      <li><strong>待定</strong>：ATL-2 — 准备 30–50 条样本</li>
+      <li><strong>待定</strong>：ATL-3 — 本地 validate_env</li>
+      <li><strong>待定</strong>：ATL-4 — 云端 smoke run</li>
+      <li><strong>待定</strong>：ATL-5 — playground 评估</li>
+      <li><strong>待定</strong>：ATL-6 — 决定是否接入 Hermes/OpenClaw</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>下一阶段 ATL-2 计划</h2>
+    <p>准备 30–50 条合成脱敏样本，覆盖以下场景：</p>
+    <ul>
+      <li>成功阶段（PASS）</li>
+      <li>失败阶段（FAIL）</li>
+      <li>部分完成（PARTIAL）</li>
+      <li>需要回滚（ROLLBACK）</li>
+      <li>阻塞等待（BLOCKED）</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>当前证据</h2>
+    <ul>
+      <li><strong>项目路径：</strong>ai-tool-test-lab/</li>
+      <li><strong>报告路径：</strong>reports/ATL0_CASTFORM_EXAMPLE_SCAFFOLD_REPORT.md</li>
+      <li><strong>commit：</strong>d069f86</li>
+      <li><strong>validate_site.py：</strong>PASS</li>
+      <li><strong>check_secrets.py：</strong>PASS</li>
+      <li><strong>未调用 Castform API</strong></li>
+      <li><strong>未上传数据</strong></li>
+      <li><strong>未训练模型</strong></li>
+    </ul>
+  </div>
+
+  <div class="section">
     <h2>项目概览</h2>
     <p>Castform 是一个模型微调平台，支持 RL（强化学习）后训练。本项目测试将其用于训练一个 "Hermes Phase Closer" 模型：输入 agent 阶段报告，输出结构化的阶段总结，包含结论、状态、设计理由、修改影响、验证结果、风险边界和下一步。</p>
   </div>

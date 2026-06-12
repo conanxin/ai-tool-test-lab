@@ -12,11 +12,12 @@ fetch('data/cases.json')
         <div class="case-meta">
           <span class="tag status">${c.status}</span>
           <span class="tag type">${c.category}</span>
+          <span class="tag phase">${c.phase}</span>
         </div>
         <div class="case-desc">
           <p><strong>本地角色：</strong>${c.local_role}</p>
           <p><strong>云端角色：</strong>${c.cloud_role}</p>
-          <p><strong>当前阶段：</strong>${c.phase}</p>
+          ${c.summary ? `<p class="summary">${c.summary}</p>` : ""}
         </div>
       </article>
     `).join('');

@@ -18,15 +18,19 @@
 - 最终结论
 - 是否值得继续使用
 
-## 当前案例
+## 当前状态
 
-| 案例 | 状态 | 类型 |
-|------|------|------|
-| [Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) | Local scaffold ready | Model fine-tuning platform / RL post-training |
+- **阶段**：ATL-1 — 公开发布准备
+- **目标**：完善项目展示质量，适合推送到 GitHub 并启用 GitHub Pages
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — Local scaffold ready
+- **验证**：validate_site.py PASS · check_secrets.py PASS
 
-## 快速开始
+## 本地运行
 
 ```bash
+# 进入项目目录
+cd ai-tool-test-lab
+
 # 本地预览
 python -m http.server 8080
 
@@ -40,6 +44,14 @@ python scripts/check_secrets.py
 ## 新增案例
 
 参见 [docs/ADDING_A_NEW_CASE.md](docs/ADDING_A_NEW_CASE.md)。
+
+## GitHub Pages 发布
+
+参见 [docs/GITHUB_PAGES_DEPLOYMENT.md](docs/GITHUB_PAGES_DEPLOYMENT.md)。
+
+## 项目路线图
+
+参见 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
 ## 项目结构
 

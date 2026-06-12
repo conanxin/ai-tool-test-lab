@@ -4,6 +4,8 @@
   --muted: #9aa0a6;
   --accent: #58a6ff;
   --accent2: #3fb950;
+  --accent3: #d29922;
+  --accent4: #f85149;
   --card: #161b22;
   --border: #30363d;
   --radius: 10px;
@@ -22,11 +24,25 @@ body {
   margin: 0 auto;
 }
 
-header { text-align: center; margin-bottom: 2rem; }
-header h1 { font-size: 2rem; letter-spacing: -0.5px; }
-.subtitle { color: var(--muted); font-size: 1.05rem; margin-top: 0.4rem; }
+header { text-align: center; margin-bottom: 2.5rem; }
+header h1 { font-size: 2.2rem; letter-spacing: -0.5px; }
+.subtitle { color: var(--muted); font-size: 1.1rem; margin-top: 0.4rem; }
 
-.intro { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+.intro { color: var(--muted); margin-bottom: 2.5rem; font-size: 1rem; max-width: 720px; }
+
+.workflow { margin-bottom: 2.5rem; }
+.workflow h2 { font-size: 1.25rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.workflow-steps { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; }
+.step { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.75rem 1rem; text-align: center; min-width: 110px; }
+.step-num { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.step-label { font-size: 0.9rem; font-weight: 600; color: var(--fg); margin-top: 0.2rem; }
+.step-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+.step-arrow { color: var(--muted); font-size: 1.2rem; }
+
+.status-legend { margin-bottom: 2.5rem; }
+.status-legend h2 { font-size: 1.25rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
+.legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--muted); }
 
 .cases h2 { font-size: 1.25rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
 
@@ -41,23 +57,26 @@ header h1 { font-size: 2rem; letter-spacing: -0.5px; }
 }
 .case-card:hover { border-color: var(--accent); }
 
-.case-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.case-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
 .case-card h3 a { color: var(--accent); text-decoration: none; }
 .case-card h3 a:hover { text-decoration: underline; }
 
 .case-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
 .tag {
   font-size: 0.78rem;
-  padding: 0.2rem 0.5rem;
+  padding: 0.2rem 0.55rem;
   border-radius: 999px;
   background: var(--border);
   color: var(--muted);
+  font-weight: 500;
 }
 .tag.status { background: #1f4d2e; color: var(--accent2); }
 .tag.type { background: #1f3a5f; color: var(--accent); }
+.tag.phase { background: #3d2e1f; color: var(--accent3); }
 
 .case-desc { color: var(--muted); font-size: 0.9rem; }
 .case-desc p { margin-bottom: 0.4rem; }
+.case-desc .summary { font-style: italic; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
 
 footer { margin-top: 3rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
 footer a { color: var(--accent); }
@@ -65,4 +84,11 @@ footer a { color: var(--accent); }
 
 @media (min-width: 640px) {
   .case-grid { grid-template-columns: repeat(2, 1fr); }
+  .workflow-steps { justify-content: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .step-arrow { display: none; }
+  .workflow-steps { flex-direction: column; align-items: stretch; }
+  .step { width: 100%; }
 }
