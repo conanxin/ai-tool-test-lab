@@ -62,8 +62,8 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-6C — Support-ready failure bundle (Starter-style redeploy launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> but UI still step 0 failed before any rollout, matching ATL-5B failure shape)</p>
-    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no rollouts · ATL-5D support bundle prepared · ATL-6A starter-style redeploy script ready · ATL-6 launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · UI observed: status=<code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no rollouts · ATL-6C failure bundle prepared · <code>FAILED_STEP_0_NO_ROLLOUTS_REPEATED</code> · likely category <code>FAILED_UNKNOWN_WORKER_BOOTSTRAP_OR_PLATFORM</code> · next: send support request to Castform, await backend logs</p>
+    <p><strong>当前阶段：</strong>ATL-6C — Repeated step 0 failure recorded; support request prepared (Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code>, both step 0 failed before any rollout, matching failure shape across two configurations)</p>
+    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no rollouts · ATL-5D support bundle prepared · ATL-6A starter-style redeploy script ready · ATL-6 launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · local validate_env <code>PASS</code> · upload <code>SUCCESS</code> · launch <code>SUCCESS</code> · 16 train / 4 eval preview · result status <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · ATL-6B redeploy result recorded · ATL-6C observed: status=<code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no rollouts · <code>FAILED_STEP_0_NO_ROLLOUTS_REPEATED</code> · likely category <code>FAILED_UNKNOWN_WORKER_BOOTSTRAP_OR_PLATFORM</code> · support request prepared · next: send to Castform Castie/support, await backend logs</p>
   </div>
 
   <div class="section">
@@ -619,62 +619,77 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
   </div>
 
   <div class="section">
-    <h2 id="atl-6c">ATL-6C — Support-Ready Failure Bundle (After Run 2 Step 0)</h2>
-    <p><strong>Current phase:</strong> Support-ready failure bundle covering Run 1 (<code>c83f971d-...</code>) and Run 2 (<code>56cb5701-...</code>)</p>
-    <p><strong>Status:</strong> <code>FAILED_STEP_0_NO_ROLLOUTS_REPEATED</code></p>
-    <p><strong>Reason:</strong> The starter-style pivots (16 train / 4 eval, no-tools env, <code>run_tool=""</code> no raise, reward 0.0~1.0, no <code>batch_size</code>) did not break the step 0 / no-rollouts pattern. ATL-5B-RESULT and ATL-6 are matching failures. Agent pivots from a third local retry to a Castform-side diagnosis: ask for backend worker bootstrap logs for both runs.</p>
+    <h2 id="atl-6b">ATL-6B — Starter-Style Redeploy Result</h2>
+    <p><strong>Current phase:</strong> Starter-style redeploy result</p>
+    <p><strong>Local validate_env:</strong> <code>PASS</code> · <code>VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code> (5 train + 2 eval rows · <code>local=True</code> · <code>api_key=None</code> · no network)</p>
+    <p><strong>Upload:</strong> <code>SUCCESS</code></p>
+    <p><strong>Launch:</strong> <code>SUCCESS</code></p>
+    <p><strong>Run id:</strong> <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code></p>
+    <p><strong>Base model:</strong> <code>Qwen/Qwen3.5-4B</code></p>
+    <p><strong>Sample count:</strong> 16 train / 4 eval preview</p>
+    <p><strong>Launcher args:</strong> <code>model</code> · <code>learning_rate</code> · <code>num_epochs</code> · <code>group_size</code> · <code>max_rollout_len</code> · <code>max_turns</code> · <code>lora_rank</code> · <code>lora_alpha</code> (no <code>batch_size</code>)</p>
+    <p><strong>Result status:</strong> <code>PASS_CLOUD_SMOKE_LAUNCHED</code></p>
+    <p><strong>Result file:</strong> <a href="starter-style-redeploy/atl6_starter_style_redeploy_result.json">starter-style-redeploy/atl6_starter_style_redeploy_result.json</a> (independent of ATL-5 / ATL-5B result files; <code>api_key_recorded=false</code>; <code>uploaded_payload_present=true</code>; <code>training_started=true</code>; <code>error_category=null</code>)</p>
+    <p><strong>Agent role:</strong> documentation only — agent did not call Castform API, did not visit Castform UI, did not upload, did not launch, did not run the redeploy script. User ran it manually in WSL after explicit authorization <code>I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY</code>.</p>
+  </div>
 
-    <p><strong>Run 1 (ATL-5B-RESULT):</strong></p>
+  <div class="section">
+    <h2 id="atl-6c">ATL-6C — Starter-Style Run Monitor (Repeated Step 0 Failure)</h2>
+    <p><strong>Current phase:</strong> Starter-style run monitor</p>
+    <p><strong>Observed status:</strong> <code>failed</code></p>
+    <p><strong>Step:</strong> <code>0</code></p>
+    <p><strong>Train data:</strong> none</p>
+    <p><strong>Rollouts:</strong> none</p>
+    <p><strong>Repeated failure:</strong> <code>YES</code> · previous run <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> (ATL-5B-RESULT) also failed at step 0 with no rollouts</p>
+    <p><strong>Run 2 identity:</strong> run_id <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · display name <code>simple-c869a30d</code> · actual UI route <code>/train/56cb5701-6b3e-424e-b671-fc2efc932aa8?tab=train</code></p>
+    <p><strong>What worked for Run 2 (proving agent-side config is sound):</strong></p>
     <ul>
-      <li>run_id: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code></li>
-      <li>actual UI route: <code>/train/c83f971d-2b2c-42b8-9774-ca64938c1286?tab=train</code></li>
-      <li>display name: <code>simple-28de6dd2</code></li>
-      <li>status: <code>failed</code> · step: <code>0</code> · no train data · no eval data · no rollouts</li>
+      <li>local validate_env: <code>PASS</code> · <code>VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code></li>
+      <li>upload: <code>SUCCESS</code></li>
+      <li>launch: <code>SUCCESS</code></li>
+      <li>corrected launcher_args accepted (no <code>batch_size</code>, with <code>learning_rate</code>)</li>
+      <li>16 train / 4 eval preview subset uploaded</li>
+      <li>no-tools env with <code>run_tool=""</code> (no raise)</li>
+      <li>reward normalized to 0.0–1.0</li>
+      <li>config tab shows uploaded env and dataset paths</li>
     </ul>
 
-    <p><strong>Run 2 (ATL-6 starter-style redeploy):</strong></p>
+    <p><strong>What failed (matching ATL-5B shape):</strong></p>
     <ul>
-      <li>run_id: <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code></li>
-      <li>actual UI route: <code>/train/56cb5701-6b3e-424e-b671-fc2efc932aa8?tab=train</code></li>
-      <li>display name: <code>simple-c869a30d</code></li>
-      <li>status: <code>failed</code> · step: <code>0</code> · started: about 8 min ago · no train data · no rollouts</li>
-      <li>launcher_args used: <code>model</code>, <code>learning_rate</code>, <code>num_epochs</code>, <code>group_size</code>, <code>max_rollout_len</code>, <code>max_turns</code>, <code>lora_rank</code>, <code>lora_alpha</code> (no <code>batch_size</code>)</li>
-      <li>env: <code>HermesPhaseCloserStarterStyleEnv</code> (BaseEnv, no custom <code>load_dataset</code>, no-tools, <code>run_tool=""</code>, reward 0.0~1.0)</li>
-      <li>local_validate_env_result: <code>VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code></li>
+      <li>training failed at step 0</li>
+      <li>no train data available</li>
+      <li>no model rollouts recorded</li>
+      <li>no visible worker logs or traceback in UI</li>
     </ul>
 
-    <p><strong>What was ruled out (across Run 1 and Run 2):</strong></p>
+    <p><strong>Ruled out (per formal spec):</strong></p>
     <ul>
-      <li><code>batch_size</code> launch arg — removed in ATL-5A fix; not used in Run 2</li>
-      <li>train dataset too small (8 train) — Run 2 uses 16 train</li>
-      <li><code>run_tool</code> raising <code>NotImplementedError</code> — Run 2 returns <code>""</code> without raising</li>
-      <li>reward scale mismatched (0~10) — Run 2 reward returns float in [0.0, 1.0]</li>
-      <li>env complexity / custom <code>load_dataset</code> override / tools — Run 2 is no-tools BaseEnv default</li>
-      <li>local <code>validate_env</code> contract — Run 2 passes local 10/10 checks</li>
-      <li>API key presence — key was present in env at launch time</li>
-      <li>upload failure — Run 2 <code>upload_succeeded: true</code></li>
-      <li>missing run / missing UI route — both runs visible, both <code>/train/&lt;run_id&gt;?tab=train</code> routes render</li>
+      <li>missing API key</li>
+      <li>upload failure</li>
+      <li>unsupported <code>batch_size</code></li>
+      <li>fewer than 16 train examples</li>
+      <li><code>run_tool</code> raising in no-tools env</li>
+      <li>reward not normalized</li>
     </ul>
 
-    <p><strong>Not yet ruled out:</strong></p>
+    <p><strong>Not yet ruled out (per formal spec):</strong></p>
     <ul>
-      <li>Run 2: remote env load failure (env-cls.pkl / env-metadata.json deserialization)</li>
-      <li>Run 2: dataset load failure (blob paths visible to worker?)</li>
-      <li>Run 2: dependency setup failure</li>
-      <li>Run 2: trainer bootstrap failure</li>
-      <li>Run 2: quota / billing / worker internal error</li>
-      <li>Run 2: framework compatibility with <code>Qwen/Qwen3.5-4B</code></li>
+      <li>remote worker bootstrap failure</li>
+      <li>dataset load failure in remote trainer</li>
+      <li>env unpickle / import issue in remote trainer</li>
+      <li>trainer backend internal error</li>
+      <li>quota / runtime / account-level issue</li>
     </ul>
 
-    <p><strong>Likely category:</strong> <code>FAILED_UNKNOWN_WORKER_BOOTSTRAP_OR_PLATFORM</code> (Castform backend issue, not agent-side config)</p>
-    <p><strong>Next step:</strong> paste <a href="starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md">ATL6C_SUPPORT_REQUEST.md</a> into Castform assistant / support, request backend worker bootstrap logs for both <code>c83f971d-...</code> and <code>56cb5701-...</code>. If backend returns a root cause, plan ATL-6D root-cause fix. Do not repeat the launch until the root cause is known.</p>
-    <p><strong>No additional upload. No additional launch.</strong> ATL-6C is a documentation + support-bundle phase only — agent did not call Castform API, did not visit Castform UI, did not upload, did not launch, did not run the redeploy script again, did not run the ATL-5B retry script again, did not record the API key (no prefix, no fragment), did not forge a backend failure reason, did not forge metrics.</p>
+    <p><strong>Likely category:</strong> <code>FAILED_UNKNOWN_WORKER_BOOTSTRAP_OR_PLATFORM</code> (Castform backend, not agent-side config)</p>
+    <p><strong>Next step:</strong> Castform support / Castie backend logs</p>
+    <p><strong>No additional upload. No additional launch.</strong> ATL-6C is a documentation + support-request phase only — agent did not call Castform API, did not visit Castform UI, did not upload, did not launch, did not run the redeploy script again, did not run the ATL-5B retry script again, did not record the API key (no prefix, no fragment), did not forge a backend failure reason, did not forge metrics.</p>
 
     <p><strong>Files (this phase):</strong></p>
     <ul>
-      <li><a href="starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md">starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md</a> — paste-ready support request covering both runs (run_ids, configurations, what was ruled out, what we need from backend, what we can provide back, local env context, current status)</li>
-      <li><a href="starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md">starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md</a> — ruled-out vs not-yet-ruled-out list, likely category, next action</li>
-      <li><a href="../../../scripts/validate_atl6c_support_bundle.py">scripts/validate_atl6c_support_bundle.py</a> — stdlib validator (checks support dir, both files, both run_id tokens, status tag, secret-pattern scan) · PASS</li>
+      <li><a href="starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md">starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md</a> — paste-ready support request: "What Worked" / "What Failed" / "Request" / "Sensitive Information Exclusion" / Run 1 + Run 2 / configuration / local validation / upload artifacts / ruled out / what we need from Castform / what we can provide back / local env context / status</li>
+      <li><a href="starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md">starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md</a> — current status / likely category / ruled out 6 / not yet ruled out 5 / UI-visible evidence (both runs) / read-only SDK probe reuse / next action</li>
+      <li><a href="../../../scripts/validate_atl6c_support_request.py">scripts/validate_atl6c_support_request.py</a> — stdlib validator (per formal spec: <code>ATL6C_SUPPORT_REQUEST.md</code> + <code>ATL6C_FAILURE_SUMMARY.md</code> both exist / both run_id tokens / <code>FAILED_STEP_0_NO_ROLLOUTS_REPEATED</code> / 16 secret patterns + 1 forbidden literal scan) · PASS</li>
     </ul>
   </div>
 
@@ -771,7 +786,7 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6A</strong>（2026-06-13 准备完成，等待用户授权 + 手动运行）：starter-style redeploy（16/4 dataset, no-tools env, 0.0~1.0 reward, no <code>load_dataset</code> override, run_name <code>hermes-phase-closer-starter-style-atl6</code>, 授权语句 <code>I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY</code>）；详见 <a href="starter-style-redeploy/ATL6_STARTER_STYLE_REDEPLOY_NOTES.md">ATL6_STARTER_STYLE_REDEPLOY_NOTES.md</a> + <a href="#atl-6a">本页面 ATL-6A 段</a></li>
       <li><strong>ATL-6</strong>（2026-06-13 用户手动运行 starter-style redeploy）：<code>PASS_CLOUD_SMOKE_LAUNCHED</code>；<strong>run_id</strong> <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · <code>train_samples=16</code> · <code>eval_samples=4</code> · <code>uploaded_payload_present=true</code> · <code>training_started=true</code> · launcher_args 8 项不含 <code>batch_size</code> 含 <code>learning_rate</code> · <code>local_validate_env_result=VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code>；<code>validate_atl6_starter_style_redeploy.py</code> PASS</li>
-      <li><strong>ATL-6C</strong>（2026-06-13）：用户在 Castform UI 观察到 starter-style redeploy 启动后仍 <code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no train data · no rollouts · 失败 shape 与 ATL-5B 一致 → 创建 support-ready failure bundle：<a href="starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md">ATL6C_SUPPORT_REQUEST.md</a>（覆盖两个 run_id，列出 ruled out / not yet ruled out / 需要 backend 给什么 / agent 可提供什么）+ <a href="starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md">ATL6C_FAILURE_SUMMARY.md</a>；<a href="../../../scripts/validate_atl6c_support_bundle.py">validate_atl6c_support_bundle.py</a> PASS；agent 未调用 API、未访问 UI、未上传、未训练、未重复 launch、未重复 retry、未记录 API key（前缀/片段均未记录）、未伪造 backend failure reason、未伪造 metrics</li>
+      <li><strong>ATL-6C</strong>（2026-06-13）：用户在 Castform UI 观察到 starter-style redeploy 启动后仍 <code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no train data · no rollouts · 失败 shape 与 ATL-5B 一致 → 创建 support-ready failure bundle：<a href="starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md">ATL6C_SUPPORT_REQUEST.md</a>（覆盖两个 run_id, What Worked / What Failed / Request / Sensitive Information Exclusion / 配置 / 本地 validation / upload artifacts / ruled out / 需要 Castform 给什么 / agent 可提供什么 / 本地 env 上下文 / 当前状态）+ <a href="starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md">ATL6C_FAILURE_SUMMARY.md</a>（ruled out 6 / not yet ruled out 5 / UI 可见证据 / read-only SDK probe 复用 / next action）；<a href="../../../scripts/validate_atl6c_support_request.py">validate_atl6c_support_request.py</a> PASS；agent 未调用 API、未访问 UI、未上传、未训练、未重复 launch、未重复 retry、未记录 API key（前缀/片段均未记录）、未伪造 backend failure reason、未伪造 metrics</li>
       <li><strong>ATL-6D</strong>（计划中，等 Castform backend 日志回报）：根因修复阶段；可能分支：改 env packaging / 改 dataset upload 路径 / 改 launcher_args / 申请 starter-task 已知好配置做 binary search</li>
       <li><strong>ATL-6</strong>（更广义的"下一个工具测试案例"计划，仍待定）</li>
     </ul>
@@ -1034,7 +1049,7 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-6C support-ready failure bundle (Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code>, both step 0 failed before any rollout, awaiting Castform backend logs) 阶段</p>
+  <p>AI Tool Test Lab — ATL-6C starter-style run monitor (Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code>, both step 0 failed before any rollout, support request prepared for Castform Castie) 阶段</p>
 </footer>
 </body>
 </html>

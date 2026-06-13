@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-6C — Support-ready failure bundle（Run 1 `c83f971d-2b2c-42b8-9774-ca64938c1286` + Run 2 `56cb5701-6b3e-424e-b671-fc2efc932aa8`，两个 run 都 step 0 failed before any rollout；agent 停止本地第三次 retry，pivot 到向 Castform backend 索要 worker bootstrap 日志）
-- **目标**：记录 ATL-6 starter-style redeploy launch 成功但 UI 仍 step 0 failed 的事实；构造跨 Run 1 / Run 2 的支持请求，等待 backend 回报根因；agent 不调用 Castform API、不访问 UI、不重复 launch、不伪造 metrics
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — starter-style redeploy launched (PASS_CLOUD_SMOKE_LAUNCHED) but UI still step 0 failed, matching ATL-5B failure shape; awaiting Castform backend logs
+- **阶段**：ATL-6C — Starter-style run monitor; repeated step 0 failure recorded; support request prepared (Run 1 `c83f971d-2b2c-42b8-9774-ca64938c1286` + Run 2 `56cb5701-6b3e-424e-b671-fc2efc932aa8` both step 0 failed before any rollout; agent stops retrying locally, pivots to asking Castform backend for worker bootstrap logs)
+- **目标**：记录 ATL-6 starter-style redeploy launch 成功但 UI 仍 step 0 failed 的事实；构造跨 Run 1 / Run 2 的支持请求（What Worked / What Failed / Request / Sensitive Information Exclusion），等待 backend 回报根因；agent 不调用 Castform API、不访问 UI、不重复 launch、不伪造 metrics
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — repeated step 0 failure; support request prepared
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -154,14 +154,16 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
   - `local_validate_env_result = VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)` —— 上传前本地 contract 真实跑通（`.venv-castform-local/bin/python validate_starter_style_env.py`）
   - 写入 `cases/.../starter-style-redeploy/atl6_starter_style_redeploy_result.json` —— 独立 result 文件，不覆盖 ATL-5 / ATL-5B 历史
   - `validate_atl6_starter_style_redeploy.py` PASS（result JSON 出现后从 SKIPPED 模式切到 normal 模式）
-- **ATL-6C 收口**（用户在 Castform UI 观察到 starter-style redeploy 启动后仍 `failed` / `step=0` / no train data / no rollouts / display name `simple-c869a30d`；失败 shape 与 ATL-5B 一致）：
-  - `cases/.../starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md` — 跨 Run 1 + Run 2 的支持请求（run_ids / Run 2 配置 / local validation / upload artifacts / ruled out 9 项 / not yet ruled out 6 项 / 需要 Castform backend 给什么 4 项 / agent 可提供什么 5 项 / 本地 env 上下文 / 当前状态 / 镜像 ATL-5D 格式）
-  - `cases/.../starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md` — ruled out 9 项 + not yet ruled out 6 项 + UI 可见证据（两个 run 各自列出）+ read-only SDK probe 复用 + next action（不要再 retry，等 backend 根因）
-  - `scripts/validate_atl6c_support_bundle.py` — stdlib 验证器（per formal spec）：support dir / `ATL6C_SUPPORT_REQUEST.md` + `ATL6C_FAILURE_SUMMARY.md` 两个文件存在 / 两个 run_id token (`c83f971d-...` + `56cb5701-...`) 都在 / 状态标签 `FAILED_STEP_0_NO_ROLLOUTS_REPEATED` 都在 / 16 secret patterns + 1 forbidden literal scan，**PASS**
+- **ATL-6B 收口**（Starter-style redeploy 结果记录到案例页）：
+  - 本地 `validate_env` PASS · upload SUCCESS · launch SUCCESS · run_id `56cb5701-6b3e-424e-b671-fc2efc932aa8` · base model `Qwen/Qwen3.5-4B` · 16 train / 4 eval · result status `PASS_CLOUD_SMOKE_LAUNCHED`
+- **ATL-6C 收口**（用户在 Castform UI 观察到 starter-style redeploy 启动后仍 `failed` / `step=0` / no train data / no rollouts / display name `simple-c869a30d`；失败 shape 与 ATL-5B 一致；repeated failure YES）：
+  - `cases/.../starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md` — paste-ready 请求（What Worked / What Failed / Request / Sensitive Information Exclusion / Run 1 + Run 2 / configuration / local validation / upload artifacts / ruled out / what we need from Castform / what we can provide back / local env context / status）
+  - `cases/.../starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md` — current status / likely category / ruled out 6 项 / not yet ruled out 5 项 / UI 可见证据（两个 run 各自列出）/ read-only SDK probe 复用 / next action
+  - `scripts/validate_atl6c_support_request.py` — stdlib 验证器（per formal spec）：两个 md 文件存在 / 两个 run_id token (`c83f971d-...` + `56cb5701-...`) 都在 / 状态标签 `FAILED_STEP_0_NO_ROLLOUTS_REPEATED` 都在 / 16 secret patterns + 1 forbidden literal scan，**PASS**
 - **ATL-6C 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未重复运行 `atl6_starter_style_redeploy.py`；agent 未重复运行 `atl5b_second_upload_launch_retry.py`；API key 未记录；API key 前缀或片段未记录；未提交 `.env`；未提交 `.venv`；未记录信用卡 / cookie / Authorization header / 用户邮箱 / 截图；不伪造 `run_id`；不伪造 `experiment_url`；不伪造 backend failure reason；不伪造 metrics；不删除旧 run `56cb5701-...` / `c83f971d-...`；不重复 launch
-- **ATL-6C 下一步**：用户把 `ATL6C_SUPPORT_REQUEST.md` 内容粘贴给 Castform support / Castie 询问 backend worker bootstrap log（覆盖两个 run_id）；若得到根因 → 进入 **ATL-6D root-cause fix plan**（可能分支：改 env packaging / 改 dataset upload 路径 / 改 launcher_args / 申请 starter-task 已知好配置做 binary search）
+- **ATL-6C 下一步**：用户把 `ATL6C_SUPPORT_REQUEST.md` 内容粘贴到 Castform Castie/support；如果 Castform 返回 backend error，进入 **ATL-6D root cause fix**（可能分支：改 env packaging / 改 dataset upload 路径 / 改 launcher_args / 申请 starter-task 已知好配置做 binary search）
 - **ATL-6C 验证（追加）**：
-  - `validate_atl6c_support_bundle.py` PASS（support dir + 两个 md + 两个 run_id token + 状态标签 + 16 secret patterns + 1 forbidden literal scan 全部通过）
+  - `validate_atl6c_support_request.py` PASS（两个 md + 两个 run_id token + 状态标签 + 16 secret patterns + 1 forbidden literal scan 全部通过）
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS

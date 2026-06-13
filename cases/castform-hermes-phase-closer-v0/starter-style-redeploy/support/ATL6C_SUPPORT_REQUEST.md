@@ -1,11 +1,42 @@
 # ATL-6C — Castform Support Request
 
-## Summary
-Two minimal SDK training runs launched successfully but failed at step 0 before any rollout was recorded. The second run used a starter-style environment aligned with Castform's starter task pattern.
+## What Worked
+- local validate_env passed 10/10
+- upload_training_run succeeded
+- launch_training_run succeeded
+- model: Qwen/Qwen3.5-4B
+- corrected launcher_args were accepted
+- train/eval sample counts:
+  - run 1: 8 train / 2 eval
+  - run 2: 16 train / 4 eval
+- no tools
+- starter-style run_tool returns an empty string
+- starter-style reward is normalized to 0.0–1.0
+- config tab shows uploaded env and dataset paths
+
+## What Failed
+- training failed at step 0
+- no train data available
+- no model rollouts recorded
+- no visible worker logs or traceback in UI
+
+## Request
+Please check backend logs for these run IDs and tell me the failure reason.
+
+## Sensitive Information Exclusion
+This request intentionally excludes:
+- API key
+- API key prefix
+- credit card
+- cookie
+- Authorization header
+- user email
+- screenshots with private account data
 
 ## Run 1 (ATL-5B retry)
 - run_id: c83f971d-2b2c-42b8-9774-ca64938c1286
 - actual UI route: /train/c83f971d-2b2c-42b8-9774-ca64938c1286?tab=train
+- display name: simple-28de6dd2
 - status: failed
 - step: 0
 - train data: none
@@ -18,9 +49,10 @@ Two minimal SDK training runs launched successfully but failed at step 0 before 
 - display name: simple-c869a30d
 - status: failed
 - step: 0
-- train data: none
+- train data: no train data available
+- train rollouts: no rollouts recorded yet
 - eval data: not yet checked
-- rollouts: none
+- config tab: uploaded env and dataset paths visible
 
 ## Configuration (Run 2)
 - base_model: Qwen/Qwen3.5-4B

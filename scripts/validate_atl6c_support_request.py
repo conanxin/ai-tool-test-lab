@@ -98,12 +98,12 @@ def main() -> int:
     issues.extend(_check_file(SUMMARY_FILE, [RUN_ID_RUN1, RUN_ID_RUN2, STATUS_TAG]))
 
     if issues:
-        print("FAIL: validate_atl6c_support_bundle")
+        print("FAIL: validate_atl6c_support_request")
         for line in issues:
             print(f"  - {line}")
         return 1
 
-    print("PASS: validate_atl6c_support_bundle")
+    print("PASS: validate_atl6c_support_request")
     print(f"  - support dir: {SUPPORT_DIR}")
     print(f"  - request file: {REQUEST_FILE.name}")
     print(f"  - summary file: {SUMMARY_FILE.name}")
