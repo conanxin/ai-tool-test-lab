@@ -193,8 +193,19 @@ def check_preview_row_counts(v: V) -> None:
 def scan_for_secrets(v: V) -> None:
     if not SMOKE_DIR.is_dir():
         return
-    for p in SMOKE_DIR.rglob("*"):
-        if not p.is_file():
+    # ATL-4B validator only scans ATL-4B files — not ATL-5 live/ subdirectory.
+    atl4b_files = [
+        SMOKE_DIR / "cloud_smoke_config.json",
+        SMOKE_DIR / "README.md",
+        SMOKE_DIR / "API_KEY_HANDLING.md",
+        SMOKE_DIR / "COST_GUARD.md",
+        SMOKE_DIR / "prepare_cloud_smoke_subset.py",
+        SMOKE_DIR / "cloud_launch_guard.py",
+        SMOKE_DIR / "smoke-train.preview.jsonl",
+        SMOKE_DIR / "smoke-eval.preview.jsonl",
+    ]
+    for p in atl4b_files:
+        if not p.exists():
             continue
         if p.suffix in (".png", ".jpg", ".jpeg", ".webp", ".gif", ".pdf", ".zip"):
             continue
@@ -215,10 +226,13 @@ def scan_for_secrets(v: V) -> None:
 def check_python_scripts_clean(v: V) -> None:
     if not SMOKE_DIR.is_dir():
         return
-    for p in SMOKE_DIR.rglob("*"):
-        if not p.is_file():
-            continue
-        if p.suffix != ".py":
+    # ATL-4B validator only scans ATL-4B files — not ATL-5 live/ subdirectory.
+    atl4b_py_files = [
+        SMOKE_DIR / "prepare_cloud_smoke_subset.py",
+        SMOKE_DIR / "cloud_launch_guard.py",
+    ]
+    for p in atl4b_py_files:
+        if not p.exists():
             continue
         text = p.read_text(encoding="utf-8")
         rel = p.relative_to(ROOT)

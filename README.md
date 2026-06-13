@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-4C — Guarded cloud smoke preflight (gated; launch still blocked)
-- **目标**：创建受保护的 upload / launch 脚本、最终 launch gate、API key 临时注入说明、dry-run 检查、页面和报告；本阶段不调用 Castform API、不上传数据、不启动训练、不创建 API key
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — guarded preflight ready; launch blocked by unclear charges
+- **阶段**：ATL-5-SCRIPT-PREP — Live script ready (agent 只生成脚本，不执行；用户手动运行)
+- **目标**：创建 ATL-5 cloud smoke run 所需脚本、结果验证脚本和最小说明文件；agent 不调用 Castform API、不上传数据、不启动训练、不读取 API key
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — live script ready; cloud smoke run pending user execution
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -49,7 +49,13 @@
   - `guarded_upload_preflight.py` / `guarded_launch_preflight.py` — 默认拒绝 upload / launch；即使 env var 已设置仍拒绝（因为 `actual_*_allowed=false`）
   - `validate_atl4c_guarded_preflight.py` PASS（59/59 OK）
 - **ATL-4C 硬边界**：`cloud_launch_allowed` 保持 `false`；`current_readiness` 保持 `BLOCKED_BY_UNCLEAR_CHARGES`；`actual_upload_allowed_in_this_phase=false`；`actual_launch_allowed_in_this_phase=false`；不调用 Castform API；不上传；不训练；不创建 API key
-- **ATL-4C 下一步**：ATL-5 — Real cloud smoke run（仅在用户显式满足 [FINAL_LAUNCH_GATE.md](cases/castform-hermes-phase-closer-v0/guarded-cloud-preflight/FINAL_LAUNCH_GATE.md) 全部 7 大 gate 后，由用户手动 flip config 并注入 API key）
+- **ATL-5-SCRIPT-PREP 交付**：
+  - `atl5_cloud_smoke_run.py` — live cloud smoke run 脚本（gate 检查 → 本地 validate_env → upload → launch → 结果 JSON）
+  - `atl5_cloud_smoke_result.json` — placeholder（status = SCRIPT_READY_NO_CLOUD_CALL）
+  - `validate_atl5_cloud_smoke_result.py` — ATL-5 结果验证器
+  - agent 不执行脚本；用户手动运行
+- **ATL-5-SCRIPT-PREP 硬边界**：agent 不调用 Castform API；不上传；不训练；不读取 API key；不运行 `atl5_cloud_smoke_run.py`
+- **ATL-5-SCRIPT-PREP 下一步**：用户在本地 WSL shell 中运行 `.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5_cloud_smoke_run.py`
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
@@ -59,6 +65,7 @@
   - validate_atl4a_preflight_scaffold.py PASS
   - validate_atl4b_cloud_smoke_config.py PASS
   - validate_atl4c_guarded_preflight.py PASS（59/59 OK；upload guard exit 1 + banner 6/6；launch guard exit 1 + banner 6/6）
+  - validate_atl5_cloud_smoke_result.py PASS（placeholder JSON 合法，无 secret，train=8，eval=2）
   - dataset_loader.py PASS（42 train + 7 eval）
   - run_local_reward_smoke.py PASS（5/5）
   - inspect_benchmax_validate_env.py PASS（introspection，无调用）

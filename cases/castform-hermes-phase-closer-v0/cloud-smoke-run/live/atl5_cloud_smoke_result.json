@@ -1,0 +1,19 @@
+{
+  "phase": "ATL-5",
+  "status": "SCRIPT_READY_NO_CLOUD_CALL",
+  "local_validate_env_result": "NOT_EXECUTED",
+  "upload_attempted": false,
+  "upload_succeeded": false,
+  "launch_attempted": false,
+  "launch_succeeded": false,
+  "run_id": null,
+  "experiment_url": null,
+  "base_model": "Qwen/Qwen3.5-4B",
+  "train_samples": 8,
+  "eval_samples": 2,
+  "api_key_recorded": false,
+  "dataset_uploaded": false,
+  "training_started": false,
+  "error_category": null,
+  "error_summary": "Script prepared. Not executed yet."
+}
