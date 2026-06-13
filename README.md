@@ -65,6 +65,7 @@
   - 增强脚本保存 `uploaded_payload`（env_cls_path / env_metadata_path / train_dataset_path / eval_dataset_path）
   - `ATL5A_LAUNCH_ARGS_FIX_NOTES.md` — 详细修复记录和 Castform 接受参数列表
   - `atl5b_second_upload_retry_guard.py` — ATL-5B 二次 upload + launch 脚本（gate 检查 → 本地 validate_env → upload → launch → 结果 JSON）
+  - `validate_atl5a_launch_args_fix.py` — ATL-5A 验证器
   - agent 不执行脚本；用户手动运行 ATL-5B
 - **ATL-5A 硬边界**：agent 不调用 Castform API；不上传；不训练；不读取 API key；不运行 `atl5_cloud_smoke_run.py`；不运行 `atl5b_second_upload_retry_guard.py`
 - **ATL-5A 下一步**：ATL-5B — 用户手动运行 `.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5b_second_upload_retry_guard.py`，需显式授权：`I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY`
@@ -78,6 +79,7 @@
   - validate_atl4b_cloud_smoke_config.py PASS
   - validate_atl4c_guarded_preflight.py PASS（59/59 OK；upload guard exit 1 + banner 6/6；launch guard exit 1 + banner 6/6）
   - validate_atl5_cloud_smoke_result.py PASS（placeholder JSON 合法，无 secret，train=8，eval=2）
+  - validate_atl5a_launch_args_fix.py PASS（13/13 OK：status/upload/launch/error_summary/batch_size/learning_rate/secret 扫描全部通过）
   - dataset_loader.py PASS（42 train + 7 eval）
   - run_local_reward_smoke.py PASS（5/5）
   - inspect_benchmax_validate_env.py PASS（introspection，无调用）

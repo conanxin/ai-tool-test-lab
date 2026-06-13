@@ -1,10 +1,10 @@
 {
   "phase": "ATL-5",
-  "status": "SCRIPT_READY_NO_CLOUD_CALL",
-  "local_validate_env_result": "NOT_EXECUTED",
-  "upload_attempted": false,
-  "upload_succeeded": false,
-  "launch_attempted": false,
+  "status": "UPLOAD_DONE_LAUNCH_FAILED",
+  "local_validate_env_result": "VALIDATE_ENV_LOCAL_PASS",
+  "upload_attempted": true,
+  "upload_succeeded": true,
+  "launch_attempted": true,
   "launch_succeeded": false,
   "run_id": null,
   "experiment_url": null,
@@ -12,8 +12,8 @@
   "train_samples": 8,
   "eval_samples": 2,
   "api_key_recorded": false,
-  "dataset_uploaded": false,
+  "dataset_uploaded": true,
   "training_started": false,
-  "error_category": null,
-  "error_summary": "Script prepared. Not executed yet."
+  "error_category": "LAUNCH_FAILED",
+  "error_summary": "launch_training_run raised: JobLaunchError: Unknown launch arg: \"batch_size\". Use GET /train/launch-args to see what's accepted."
 }

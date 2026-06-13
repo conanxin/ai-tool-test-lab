@@ -396,6 +396,42 @@
   </div>
 
   <div class="section">
+    <h2>ATL-5 / ATL-5A — Cloud Smoke Run Result</h2>
+    <p><strong>ATL-5 首次运行：</strong></p>
+    <ul>
+      <li>Local validate_env: <strong>PASS</strong> (<code>VALIDATE_ENV_LOCAL_PASS</code>)</li>
+      <li>Upload: <strong>SUCCESS</strong> (dataset uploaded to Castform)</li>
+      <li>Launch: <strong>FAILED</strong> (<code>JobLaunchError: Unknown launch arg: "batch_size"</code>)</li>
+    </ul>
+
+    <p><strong>失败原因：</strong> Castform 不接受 <code>batch_size</code> 作为 launcher arg。</p>
+
+    <p><strong>Accepted launch args mapped：</strong></p>
+    <ul>
+      <li><code>model</code></li>
+      <li><code>learning_rate</code></li>
+      <li><code>num_epochs</code></li>
+      <li><code>group_size</code></li>
+      <li><code>max_rollout_len</code></li>
+      <li><code>max_turns</code></li>
+      <li><code>lora_rank</code></li>
+      <li><code>lora_alpha</code></li>
+    </ul>
+
+    <p><strong>Removed arg：</strong> <code>batch_size</code></p>
+
+    <p><strong>uploaded_payload in original result：</strong> <span class="value blocked">MISSING</span></p>
+    <p><strong>Launch-only retry：</strong> <span class="value blocked">BLOCKED_BY_MISSING_UPLOAD_METADATA</span></p>
+
+    <p><strong>API key recorded：</strong> NO</p>
+    <p><strong>Full dataset uploaded：</strong> NO (only 8 train / 2 eval preview)</p>
+    <p><strong>Training started：</strong> NO</p>
+
+    <p><strong>Next step：</strong> ATL-5B second upload + launch retry, only with explicit user authorization:</p>
+    <pre class="code-block">I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY</pre>
+  </div>
+
+  <div class="section">
     <h2>测试数据</h2>
     <p><strong>训练样本：</strong>42 条（sample-train.jsonl）</p>
     <p><strong>评估样本：</strong>7 条（sample-eval.jsonl）</p>
