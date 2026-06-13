@@ -118,13 +118,6 @@ def _load_jsonl(path: Path, expected: int) -> list[dict]:
     return out
 
 
-def _mask_key(val: str) -> str:
-    """Mask a secret value for safe log output (4 chars + ellipsis or ***)."""
-    if len(val) <= 8:
-        return "***"
-    return val[:4] + "..."
-
-
 def _sanitize_error_text(text: str) -> str:
     """Sanitize any leaked secret-shaped value from an error message.
 
@@ -195,7 +188,9 @@ def check_gates() -> tuple[bool, str, str]:
 
     Returns (ok, category, summary). If any gate fails, ok=False and category
     identifies which gate (BLOCKED_BY_*). The summary lists every gate's
-    observed vs expected state for audit purposes.
+    outcome as a boolean / OK marker — it NEVER echoes the actual env-var
+    value (not even a prefix), so no key fragment or authorization string
+    can leak into logs or the result JSON.
     """
     ok = True
     category: str | None = None
@@ -203,12 +198,14 @@ def check_gates() -> tuple[bool, str, str]:
     for var, (check, expected) in REQUIRED_GATES.items():
         val = os.environ.get(var, "").strip()
         if check == "present":
+            # CASTFORM_API_KEY: only report True/False. Never echo any
+            # prefix or fragment of the key.
             if not val:
                 ok = False
                 category = "BLOCKED_BY_MISSING_RUNTIME_API_KEY"
-                summary_parts.append(f"{var} missing")
+                summary_parts.append(f"{var} present: False")
             else:
-                summary_parts.append(f"{var} present: {_mask_key(val)}")
+                summary_parts.append(f"{var} present: True")
         elif check == "exact":
             if val != expected:
                 ok = False
@@ -218,9 +215,12 @@ def check_gates() -> tuple[bool, str, str]:
                     category = "BLOCKED_BY_LAUNCH_GATE"
                 elif var == "ATL_USER_AUTHORIZATION":
                     category = "BLOCKED_BY_MISSING_USER_AUTHORIZATION"
-                summary_parts.append(f"{var}='{val}' (expected '{expected}')")
+                # Report only the gate name and the mismatch fact, never
+                # the actual user-supplied value (which could accidentally
+                # embed a key).
+                summary_parts.append(f"{var} mismatch (expected: {expected!r})")
             else:
-                summary_parts.append(f"{var}='{val}' OK")
+                summary_parts.append(f"{var} OK")
     return ok, category or "UNKNOWN", "; ".join(summary_parts)
 
 

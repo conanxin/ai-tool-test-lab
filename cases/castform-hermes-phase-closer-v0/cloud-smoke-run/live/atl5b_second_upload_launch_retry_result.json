@@ -1,0 +1,36 @@
+{
+  "phase": "ATL-5B",
+  "local_validate_env_result": "VALIDATE_ENV_LOCAL_PASS",
+  "upload_attempted": true,
+  "upload_succeeded": true,
+  "launch_attempted": true,
+  "launch_succeeded": true,
+  "run_id": "c83f971d-2b2c-42b8-9774-ca64938c1286",
+  "experiment_url": "https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286",
+  "base_model": "Qwen/Qwen3.5-4B",
+  "train_samples": 8,
+  "eval_samples": 2,
+  "api_key_recorded": false,
+  "dataset_uploaded": true,
+  "training_started": true,
+  "launcher_args_used": {
+    "model": "Qwen/Qwen3.5-4B",
+    "learning_rate": 1e-05,
+    "num_epochs": 1,
+    "group_size": 2,
+    "max_rollout_len": 512,
+    "max_turns": 1,
+    "lora_rank": 16,
+    "lora_alpha": 32
+  },
+  "uploaded_payload_present": true,
+  "uploaded_payload": {
+    "env_cls_path": "envs/hermes-phase-closer-smoke-atl5b/cef99dc22d69e4c8/env-cls.pkl",
+    "env_metadata_path": "envs/hermes-phase-closer-smoke-atl5b/cef99dc22d69e4c8/env-metadata.json",
+    "train_dataset_path": "datasets/hermes-phase-closer-smoke-atl5b/bac77401/train.jsonl",
+    "eval_dataset_path": "datasets/hermes-phase-closer-smoke-atl5b/bac77401/eval.jsonl"
+  },
+  "error_category": null,
+  "error_summary": null,
+  "status": "PASS_CLOUD_SMOKE_LAUNCHED"
+}

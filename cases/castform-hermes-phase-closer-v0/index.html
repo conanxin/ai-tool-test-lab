@@ -62,8 +62,8 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-5B — Second upload + launch retry script prepared (execution not run, awaiting user authorization)</p>
-    <p><strong>测试状态：</strong>retry script prepared · execution not run · upload: none · training: none · API call: none · batch_size removed from launch args · learning_rate added · ATL-3C 10/10 PASS · 仅本地记录</p>
+    <p><strong>当前阶段：</strong>ATL-5B-RESULT — Second upload and launch retry result (training started; awaiting ATL-5C monitor)</p>
+    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id recorded · training_started YES · API key not recorded · full dataset not uploaded · batch_size removed · learning_rate added · ATL-3C 10/10 PASS · 未调用 API · 仅本地记录</p>
   </div>
 
   <div class="section">
@@ -448,6 +448,45 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py</code></pre>
   </div>
 
   <div class="section">
+    <h2>ATL-5B-RESULT — Second Upload and Launch Retry Result</h2>
+    <p><strong>当前阶段：</strong>Second upload and launch retry result · training started on Castform · awaiting ATL-5C monitor</p>
+
+    <p><strong>Outcome summary:</strong></p>
+    <ul>
+      <li>Local validate_env: <strong>PASS</strong> (<code>VALIDATE_ENV_LOCAL_PASS</code>)</li>
+      <li>Upload: <strong>SUCCESS</strong> (8 train / 2 eval preview subset uploaded to Castform)</li>
+      <li>Launch: <strong>SUCCESS</strong> (corrected launcher_args accepted; no <code>batch_size</code>)</li>
+      <li>Result: <code>PASS_CLOUD_SMOKE_LAUNCHED</code></li>
+    </ul>
+
+    <p><strong>Run identifiers:</strong></p>
+    <ul>
+      <li><strong>run_id</strong>: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code></li>
+      <li><strong>experiment_url</strong>: <a href="https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286">https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286</a></li>
+      <li><strong>base model</strong>: <code>Qwen/Qwen3.5-4B</code></li>
+      <li><strong>sample count</strong>: 8 train / 2 eval (<code>smoke-train.preview.jsonl</code> / <code>smoke-eval.preview.jsonl</code>)</li>
+    </ul>
+
+    <p><strong>Hard-rule compliance:</strong></p>
+    <ul>
+      <li><strong>api_key_recorded</strong>: NO — result JSON field is <code>false</code>; no <code>.env</code> file created; no API key fragment anywhere in repo or commit</li>
+      <li><strong>full dataset uploaded</strong>: NO — only the 8/2 preview subset</li>
+      <li><strong>uploaded_payload_present</strong>: <code>true</code> — env_cls_path / env_metadata_path / train_dataset_path / eval_dataset_path saved for audit trail</li>
+      <li><strong>training_started</strong>: YES — Castform accepted <code>launch_training_run</code> with corrected args</li>
+    </ul>
+
+    <p><strong>Result file</strong>: <a href="cloud-smoke-run/live/atl5b_second_upload_launch_retry_result.json">cloud-smoke-run/live/atl5b_second_upload_launch_retry_result.json</a> (verify with <code>python3 scripts/validate_atl5b_second_upload_retry_result.py</code> → PASS).</p>
+
+    <p><strong>Notes</strong>:</p>
+    <ul>
+      <li>ATL-5B retry result is preserved as a separate file; ATL-5 first-run result (<code>atl5_cloud_smoke_result.json</code>) remains intact as historical evidence.</li>
+      <li>Retry script gate log was hardened in ATL-5B-RESULT phase: the API key is now reported only as <code>present: True|False</code> (no prefix, no fragment); gate mismatches show only the gate name and the expected literal, never the user-supplied value.</li>
+    </ul>
+
+    <p><strong>Next step — ATL-5C monitor first Castform training run</strong>: poll the experiment URL, check status (queued / running / completed / failed), capture training metrics, update case page and report when run reaches terminal state.</p>
+  </div>
+
+  <div class="section">
     <h2>ATL-5 / ATL-5A — Cloud Smoke Run Result</h2>
     <p><strong>ATL-5 首次运行：</strong></p>
     <ul>
@@ -532,6 +571,7 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py</code></pre>
       <li><strong>ATL-5</strong>（2026-06-13）：用户手动运行 atl5_cloud_smoke_run.py：local validate_env PASS → upload SUCCEEDED → launch FAILED（<code>JobLaunchError: Unknown launch arg: "batch_size"</code>）；dataset_uploaded=true；training_started=false；<strong>未记录</strong> API key</li>
       <li><strong>ATL-5A</strong>（2026-06-13）：修复 launcher_args（删除 <code>batch_size</code>，增加 <code>learning_rate: 1e-5</code>）；增强脚本保存 <code>uploaded_payload</code>；创建 <a href="cloud-smoke-run/live/ATL5A_LAUNCH_ARGS_FIX_NOTES.md">ATL5A_LAUNCH_ARGS_FIX_NOTES.md</a>；创建 <a href="cloud-smoke-run/live/atl5b_second_upload_retry_guard.py">atl5b_second_upload_retry_guard.py</a>；agent 未调用 API、未上传、未训练</li>
       <li><strong>ATL-5B</strong>（2026-06-13）：second upload + launch retry 脚本已准备（<a href="cloud-smoke-run/live/atl5b_second_upload_launch_retry.py">atl5b_second_upload_launch_retry.py</a>，独立 result 文件 <code>atl5b_second_upload_launch_retry_result.json</code>，<code>run_name=hermes-phase-closer-smoke-atl5b</code>，修正后 launcher_args 不含 <code>batch_size</code> 含 <code>learning_rate</code>）；创建 <a href="cloud-smoke-run/live/ATL5B_SECOND_UPLOAD_RETRY_NOTES.md">ATL5B_SECOND_UPLOAD_RETRY_NOTES.md</a> 和 <a href="../../../scripts/validate_atl5b_second_upload_retry_result.py">validate_atl5b_second_upload_retry_result.py</a>；agent 未运行 retry 脚本、未调用 API、未上传、未训练；等待用户显式授权 <code>I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY</code> 后手动运行</li>
+      <li><strong>ATL-5B-RESULT</strong>（2026-06-13）：用户在本地 WSL 手动运行 retry 脚本 → <code>PASS_CLOUD_SMOKE_LAUNCHED</code>；<strong>run_id</strong> <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · <strong>experiment_url</strong> <a href="https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286">app.castform.com/experiments/...</a> · <code>api_key_recorded=false</code> · <code>uploaded_payload_present=true</code> · <code>training_started=true</code>；<code>validate_atl5b_second_upload_retry_result.py</code> PASS；同步修复 retry 脚本 gate 日志：API key 仅显示 <code>present: True|False</code>，不再输出 key 前缀/片段</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
@@ -795,7 +835,7 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py</code></pre>
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-5B second upload + launch retry script prepared 阶段</p>
+  <p>AI Tool Test Lab — ATL-5B-RESULT cloud smoke run launched; awaiting ATL-5C monitor 阶段</p>
 </footer>
 </body>
 </html>

@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-5B — Second upload + launch retry script prepared (agent 只准备脚本；用户手动运行)
-- **目标**：准备 ATL-5B retry 脚本（独立 result 文件，不覆盖 ATL-5 历史）、验证器、文档和报告；agent 不调用 Castform API、不上传数据、不启动训练、不读取 API key
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — second upload retry script ready; manual execution required
+- **阶段**：ATL-5B-RESULT — Second upload and launch retry result (training started; awaiting ATL-5C monitor)
+- **目标**：记录 ATL-5B retry 实际运行结果（用户本地 WSL 手动执行），同步修复 retry 脚本 gate 日志避免打印 key 前缀/片段，更新页面 / cases.json / 报告
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — cloud smoke run launched; monitoring required
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -86,6 +86,21 @@ cd /mnt/d/AI/ai-tool-test-lab
 .venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5b_second_upload_launch_retry.py
 python3 scripts/validate_atl5b_second_upload_retry_result.py
 ```
+- **ATL-5B-RESULT 收口**（用户在本地 WSL 手动执行 retry 脚本）：
+  - **second upload**: SUCCESS（8 train / 2 eval preview subset 上传 Castform 成功）
+  - **launch**: SUCCESS（修正后 `launcher_args` 含 `learning_rate` 不含 `batch_size`，被 Castform 接受）
+  - **run_id**: `c83f971d-2b2c-42b8-9774-ca64938c1286`
+  - **experiment URL**: <https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286>
+  - **base model**: `Qwen/Qwen3.5-4B`
+  - **sample count**: 8 train / 2 eval
+  - **status**: `PASS_CLOUD_SMOKE_LAUNCHED`
+  - **API key not recorded**: `api_key_recorded=false`；无 `.env` 创建；无 API key 片段落盘
+  - **full dataset not uploaded**: 仅 8/2 preview subset
+  - **`uploaded_payload_present`**: `true`（env_cls_path / env_metadata_path / train_dataset_path / eval_dataset_path 已落盘）
+  - **`validate_atl5b_second_upload_retry_result.py`**: PASS
+- **ATL-5B-RESULT 硬边界**：agent 未调用 Castform API；agent 未重复运行 retry 脚本；agent 未读取 API key；agent 未记录 API key 片段；不伪造 `run_id` / `experiment_url`
+- **ATL-5B-RESULT 同步修复**：retry 脚本 `atl5b_second_upload_launch_retry.py` 的 `check_gates` 日志已硬化 — API key 仅显示 `present: True|False`（不再用 `_mask_key` 输出 4 字符前缀）；gate mismatch 仅显示 gate 名 + 期望字面量，不再回显用户填入的授权字符串。`_mask_key` 函数已删除。
+- **ATL-5B-RESULT 下一步**：**ATL-5C monitor first Castform training run** — 轮询 experiment URL，捕获 training status（queued / running / completed / failed）+ metrics；运行到终态后更新页面 / cases.json / 报告。
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
