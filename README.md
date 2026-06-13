@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-5A — Upload succeeded, launch failed, args fixed, ATL-5B retry ready (agent 只修复脚本，不执行；用户手动运行 ATL-5B)
-- **目标**：记录 ATL-5 首次 cloud smoke run 部分成功结果，修复 launcher_args schema，增强脚本保存 uploaded_payload，准备 ATL-5B second upload + launch retry；agent 不调用 Castform API、不上传数据、不启动训练、不读取 API key
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — upload succeeded; launch failed (batch_size rejected); args fixed; ATL-5B retry ready
+- **阶段**：ATL-5B — Second upload + launch retry script prepared (agent 只准备脚本；用户手动运行)
+- **目标**：准备 ATL-5B retry 脚本（独立 result 文件，不覆盖 ATL-5 历史）、验证器、文档和报告；agent 不调用 Castform API、不上传数据、不启动训练、不读取 API key
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — second upload retry script ready; manual execution required
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -69,6 +69,23 @@
   - agent 不执行脚本；用户手动运行 ATL-5B
 - **ATL-5A 硬边界**：agent 不调用 Castform API；不上传；不训练；不读取 API key；不运行 `atl5_cloud_smoke_run.py`；不运行 `atl5b_second_upload_retry_guard.py`
 - **ATL-5A 下一步**：ATL-5B — 用户手动运行 `.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5b_second_upload_retry_guard.py`，需显式授权：`I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY`
+- **ATL-5B-SCRIPT-PREP 交付**：
+  - 第二次 upload + launch retry 脚本已准备：`atl5b_second_upload_launch_retry.py`（独立 result 文件 `atl5b_second_upload_launch_retry_result.json`，不覆盖 ATL-5 的 `atl5_cloud_smoke_result.json`；`run_name=hermes-phase-closer-smoke-atl5b`；4 重 gate 含 ATL-5B 授权语句；本地 validate_env → upload → 落盘 `uploaded_payload` → launch with 修正后 args 含 `learning_rate` 不含 `batch_size`）
+  - `ATL5B_SECOND_UPLOAD_RETRY_NOTES.md` — 为什么需要 ATL-5B / batch_size 移除 / 授权语句 / 硬规则
+  - `validate_atl5b_second_upload_retry_result.py` — std-lib 验证器（无 result → `SKIPPED_RESULT_NOT_PRESENT` exit 0；有 result → PASS/FAIL）
+- **ATL-5B-SCRIPT-PREP 硬边界**：agent 未调用 Castform API；agent 未上传；agent 未训练；agent 未读取 API key；agent 未记录 API key；不运行 `atl5b_second_upload_launch_retry.py`；不伪造 run_id / experiment_url
+- **ATL-5B-SCRIPT-PREP 下一步**：真实运行需要用户本地 shell 授权；用户在本地 WSL 中：
+
+```bash
+export ATL_USER_AUTHORIZATION=*** AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY"
+export ATL_ALLOW_CASTFORM_UPLOAD="YES"
+export ATL_ALLOW_CASTFORM_LAUNCH="YES"
+read -s CASTFORM_API_KEY && export CASTFORM_API_KEY
+
+cd /mnt/d/AI/ai-tool-test-lab
+.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5b_second_upload_launch_retry.py
+python3 scripts/validate_atl5b_second_upload_retry_result.py
+```
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
