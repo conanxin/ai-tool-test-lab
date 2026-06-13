@@ -3,7 +3,7 @@
 **Date**: 2026-06-13
 **Phase**: ATL-4B-CONFIG
 **Status**: **PASS_WITH_LAUNCH_BLOCKED**
-**Commit**: 2e9a5c8
+**Commit**: b364bb7
 **Baseline**: ff22241 (ATL-4A) · 5f06de9 (ATL-3C)
 **Current baseline commit**: `ff22241` (ATL-4A)
 **Reference baseline**: ATL-3C commit `5f06de9`
