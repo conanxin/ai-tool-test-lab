@@ -8,8 +8,15 @@ new_case.py — 新增测试案例脚手架
 自动创建：
     cases/<slug>/index.html
     cases/<slug>/test-plan.md
+    cases/<slug>/local-readiness.md
+    cases/<slug>/CASE_CLOSEOUT.md       (placeholder)
+    cases/<slug>/support-request.md    (placeholder)
 
 然后提示用户手动更新 data/cases.json。
+
+Canonical example:
+    Use Castform Hermes Phase Closer v0 as the canonical workflow example.
+    See docs/CASE_WORKFLOW_STANDARD.md for full lifecycle.
 """
 
 import re
@@ -41,6 +48,10 @@ def create_case(name):
 
     case_dir.mkdir(parents=True)
 
+    print("Use Castform Hermes Phase Closer v0 as the canonical workflow example.")
+    print("See docs/CASE_WORKFLOW_STANDARD.md for the full lifecycle.")
+    print()
+
     index_html = case_dir / "index.html"
     with open(index_html, "w", encoding="utf-8") as f:
         f.write(f"""<!DOCTYPE html>
@@ -65,42 +76,85 @@ def create_case(name):
   <p style="color:var(--muted)">状态: Local scaffold ready</p>
 
   <div class="section">
-    <h2>项目概览</h2>
+    <h2>Case Status</h2>
+    <p>phase: ATL-0</p>
+    <p>status: Local scaffold ready</p>
+    <p>final status: （待填）</p>
+    <p>updated_at: （待填）</p>
+  </div>
+
+  <div class="section">
+    <h2>Why This Tool</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>测试目的</h2>
+    <h2>What We Want To Test</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>本地环境</h2>
+    <h2>Local Role</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>安装过程</h2>
+    <h2>Cloud / External Role</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>核心功能测试</h2>
+    <h2>Account / Billing Notes</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>成本与限制</h2>
+    <h2>Data / Input Plan</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>问题记录</h2>
+    <h2>Local Validation</h2>
     <p>（待填写）</p>
   </div>
 
   <div class="section">
-    <h2>结论</h2>
+    <h2>External Run / Cloud Run</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Monitoring</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Failure Analysis</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Closeout</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Evidence</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Reports</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Support Request</h2>
+    <p>（待填写）</p>
+  </div>
+
+  <div class="section">
+    <h2>Sensitive Information Exclusion</h2>
     <p>（待填写）</p>
   </div>
 </div>
@@ -133,13 +187,121 @@ def create_case(name):
 ## 风险控制
 
 - （待填写）
+
+## 参考
+
+- 参见 `docs/CASE_WORKFLOW_STANDARD.md`（10 阶段 lifecycle）
+- 参见 `docs/CASE_PHASES.md`（阶段命名规则）
+- 参见 `cases/castform-hermes-phase-closer-v0/`（canonical example）
+""")
+
+    local_readiness = case_dir / "local-readiness.md"
+    with open(local_readiness, "w", encoding="utf-8") as f:
+        f.write(f"""# {name} — 本地环境评估
+
+## 操作系统
+
+（待填写）
+
+## 硬件
+
+（待填写）
+
+## 已有依赖
+
+（待填写）
+
+## 本地能做什么
+
+（待填写）
+
+## 本地不能做什么
+
+（待填写）
+
+## 是否需要云端 / API / GPU / 账号
+
+（待填写）
+
+## 风险评估
+
+（待填写）
+""")
+
+    case_closeout = case_dir / "CASE_CLOSEOUT.md"
+    with open(case_closeout, "w", encoding="utf-8") as f:
+        f.write(f"""# {name} — Final Case Closeout
+
+## Final Status
+
+（PASS_COMPLETED / PASS_WITH_LIMITATIONS / PAUSED_PENDING_VENDOR_FEEDBACK / PAUSED_PENDING_BACKEND_LOGS / BLOCKED_BY_ACCOUNT_OR_BILLING / BLOCKED_BY_LOCAL_ENVIRONMENT / FAILED_REPRODUCIBLE / ARCHIVED_NO_FURTHER_ACTION 之一）
+
+## What Tested
+
+（待填写）
+
+## Local Successes
+
+（待填写）
+
+## Cloud / External Successes
+
+（待填写）
+
+## Cloud / External Failure
+
+（待填写）
+
+## Ruled Out
+
+（待填写）
+
+## Not Yet Ruled Out
+
+（待填写）
+
+## Final Decision
+
+（待填写）
+
+## Optional Future Action
+
+（待填写）
+
+## Sensitive Information Exclusion
+
+API key / API key 前缀 / 信用卡 / cookie / Authorization header / 用户邮箱 / 截图含敏感信息 — 均未记录在仓库中。
+""")
+
+    support_request = case_dir / "support-request.md"
+    with open(support_request, "w", encoding="utf-8") as f:
+        f.write(f"""# {name} — Support Request
+
+## What Worked
+
+（待填写）
+
+## What Failed
+
+（待填写）
+
+## Request
+
+（待填写）
+
+## Sensitive Information Exclusion
+
+API key / API key 前缀 / 信用卡 / cookie / Authorization header / 用户邮箱 / 截图含敏感信息 — 均未包含在本请求中。
 """)
 
     print(f"Created: cases/{slug}/index.html")
     print(f"Created: cases/{slug}/test-plan.md")
+    print(f"Created: cases/{slug}/local-readiness.md")
+    print(f"Created: cases/{slug}/CASE_CLOSEOUT.md (placeholder)")
+    print(f"Created: cases/{slug}/support-request.md (placeholder)")
     print()
     print("Next step: manually update data/cases.json with:")
-    print(f'  {{"slug": "{slug}", "title": "{name}", "status": "Local scaffold ready", "category": "（填写类别）"}}')
+    print(f'  {{"slug": "{slug}", "title": "{name}", "status": "Local scaffold ready", "category": "（填写类别）", "canonical_example": false, "workflow_reference": false, "final_status": null}}')
     return 0
 
 

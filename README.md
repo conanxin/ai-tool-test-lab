@@ -213,6 +213,25 @@ python scripts/validate_site.py
 python scripts/check_secrets.py
 ```
 
+## Case workflow standard
+
+Castform Hermes Phase Closer v0 is the canonical example.
+
+Future cases should follow the same one-case-one-page structure.
+
+Every case should move through discovery, local readiness, scaffold, local validation, guarded external run, monitoring, failure analysis, and closeout.
+
+The goal is not only to test tools, but to preserve reasoning, evidence, risk boundaries, and final state.
+
+### 相关文档与案例
+
+- [docs/CASE_WORKFLOW_STANDARD.md](docs/CASE_WORKFLOW_STANDARD.md) — Case workflow 标准（10 阶段 lifecycle + 强制原则）
+- [docs/CASE_PHASES.md](docs/CASE_PHASES.md) — 阶段命名规则（ATL-0 ~ ATL-CLOSEOUT）
+- [docs/CASE_TEMPLATE.md](docs/CASE_TEMPLATE.md) — Castform-style case 模板（16 节固定结构）
+- [docs/ADDING_A_NEW_CASE.md](docs/ADDING_A_NEW_CASE.md) — 新增 case 标准步骤
+- [cases/castform-hermes-phase-closer-v0/index.html](cases/castform-hermes-phase-closer-v0/index.html) — Castform 案例页
+- [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) — Castform 最终 closeout 文档
+
 ## 新增案例
 
 参见 [docs/ADDING_A_NEW_CASE.md](docs/ADDING_A_NEW_CASE.md)。

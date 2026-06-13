@@ -69,6 +69,20 @@
     </div>
   </section>
 
+  <section class="case-workflow">
+    <h2>Case workflow standard</h2>
+    <p>本实验室的所有测试案例都遵循统一的工作流标准。第一个 canonical example 是 Castform Hermes Phase Closer v0。</p>
+    <ul>
+      <li><strong>Castform Hermes Phase Closer v0 is the first canonical case.</strong> 未来所有 AI 工具 / 平台 / 开源项目的测试，都将使用同样的流程与文档结构。</li>
+      <li><strong>Future AI tools will be tested with the same flow.</strong> Discovery → Local readiness → Scaffold → Local validation → Guarded external run → Monitoring → Failure analysis → Closeout。</li>
+      <li><strong>Each case gets one page.</strong> 一个案例对应一个独立的 case 页面，只展示结论，不堆全部原始日志。</li>
+      <li><strong>Each stage gets reports.</strong> 每个阶段都有报告，命名遵循 <code>ATL-N_*_REPORT.md</code> 格式。</li>
+      <li><strong>Each run records what worked, what failed, and what remains unknown.</strong> 每次执行都清晰记录成功证据、失败证据、未知项。</li>
+      <li><strong>Every case ends with closeout.</strong> 每个案例最终必须有 <code>CASE_CLOSEOUT.md</code> + 最终阶段报告 + <code>data/cases.json</code> 中的最终状态字段。</li>
+    </ul>
+    <p>详细规范见 <a href="docs/CASE_WORKFLOW_STANDARD.md">docs/CASE_WORKFLOW_STANDARD.md</a>、<a href="docs/CASE_PHASES.md">docs/CASE_PHASES.md</a>、<a href="docs/CASE_TEMPLATE.md">docs/CASE_TEMPLATE.md</a>。</p>
+  </section>
+
   <section class="cases">
     <h2>测试案例</h2>
     <div id="case-list" class="case-grid"></div>
