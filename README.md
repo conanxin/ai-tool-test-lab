@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-5C — First-run monitor (failed at step 0, no rollouts)
-- **目标**：记录用户在 Castform UI 观察到的 launched run 状态（failed at step 0）+ 创建 read-only SDK status probe（用户本地运行，agent 不跑）
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — cloud smoke launched; failed at step 0 before rollouts
+- **阶段**：ATL-5D — Support-ready failure bundle (run failed at step 0; SDK has no read-only status/log method; awaiting backend log from Castform support)
+- **目标**：整理 read-only probe 输出 → 创建 support-ready failure bundle（run_id / what worked / what failed / requested backend log）让用户粘贴给 Castform support / Castie 询问 backend worker log
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — run failed at step 0; support log request prepared
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -118,6 +118,19 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
   - `scripts/validate_atl5c_failed_step0_record.py` — 三文件存在 + 必要字段 + 无 secret 字面量校验，PASS
 - **ATL-5C 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未重复运行 retry 脚本；API key 未记录；API key 前缀或片段未记录；未提交 `.env`；未提交 `.venv`；未记录信用卡 / cookie / Authorization header / 用户邮箱 / 截图；不伪造 failure reason；不伪造 metrics
 - **ATL-5C 下一步**：用户本地 WSL 运行 `atl5c_readonly_status_probe.py --run-id c83f971d-...`；若发现 backend error / traceback → 进入 **ATL-5D failure root cause record**；若 probe 输出 `NO_READ_ONLY_STATUS_METHOD_FOUND` → 进入 **ATL-5E support-ready failure bundle**
+- **ATL-5D 收口**（read-only SDK probe → `NO_READ_ONLY_STATUS_METHOD_FOUND` → 不存在 root cause record path，只存在 support-ready failure bundle path）：
+  - `cases/.../support/ATL5D_SUPPORT_REQUEST.md` — 粘贴给 Castform support / Castie 询问 backend worker log（run_id `c83f971d-2b2c-42b8-9774-ca64938c1286` / what worked / what failed / requested backend log / privacy-scope notes）
+  - `cases/.../support/ATL5D_FAILURE_SUMMARY.md` — ruled out: 缺 API key / upload 失败 / batch_size 拒绝 / 缺 run / 缺 UI route；not yet ruled out: remote env load / dataset load / 依赖安装 / trainer bootstrap / quota-billing / worker 内部错误；likely category `FAILED_UNKNOWN_WORKER_BOOTSTRAP`
+  - `scripts/validate_atl5d_support_bundle.py` — stdlib 验证器，检查 support 目录、两个 md 文件、run_id token `c83f971d-2b2c-42b8-9774-ca64938c1286`、status tag `FAILED_STEP_0_NO_ROLLOUTS`、16 secret patterns + 1 forbidden literal scan，PASS
+- **ATL-5D 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未重复运行 retry 脚本；API key 未记录；API key 前缀或片段未记录；未提交 `.env`；未提交 `.venv`；未记录信用卡 / cookie / Authorization header / 用户邮箱 / 截图；不伪造 failure reason；不伪造 metrics
+- **ATL-5D 下一步**：用户把 `ATL5D_SUPPORT_REQUEST.md` 内容粘贴给 Castform support / Castie 询问 backend log；若得到 backend error 根因 → 进入 **ATL-5E root-cause fix plan**
+- **ATL-5 timeline 摘要**：
+  - **ATL-5B launched successfully**：local validate_env PASS · upload SUCCESS · launch SUCCESS · run_id `c83f971d-2b2c-42b8-9774-ca64938c1286` · 8 train / 2 eval · `api_key_recorded=false`
+  - **ATL-5C observed failed at step 0**：用户在 Castform UI 观察到 `failed` / `step=0` / no train data / no eval data / no rollouts；read-only SDK probe 确认无 status/log 方法（`NO_READ_ONLY_STATUS_METHOD_FOUND`）
+  - **ATL-5D prepared support-ready failure bundle**：run_id / what worked / what failed / requested backend log 整理为可粘贴的支持请求，等待 Castform support 返回 backend log
+  - **no repeated launch** · **no new upload**：ATL-5C 后未重复 launch、ATL-5D 后未重复 launch、两次之间未新增 upload；`api_key_recorded` 始终为 `false`
+- **ATL-5D 验证（追加）**：
+  - validate_atl5d_support_bundle.py PASS（support dir + 两个 md + run_id token + status tag + 16 patterns + 1 literal scan 全部通过）
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
