@@ -1,0 +1,27 @@
+{
+  "phase": "ATL-4C",
+  "run_name": "hermes-phase-closer-smoke",
+  "base_model": "Qwen/Qwen3.5-4B",
+  "selected_path": "build_your_own_sdk",
+  "train_preview_file": "../cloud-smoke-run/smoke-train.preview.jsonl",
+  "eval_preview_file": "../cloud-smoke-run/smoke-eval.preview.jsonl",
+  "train_sample_count": 8,
+  "eval_sample_count": 2,
+  "cloud_launch_allowed": false,
+  "current_readiness": "BLOCKED_BY_UNCLEAR_CHARGES",
+  "user_declared_readiness": "READY_FOR_CLOUD_SMOKE_RUN",
+  "risk_note": "User declared ready, but billing, charge visibility, run controls, and data policy remain partially unknown.",
+  "requires_env_var_castform_api_key": true,
+  "requires_env_var_atl_allow_upload": true,
+  "requires_env_var_atl_allow_launch": true,
+  "actual_upload_allowed_in_this_phase": false,
+  "actual_launch_allowed_in_this_phase": false,
+  "notes": [
+    "Guarded preflight only. No Castform API call.",
+    "No data uploaded.",
+    "No training started.",
+    "No API key created.",
+    "Real CASTFORM_API_KEY never written into repo or .env.",
+    "Upload and launch remain blocked until ATL-5 with explicit user authorization."
+  ]
+}

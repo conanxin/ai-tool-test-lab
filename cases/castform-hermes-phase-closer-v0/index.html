@@ -63,7 +63,7 @@
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
     <p><strong>当前阶段：</strong>ATL-4A — Account / Credit / Billing Manual Preflight (scaffold ready, awaiting human input)</p>
-    <p><strong>测试状态：</strong>ATL-4A-CREDIT-FILL credit/billing result recorded · $50 free credit confirmed · READY declared with guarded preflight required · ATL-3C 10/10 PASS · launch still blocked · 未调用 API · 未训练 · 仅本地准备</p>
+    <p><strong>测试状态：</strong>ATL-4C guarded cloud smoke preflight ready · $50 free credit confirmed · READY declared with guarded preflight required · ATL-3C 10/10 PASS · launch still blocked · 未调用 API · 未训练 · 仅本地准备</p>
   </div>
 
   <div class="section">
@@ -251,6 +251,74 @@
   </div>
 
   <div class="section">
+    <h2>ATL-4C — Guarded Cloud Smoke Preflight</h2>
+    <p><strong>当前阶段：</strong>Guarded cloud smoke preflight（准备 upload / launch 脚本与 gate，但不执行）</p>
+    <p><strong>本阶段硬边界：</strong>不调用 Castform API · 不上传数据 · 不启动训练 · 不创建 API key · 不运行 <code>upload_training_run</code> · 不运行 <code>launch_training_run</code> · 不运行 <code>TrainerClient.launch_training_run</code> · <code>cloud_launch_allowed</code> 保持 <code>false</code> · <code>current_readiness</code> 保持 <code>BLOCKED_BY_UNCLEAR_CHARGES</code>。</p>
+
+    <p><strong>Guarded Upload / Launch 架构：</strong></p>
+    <ul>
+      <li>Castform 真实训练分两步：<code>upload_training_run</code>（上传 env + dataset）→ <code>TrainerClient.launch_training_run</code>（启动训练 job）。</li>
+      <li>两步均为危险动作（消耗 credit、启动 GPU 计算、创建云端状态）。</li>
+      <li>ATL-4C 用 <strong>dual gate</strong> 控制：
+        <ul>
+          <li>Gate 1 — 环境变量授权：用户必须显式设置 <code>CASTFORM_API_KEY</code> + <code>ATL_ALLOW_CASTFORM_UPLOAD="YES"</code> + <code>ATL_ALLOW_CASTFORM_LAUNCH="YES"</code>。</li>
+          <li>Gate 2 — 脚本级 guard：<code>guarded_upload_preflight.py</code> 和 <code>guarded_launch_preflight.py</code> 默认拒绝执行（exit 1），即使环境变量已设置。</li>
+          <li>Gate 3 — 配置级 tripwire：<code>guarded_cloud_preflight_config.json</code> 中 <code>actual_upload_allowed_in_this_phase=false</code> / <code>actual_launch_allowed_in_this_phase=false</code>。</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><strong>产物文件：</strong></p>
+    <ul class="file-list">
+      <li><a href="guarded-cloud-preflight/guarded_cloud_preflight_config.json">guarded_cloud_preflight_config.json</a> — 机器可读 guarded config（cloud_launch_allowed=false · actual_upload/launch_allowed=false）</li>
+      <li><a href="guarded-cloud-preflight/README.md">guarded-cloud-preflight/README.md</a> — 架构与边界说明</li>
+      <li><a href="guarded-cloud-preflight/API_KEY_RUNTIME_ONLY.md">guarded-cloud-preflight/API_KEY_RUNTIME_ONLY.md</a> — API key 只允许运行时注入（read -s + export）</li>
+      <li><a href="guarded-cloud-preflight/FINAL_LAUNCH_GATE.md">guarded-cloud-preflight/FINAL_LAUNCH_GATE.md</a> — ATL-5 最终 launch gate 清单（7 大 gate，全部 green 才允许 launch）</li>
+      <li><a href="guarded-cloud-preflight/guarded_upload_preflight.py">guarded_upload_preflight.py</a> — 默认拒绝 upload 的 guard 脚本</li>
+      <li><a href="guarded-cloud-preflight/guarded_launch_preflight.py">guarded_launch_preflight.py</a> — 默认拒绝 launch 的 guard 脚本</li>
+    </ul>
+
+    <p><strong>当前 guard 状态：</strong></p>
+    <div class="status-grid">
+      <div class="status-item">
+        <div class="label">cloud_launch_allowed</div>
+        <div class="value blocked">false (unchanged)</div>
+      </div>
+      <div class="status-item">
+        <div class="label">current_readiness</div>
+        <div class="value blocked">BLOCKED_BY_UNCLEAR_CHARGES</div>
+      </div>
+      <div class="status-item">
+        <div class="label">actual_upload_allowed</div>
+        <div class="value blocked">false</div>
+      </div>
+      <div class="status-item">
+        <div class="label">actual_launch_allowed</div>
+        <div class="value blocked">false</div>
+      </div>
+      <div class="status-item">
+        <div class="label">API call</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Upload</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Training</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">API key created</div>
+        <div class="value blocked">NO</div>
+      </div>
+    </div>
+
+    <p><strong>验证：</strong><code>validate_atl4c_guarded_preflight.py</code> PASS（59/59 OK；upload guard exit 1 + banner 6/6；launch guard exit 1 + banner 6/6；secret 扫描 clean；forbidden-call 扫描 clean）。</p>
+    <p><strong>下一阶段：</strong>ATL-5 — Real cloud smoke run（仅在用户显式满足 <a href="guarded-cloud-preflight/FINAL_LAUNCH_GATE.md">FINAL_LAUNCH_GATE.md</a> 全部 7 大 gate 后，由用户手动 flip <code>actual_upload_allowed_in_this_phase</code> / <code>actual_launch_allowed_in_this_phase</code> / <code>cloud_launch_allowed</code>）。</p>
+  </div>
+
+  <div class="section">
     <h2>测试数据</h2>
     <p><strong>训练样本：</strong>42 条（sample-train.jsonl）</p>
     <p><strong>评估样本：</strong>7 条（sample-eval.jsonl）</p>
@@ -294,7 +362,8 @@
       <li><strong>ATL-4A</strong>（2026-06-13）：Account / Credit / Billing 人工 preflight scaffold 创建完毕；<code>validate_atl4a_preflight_scaffold.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>；等待用户人工填写 <a href="account-billing-preflight.md">account-billing-preflight.md</a> 后才能进入 ATL-4B</li>
       <li><strong>ATL-4B-CONFIG</strong>（2026-06-13）：Cloud smoke run <strong>dry configuration</strong> 包已准备（<a href="cloud-smoke-run/README.md">cloud-smoke-run/README.md</a>），选型 <code>Build your own / SDK</code> · base model <code>Qwen/Qwen3.5-4B</code> · 8 train / 2 eval preview 子集已生成 · <code>cloud_launch_allowed=false</code> · <code>current_readiness=BLOCKED_BY_UNCLEAR_CHARGES</code>；<code>validate_atl4b_cloud_smoke_config.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>、<strong>未创建</strong> API key</li>
       <li><strong>ATL-4A-CREDIT-FILL</strong>（2026-06-13）：用户人工填写 credit / billing / cost / run controls / data policy 字段（<a href="credit-billing-verification.md">credit-billing-verification.md</a>）：<strong>Free credit $50 visible + usage page visible</strong>（首次 YES 项）但 billing / auto-charge / cost estimate / cancellation / deletion / data policy 仍多项 <code>UNKNOWN</code>；用户声明 <code>READY_FOR_CLOUD_SMOKE_RUN</code>，<code>cloud_launch_allowed</code> 保持 <code>false</code>，<strong>guarded preflight required</strong>；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong></li>
-      <li><strong>ATL-4C</strong>（计划中，gated）：Guarded cloud smoke preflight（仅在 ATL-4A-CREDIT-FILL 留档的 risk-adjusted note 下推进，且仍不 launch）</li>
+      <li><strong>ATL-4C</strong>（2026-06-13）：Guarded cloud smoke preflight 包已准备（<a href="guarded-cloud-preflight/README.md">guarded-cloud-preflight/README.md</a>），含 dual gate 架构（env var 授权 + 脚本级 guard + 配置级 tripwire）、<code>guarded_upload_preflight.py</code> / <code>guarded_launch_preflight.py</code>（默认拒绝 exit 1）、<code>FINAL_LAUNCH_GATE.md</code>（7 大 gate 清单）、<code>API_KEY_RUNTIME_ONLY.md</code>（read -s + export 注入规则）；<code>validate_atl4c_guarded_preflight.py</code> PASS（59/59 OK）；<code>cloud_launch_allowed</code> 保持 <code>false</code>，<code>actual_upload_allowed_in_this_phase=false</code>，<code>actual_launch_allowed_in_this_phase=false</code>；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>、<strong>未创建</strong> API key</li>
+      <li><strong>ATL-5</strong>（计划中，gated）：Real cloud smoke run（仅在用户显式满足 <a href="guarded-cloud-preflight/FINAL_LAUNCH_GATE.md">FINAL_LAUNCH_GATE.md</a> 全部 7 大 gate 后，由用户手动 flip config 并注入 API key）</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
@@ -558,7 +627,7 @@
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-4A-CREDIT-FILL credit / billing result recorded 阶段</p>
+  <p>AI Tool Test Lab — ATL-4C guarded cloud smoke preflight 阶段</p>
 </footer>
 </body>
 </html>
