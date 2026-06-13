@@ -3,8 +3,8 @@
     {
       "slug": "castform-hermes-phase-closer-v0",
       "title": "Castform — Hermes Phase Closer v0",
-      "phase": "ATL-6C starter-style run failed before rollouts",
-      "status": "repeated step 0 failure; support request prepared",
+      "phase": "CASE-CLOSEOUT",
+      "status": "paused pending Castform backend logs",
       "category": "Model fine-tuning platform / RL post-training",
       "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run、Python 3.12 venv/pip 修复、benchmax SDK introspection、真实本地 validate_env、Account/Credit/Billing 人工 preflight checklist 与字段框架、cloud smoke run dry configuration 包（Build your own / SDK path · 8/2 preview subset · launch guard）、ATL-4A-CREDIT-FILL 字段留档（free credit $50 visible，billing / cost / run controls / data policy 多 UNKNOWN）、ATL-4C guarded cloud smoke preflight 包（dual gate 架构：env var 授权 + 脚本级 guard + 配置级 tripwire · guarded_upload_preflight.py / guarded_launch_preflight.py 默认拒绝 exit 1 · FINAL_LAUNCH_GATE.md 7 大 gate 清单 · API_KEY_RUNTIME_ONLY.md read-s 注入规则）",
       "cloud_role": "GPU training / Castform run",

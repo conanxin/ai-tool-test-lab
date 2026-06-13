@@ -62,8 +62,8 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-6C — Repeated step 0 failure recorded; support request prepared (Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code>, both step 0 failed before any rollout, matching failure shape across two configurations)</p>
-    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no rollouts · ATL-5D support bundle prepared · ATL-6A starter-style redeploy script ready · ATL-6 launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · local validate_env <code>PASS</code> · upload <code>SUCCESS</code> · launch <code>SUCCESS</code> · 16 train / 4 eval preview · result status <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · ATL-6B redeploy result recorded · ATL-6C observed: status=<code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no rollouts · <code>FAILED_STEP_0_NO_ROLLOUTS_REPEATED</code> · likely category <code>FAILED_UNKNOWN_WORKER_BOOTSTRAP_OR_PLATFORM</code> · support request prepared · next: send to Castform Castie/support, await backend logs</p>
+    <p><strong>当前阶段：</strong>CASE-CLOSEOUT — Final closeout · <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> · no further cloud attempts · optionally send <code>CASTFORM_SUPPORT_REQUEST_FINAL.md</code> to Castform Castie/support</p>
+    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no rollouts · ATL-5D support bundle prepared · ATL-6A starter-style redeploy script ready · ATL-6 launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · local validate_env <code>PASS</code> · upload <code>SUCCESS</code> · launch <code>SUCCESS</code> · 16 train / 4 eval preview · result status <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · ATL-6B redeploy result recorded · ATL-6C observed: status=<code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no rollouts · <code>FAILED_STEP_0_NO_ROLLOUTS_REPEATED</code> · likely category <code>FAILED_UNKNOWN_WORKER_BOOTSTRAP_OR_PLATFORM</code> · support request prepared · ATL-CLOSEOUT final closeout: <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> · no further cloud runs</p>
   </div>
 
   <div class="section">
@@ -693,6 +693,38 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
     </ul>
   </div>
 
+  <div class="section">
+    <h2 id="case-closeout">Final Closeout — PAUSED_PENDING_CASTFORM_BACKEND_LOGS</h2>
+    <p><strong>Final status:</strong> <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code></p>
+    <p><strong>What worked:</strong></p>
+    <ul>
+      <li>local <code>validate_env</code> · real local 10/10 PASS (both configs)</li>
+      <li><code>upload_training_run</code> · SUCCESS for both Run 1 (<code>c83f971d-...</code>) and Run 2 (<code>56cb5701-...</code>)</li>
+      <li><code>launch_training_run</code> · SUCCESS for both runs (at SDK level)</li>
+      <li>GitHub Pages documentation · <a href="https://conanxin.github.io/ai-tool-test-lab/">ai-tool-test-lab/</a> published; this case page published</li>
+    </ul>
+    <p><strong>What failed:</strong></p>
+    <ul>
+      <li>repeated step 0 failure · both runs visible in Castform UI as <code>failed</code> · <code>step=0</code></li>
+      <li>no rollouts · no train data available · no eval data · no visible worker logs or traceback in UI</li>
+    </ul>
+    <p><strong>Runs (preserved, not deleted):</strong></p>
+    <ul>
+      <li><code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · 8 train / 2 eval · display name <code>simple-28de6dd2</code></li>
+      <li><code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · 16 train / 4 eval · display name <code>simple-c869a30d</code></li>
+    </ul>
+    <p><strong>Decision:</strong> stop further cloud attempts · do not run more upload / launch tests until Castform backend logs or support feedback are available</p>
+    <p><strong>Artifacts (this phase):</strong></p>
+    <ul>
+      <li><a href="CASE_CLOSEOUT.md">CASE_CLOSEOUT.md</a> — final case closeout doc (status / what tested / local successes / cloud successes / cloud failure / ruled out / not yet ruled out / final decision / optional future action / sensitive information exclusion)</li>
+      <li><a href="CASTFORM_SUPPORT_REQUEST_FINAL.md">CASTFORM_SUPPORT_REQUEST_FINAL.md</a> — paste-ready English support request (short version) for Castform / Castie</li>
+      <li><a href="../../../reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md">reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md</a> — full closeout report (phase overview, deliverables, blockers, evidence, security notes, hard-boundary audit)</li>
+      <li><a href="../../../scripts/validate_case_closeout.py">scripts/validate_case_closeout.py</a> — stdlib validator (per formal spec: 3 closeout doc files exist / both run_id tokens / <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> / <code>data/cases.json</code> Castform case status = paused pending Castform backend logs / 16 secret patterns + 1 forbidden literal scan) · PASS</li>
+    </ul>
+    <p><strong>Sensitive information exclusion:</strong> API key / API key prefix / credit card / cookie / Authorization header / user email / screenshots with private account data — none recorded in any file in this repository.</p>
+    <p><strong>No additional upload. No additional launch.</strong> ATL-CLOSEOUT is a documentation + report + page-update phase only — agent did not call Castform API, did not visit Castform UI, did not upload, did not launch, did not re-run the ATL-5B or ATL-6 scripts, did not record the API key (no prefix, no fragment), did not forge a root cause, did not forge metrics, did not delete any historical result JSON or old run information.</p>
+  </div>
+
 
   <div class="section">
     <h2>ATL-5 / ATL-5A — Cloud Smoke Run Result</h2>
@@ -788,6 +820,7 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
       <li><strong>ATL-6</strong>（2026-06-13 用户手动运行 starter-style redeploy）：<code>PASS_CLOUD_SMOKE_LAUNCHED</code>；<strong>run_id</strong> <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> · <code>train_samples=16</code> · <code>eval_samples=4</code> · <code>uploaded_payload_present=true</code> · <code>training_started=true</code> · launcher_args 8 项不含 <code>batch_size</code> 含 <code>learning_rate</code> · <code>local_validate_env_result=VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code>；<code>validate_atl6_starter_style_redeploy.py</code> PASS</li>
       <li><strong>ATL-6C</strong>（2026-06-13）：用户在 Castform UI 观察到 starter-style redeploy 启动后仍 <code>failed</code> · step=<code>0</code> · display name <code>simple-c869a30d</code> · no train data · no rollouts · 失败 shape 与 ATL-5B 一致 → 创建 support-ready failure bundle：<a href="starter-style-redeploy/support/ATL6C_SUPPORT_REQUEST.md">ATL6C_SUPPORT_REQUEST.md</a>（覆盖两个 run_id, What Worked / What Failed / Request / Sensitive Information Exclusion / 配置 / 本地 validation / upload artifacts / ruled out / 需要 Castform 给什么 / agent 可提供什么 / 本地 env 上下文 / 当前状态）+ <a href="starter-style-redeploy/support/ATL6C_FAILURE_SUMMARY.md">ATL6C_FAILURE_SUMMARY.md</a>（ruled out 6 / not yet ruled out 5 / UI 可见证据 / read-only SDK probe 复用 / next action）；<a href="../../../scripts/validate_atl6c_support_request.py">validate_atl6c_support_request.py</a> PASS；agent 未调用 API、未访问 UI、未上传、未训练、未重复 launch、未重复 retry、未记录 API key（前缀/片段均未记录）、未伪造 backend failure reason、未伪造 metrics</li>
       <li><strong>ATL-6D</strong>（计划中，等 Castform backend 日志回报）：根因修复阶段；可能分支：改 env packaging / 改 dataset upload 路径 / 改 launcher_args / 申请 starter-task 已知好配置做 binary search</li>
+      <li><strong>ATL-CLOSEOUT</strong>（2026-06-13）：最终收口，<code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code>。不再继续 cloud attempts。创建 <a href="CASE_CLOSEOUT.md">CASE_CLOSEOUT.md</a>（final status / what tested / successes / failure / ruled out / not yet ruled out / final decision / optional future action / sensitive info exclusion）+ <a href="CASTFORM_SUPPORT_REQUEST_FINAL.md">CASTFORM_SUPPORT_REQUEST_FINAL.md</a>（paste-ready 英文简短版本） + <a href="../../../reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md">ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md</a>（完整收口报告） + <a href="../../../scripts/validate_case_closeout.py">validate_case_closeout.py</a>（stdlib 验证器 PASS）。<strong>不再继续 cloud tests</strong>，<strong>不删除历史 result JSON</strong>，<strong>不删除旧 run 信息</strong>，<strong>不伪造根因</strong>，<strong>不伪造 metrics</strong>。下一步：选择下一个 AI 工具 / 平台；当 Castform backend 日志可用时再恢复 Castform case。</li>
       <li><strong>ATL-6</strong>（更广义的"下一个工具测试案例"计划，仍待定）</li>
     </ul>
   </div>
@@ -1049,7 +1082,7 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-6C starter-style run monitor (Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code>, both step 0 failed before any rollout, support request prepared for Castform Castie) 阶段</p>
+  <p>AI Tool Test Lab — CASE-CLOSEOUT · <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> · Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> both step 0 failed before any rollout · support request prepared · no further cloud runs planned</p>
 </footer>
 </body>
 </html>

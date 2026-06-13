@@ -20,9 +20,12 @@
 
 ## 当前状态
 
-- **阶段**：ATL-6C — Starter-style run monitor; repeated step 0 failure recorded; support request prepared (Run 1 `c83f971d-2b2c-42b8-9774-ca64938c1286` + Run 2 `56cb5701-6b3e-424e-b671-fc2efc932aa8` both step 0 failed before any rollout; agent stops retrying locally, pivots to asking Castform backend for worker bootstrap logs)
-- **目标**：记录 ATL-6 starter-style redeploy launch 成功但 UI 仍 step 0 failed 的事实；构造跨 Run 1 / Run 2 的支持请求（What Worked / What Failed / Request / Sensitive Information Exclusion），等待 backend 回报根因；agent 不调用 Castform API、不访问 UI、不重复 launch、不伪造 metrics
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — repeated step 0 failure; support request prepared
+- **阶段**：ATL-CLOSEOUT — Final closeout · <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> · no further cloud runs planned · support request prepared
+- **目标**：完成 AI Tool Test Lab Castform 案例的最终收口；记录 final status / 测试阶段总览 / 最终成果 / 最终阻塞 / 保留证据 / 安全说明 / 下一步建议；agent 不调用 Castform API / 不访问 UI / 不上传 / 不训练 / 不重复 launch / 不伪造根因 / 不伪造 metrics
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — closed for now; support request prepared; resume only after Castform backend logs or support feedback
+- **AI Tool Test Lab published**: `https://conanxin.github.io/ai-tool-test-lab/` (HTTP/2 200)
+- **Castform case published**: `https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/` (HTTP/2 200)
+- **AI Tool Test Lab 已成功发布；Castform case 已成功发布** — 详见 [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) + [reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md](reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md)
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -164,6 +167,15 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
 - **ATL-6C 下一步**：用户把 `ATL6C_SUPPORT_REQUEST.md` 内容粘贴到 Castform Castie/support；如果 Castform 返回 backend error，进入 **ATL-6D root cause fix**（可能分支：改 env packaging / 改 dataset upload 路径 / 改 launcher_args / 申请 starter-task 已知好配置做 binary search）
 - **ATL-6C 验证（追加）**：
   - `validate_atl6c_support_request.py` PASS（两个 md + 两个 run_id token + 状态标签 + 16 secret patterns + 1 forbidden literal scan 全部通过）
+- **ATL-CLOSEOUT 收口**（最终收口，<code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code>；不再继续 cloud runs）：
+  - `cases/.../CASE_CLOSEOUT.md` — final case closeout doc (final status / what tested / local successes / cloud successes / cloud failure / ruled out / not yet ruled out / final decision / optional future action / sensitive info exclusion)
+  - `cases/.../CASTFORM_SUPPORT_REQUEST_FINAL.md` — paste-ready 英文简短支持请求 (Run 1 + Run 2 / what worked / what failed / request / sensitive information exclusion)
+  - `reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md` — 完整收口报告 (阶段结论 / current baseline commit / 项目公开 URL / Castform 案例页 URL / 测试阶段总览 / 最终成果 / 最终阻塞 / 保留证据 / 安全说明 / 下一步建议)
+  - `scripts/validate_case_closeout.py` — stdlib 验证器（per formal spec：3 closeout doc 文件存在 / 两个 run_id token 都在 / 状态标签 <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> / <code>data/cases.json</code> Castform case status = paused pending Castform backend logs / 16 secret patterns + 1 forbidden literal scan），**PASS**
+- **ATL-CLOSEOUT 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练 run；agent 未重复运行 ATL-5B 脚本；agent 未重复运行 ATL-6 redeploy 脚本；API key 未记录；API key 前缀或片段未记录；未提交 `.env`；未提交 `.venv`；未记录信用卡 / cookie / Authorization header / 用户邮箱 / 截图；不伪造根因；不伪造 metrics；不删除历史 result JSON；不删除旧 run 信息
+- **ATL-CLOSEOUT 下一步建议**：pause project；optionally send `CASTFORM_SUPPORT_REQUEST_FINAL.md`（或 `ATL6C_SUPPORT_REQUEST.md`）到 Castform Castie/support；do not run more cloud tests until Castform backend logs are available
+- **ATL-CLOSEOUT 验证（追加）**：
+  - `validate_case_closeout.py` PASS（3 closeout doc + 两个 run_id token + 状态标签 + data/cases.json Castform case status 校验 + 16 secret patterns + 1 forbidden literal scan 全部通过）
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
