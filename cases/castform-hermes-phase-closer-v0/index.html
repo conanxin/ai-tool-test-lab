@@ -63,7 +63,7 @@
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
     <p><strong>当前阶段：</strong>ATL-4A — Account / Credit / Billing Manual Preflight (scaffold ready, awaiting human input)</p>
-    <p><strong>测试状态：</strong>manual preflight scaffold ready · ATL-3C 10/10 PASS · 未调用 API · 未训练 · 仅本地准备</p>
+    <p><strong>测试状态：</strong>ATL-4B-CONFIG cloud smoke run dry configuration ready · ATL-3C 10/10 PASS · launch blocked by unclear charges · 未调用 API · 未训练 · 仅本地准备</p>
   </div>
 
   <div class="section">
@@ -103,6 +103,84 @@
       <li>若人工 preflight 结论 = <code>READY_FOR_CLOUD_SMOKE_RUN</code>，进入 ATL-4B（cloud smoke run dry configuration）。</li>
       <li>若结论为任何 <code>BLOCKED_BY_*</code>，记录 blocked reason，本仓库继续停在 ATL-4A。</li>
     </ul>
+  </div>
+
+  <div class="section">
+    <h2>ATL-4B-CONFIG — Cloud Smoke Run Dry Configuration</h2>
+    <p><strong>当前阶段：</strong>Cloud smoke run dry configuration（dry 配置，不真实 launch）</p>
+    <p><strong>本阶段硬边界：</strong>不调用 Castform API · 不上传数据 · 不启动训练 · 不创建 API key · 不使用真实 <code>CASTFORM_API_KEY</code> · 不创建 .env · 不伪造 cloud smoke run 成功。</p>
+
+    <p><strong>用户人工观察摘要：</strong></p>
+    <ul>
+      <li>已人工进入 Castform Web App · New training run 页面可访问</li>
+      <li>示例 setup flows 可访问：<code>starter task</code> · <code>rag agent</code> · <code>agent traces</code></li>
+      <li>API key 页面可访问，但当前 <code>No API keys yet</code></li>
+      <li>Export to VSCode 按钮可见</li>
+      <li>base model <code>Qwen/Qwen3.5-4B</code> 在 setup pages 中可见</li>
+      <li>billing / credit / auto-charge / cost estimate 仍未确认</li>
+    </ul>
+
+    <p><strong>选型结论：Build your own / SDK path</strong></p>
+    <ul>
+      <li>不优先选 RAG Agent：当前没有 production 文档 corpus / 检索引用需求，RAG 模板会增加检索侧算力，浪费 smoke 预算。</li>
+      <li>不优先选 Agent Traces：模板面向生产 agent traces provider；本地数据是合成的 prompt + ground_truth，不是真实 agent traffic。</li>
+      <li>Build your own / SDK：与现有 prompt + ground_truth JSONL / ATL-3C 本地 env candidate / rule-based reward 匹配度最高，暴露最小可用平台链路。</li>
+    </ul>
+
+    <p><strong>cloud smoke 配置：</strong></p>
+    <ul>
+      <li>run name：<code>hermes-phase-closer-smoke</code></li>
+      <li>template path：<code>build_your_own_sdk</code></li>
+      <li>base model：<code>Qwen/Qwen3.5-4B</code></li>
+      <li>train sample count：<code>8</code>（preview 子集已生成：<code>smoke-train.preview.jsonl</code>）</li>
+      <li>eval sample count：<code>2</code>（preview 子集已生成：<code>smoke-eval.preview.jsonl</code>）</li>
+      <li>dataset source：<code>../sample-train.jsonl</code> + <code>../sample-eval.jsonl</code>（ATL-2 redacted）</li>
+      <li>environment source：<code>../local-validate-env/environment_validate_candidate.py</code>（ATL-3C）</li>
+      <li>reward source：<code>../local-validate-env/reward.py</code></li>
+      <li>tools / external network tools：<code>none</code></li>
+      <li>max turns：<code>1</code>（minimal）</li>
+      <li>objective：验证 upload + launch + monitoring 链路启动，不追求模型质量</li>
+    </ul>
+
+    <p><strong>当前 readiness：</strong></p>
+    <div class="status-grid">
+      <div class="status-item">
+        <div class="label">Launch allowed</div>
+        <div class="value blocked">false</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Current readiness</div>
+        <div class="value blocked">BLOCKED_BY_UNCLEAR_CHARGES</div>
+      </div>
+      <div class="status-item">
+        <div class="label">API key created</div>
+        <div class="value blocked">NO</div>
+      </div>
+      <div class="status-item">
+        <div class="label">API call</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Upload</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Training</div>
+        <div class="value blocked">none</div>
+      </div>
+    </div>
+
+    <p><strong>产物文件：</strong></p>
+    <ul class="file-list">
+      <li><a href="cloud-smoke-run/cloud_smoke_config.json">cloud_smoke_config.json</a> — dry 配置</li>
+      <li><a href="cloud-smoke-run/README.md">cloud-smoke-run/README.md</a> — 选型与边界说明</li>
+      <li><a href="cloud-smoke-run/API_KEY_HANDLING.md">cloud-smoke-run/API_KEY_HANDLING.md</a> — API key 注入规则</li>
+      <li><a href="cloud-smoke-run/COST_GUARD.md">cloud-smoke-run/COST_GUARD.md</a> — 成本与计费 guard</li>
+      <li><a href="cloud-smoke-run/prepare_cloud_smoke_subset.py">prepare_cloud_smoke_subset.py</a> — 8/2 preview 子集生成</li>
+      <li><a href="cloud-smoke-run/cloud_launch_guard.py">cloud_launch_guard.py</a> — 默认拒绝 launch 的 guard</li>
+    </ul>
+
+    <p><strong>下一步：</strong>ATL-4A-CREDIT — verify credit / billing / auto-charge / cost visibility；或用户确认 <code>READY_FOR_CLOUD_SMOKE_RUN</code> 后进入 ATL-4C guarded upload preflight。</p>
   </div>
 
   <div class="section">
@@ -147,6 +225,8 @@
       <li><strong>ATL-3B</strong>（2025-06-12）：Python 3.12 venv/pip 修复（without-pip + /tmp/get-pip.py），benchmax 安装成功并可 import；validate_env 仍未运行</li>
       <li><strong>ATL-3C</strong>（2026-06-13）：映射 <code>benchmax.platform.validation.validate_env</code>，构造 <code>HermesPhaseCloserLocalEnv(BaseEnv)</code>，真实本地 validate_env <strong>10/10 PASS</strong>（api_key=None + local=True → 零网络、零上传、零训练）</li>
       <li><strong>ATL-4A</strong>（2026-06-13）：Account / Credit / Billing 人工 preflight scaffold 创建完毕；<code>validate_atl4a_preflight_scaffold.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>；等待用户人工填写 <a href="account-billing-preflight.md">account-billing-preflight.md</a> 后才能进入 ATL-4B</li>
+      <li><strong>ATL-4B-CONFIG</strong>（2026-06-13）：Cloud smoke run <strong>dry configuration</strong> 包已准备（<a href="cloud-smoke-run/README.md">cloud-smoke-run/README.md</a>），选型 <code>Build your own / SDK</code> · base model <code>Qwen/Qwen3.5-4B</code> · 8 train / 2 eval preview 子集已生成 · <code>cloud_launch_allowed=false</code> · <code>current_readiness=BLOCKED_BY_UNCLEAR_CHARGES</code>；<code>validate_atl4b_cloud_smoke_config.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>、<strong>未创建</strong> API key</li>
+      <li><strong>ATL-4C</strong>（计划中，gated）：Guarded upload preflight（仅在用户确认 credit / billing / cost visibility 之后）</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
@@ -410,7 +490,7 @@
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-0 本地 scaffold 阶段</p>
+  <p>AI Tool Test Lab — ATL-4B-CONFIG cloud smoke run dry configuration 阶段</p>
 </footer>
 </body>
 </html>

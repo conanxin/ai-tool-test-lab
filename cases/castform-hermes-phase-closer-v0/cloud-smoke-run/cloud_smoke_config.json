@@ -1,0 +1,27 @@
+{
+  "phase": "ATL-4B-CONFIG",
+  "run_name": "hermes-phase-closer-smoke",
+  "template_path": "build_your_own_sdk",
+  "base_model": "Qwen/Qwen3.5-4B",
+  "train_sample_count": 8,
+  "eval_sample_count": 2,
+  "dataset_source": "../sample-train.jsonl and ../sample-eval.jsonl",
+  "environment_source": "../local-validate-env/environment_validate_candidate.py",
+  "reward_source": "../local-validate-env/reward.py",
+  "tools": [],
+  "external_network_tools": [],
+  "max_turns": 1,
+  "objective": "prove upload + launch + monitoring can start, not train a useful model",
+  "cloud_launch_allowed": false,
+  "requires_user_credit_billing_confirmation": true,
+  "requires_explicit_user_api_key_authorization": true,
+  "current_readiness": "BLOCKED_BY_UNCLEAR_CHARGES",
+  "notes": [
+    "Dry configuration only. No Castform API call.",
+    "No data uploaded.",
+    "No training started.",
+    "No API key created.",
+    "Real CASTFORM_API_KEY never written into repo or .env.",
+    "Launch remains blocked until user confirms READY_FOR_CLOUD_SMOKE_RUN."
+  ]
+}

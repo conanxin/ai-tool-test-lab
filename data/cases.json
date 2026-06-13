@@ -3,12 +3,12 @@
     {
       "slug": "castform-hermes-phase-closer-v0",
       "title": "Castform — Hermes Phase Closer v0",
-      "status": "manual preflight scaffold ready",
+      "status": "cloud smoke config ready; launch blocked by unclear charges",
       "category": "Model fine-tuning platform / RL post-training",
-      "phase": "ATL-4A account and billing preflight",
-      "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run、Python 3.12 venv/pip 修复、benchmax SDK introspection、真实本地 validate_env、Account/Credit/Billing 人工 preflight checklist 与字段框架",
+      "phase": "ATL-4B-CONFIG cloud smoke run dry configuration",
+      "local_role": "数据整理、JSONL 样本生成、reward 脚手架、本地 dry-run、Python 3.12 venv/pip 修复、benchmax SDK introspection、真实本地 validate_env、Account/Credit/Billing 人工 preflight checklist 与字段框架、cloud smoke run dry configuration 包（Build your own / SDK path · 8/2 preview subset · launch guard）",
       "cloud_role": "GPU training / Castform run",
-      "summary": "benchmax 0.1.2.dev33 真实本地 validate_env 10/10 PASS：dataset_preprocess / load_dataset / list_tools / compute_reward / simulated rollout / pickle round-trip 全部通过；HermesPhaseCloserLocalEnv(BaseEnv) 满足 SDK 契约；api_key=None + local=True 完全跳过 RolloutClient，未调用 API、未上传、未训练。",
+      "summary": "ATL-3C 真实本地 validate_env 10/10 PASS；ATL-4A preflight scaffold ready；ATL-4B-CONFIG 已交付 cloud smoke run dry configuration：run name=hermes-phase-closer-smoke · template=build_your_own_sdk · base model=Qwen/Qwen3.5-4B · 8 train / 2 eval preview subset · cloud_launch_allowed=false · current_readiness=BLOCKED_BY_UNCLEAR_CHARGES；未调用 Castform API · 未上传 · 未训练 · 未创建 API key。",
       "updated_at": "2026-06-13"
     }
   ]

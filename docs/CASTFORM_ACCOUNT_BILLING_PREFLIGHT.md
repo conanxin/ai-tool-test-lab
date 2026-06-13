@@ -1,8 +1,8 @@
 # Castform Account / Credit / Billing Preflight
 
-**Phase**: ATL-4A
-**Status**: manual preflight scaffold ready (awaiting human input)
-**Baseline**: commit `5f06de9` (ATL-3C)
+**Phase**: ATL-4A → ATL-4B-CONFIG (gated)
+**Status**: ATL-4B-CONFIG cloud smoke run dry configuration package ready; launch still BLOCKED_BY_UNCLEAR_CHARGES
+**Baseline**: commit `5f06de9` (ATL-3C) · `ff22241` (ATL-4A)
 
 ## 目标
 
@@ -76,3 +76,14 @@
 - ATL-3C 已在本地完成 `validate_env` 真实调用，10/10 contract checks PASS。
 - 本地阶段 (`local=True`) **不消耗 credit、不调用云端、不上传数据**。
 - 本 preflight 是进入云端的最后一道闸门。结论 `READY` 之前，**不会**在仓库内引入真实 `CASTFORM_API_KEY`、不会调用 `upload_training_run`、不会调用 `launch_training_run`、不会触发 `TrainerClient`。
+
+## ATL-4B-CONFIG 衔接（gated, dry only）
+
+- ATL-4B-CONFIG 已准备 cloud smoke run **dry configuration** 包（仅 dry，不 launch）。
+- 选型：Build your own / SDK path · base model `Qwen/Qwen3.5-4B` · 8 train / 2 eval preview subset。
+- 配置文件：`cases/castform-hermes-phase-closer-v0/cloud-smoke-run/cloud_smoke_config.json`。
+- 防护文件：`prepare_cloud_smoke_subset.py`（preview-only） + `cloud_launch_guard.py`（默认拒绝 launch）。
+- 验证脚本：`scripts/validate_atl4b_cloud_smoke_config.py`（PASS）。
+- **billing / credit / auto-charge / cost visibility 未在 Castform Web App 中确认 → 不得 launch**。
+- 下一步仍需人工确认 credit / billing / auto-charge / cost visibility，并把结论同步到 `cases/castform-hermes-phase-closer-v0/account-billing-preflight.md` 的 `Ready status` 字段。
+- 在用户显式声明 `READY_FOR_CLOUD_SMOKE_RUN` 之前，仓库不会进入 ATL-4C guarded upload preflight。
