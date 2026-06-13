@@ -20,11 +20,21 @@
 
 ## 当前状态
 
-- **阶段**：ATL-4B-CONFIG — Castform cloud smoke run dry configuration (gated; launch blocked by unclear charges)
-- **目标**：为 Castform Hermes Phase Closer v0 准备 cloud smoke run 的 dry configuration 包、脚本占位、成本边界、安全说明、页面记录和报告；本阶段不调用 Castform API、不上传数据、不启动训练、不创建 API key
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — cloud smoke run dry configuration ready
+- **阶段**：ATL-4A-CREDIT-FILL — Castform credit / billing result recorded (gated; launch still blocked)
+- **目标**：记录用户人工 credit / billing / cost / run controls / data policy 检查结果；不调用 API · 不上传 · 不训练 · 不创建 API key
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — free credit confirmed; ready declared with guarded preflight required
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
-- **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见；**billing / credit / auto-charge / cost visibility 仍未在 UI 中确认**
+- **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
+- **ATL-4A-CREDIT-FILL 收口**：
+  - Free credit visible: **YES** · $50（首次出现 YES 项）
+  - Usage page visible: **YES**
+  - Billing page visible: **NO** · auto-charge / credit card / cost visibility: **UNKNOWN**
+  - Run controls (cancel / delete run / delete dataset / LoRA download): **UNKNOWN**
+  - Data policy (terms / privacy / retention / deletion): **UNKNOWN**
+  - User-declared readiness: `READY_FOR_CLOUD_SMOKE_RUN`（声明而非系统确认）
+  - Risk-adjusted note: `READY` declared with multiple `UNKNOWN`；guarded preflight required before launch
+  - `cloud_launch_allowed` 保持 `false`；`current_readiness` 保持 `BLOCKED_BY_UNCLEAR_CHARGES`
+  - 详细见 [credit-billing-verification.md](cases/castform-hermes-phase-closer-v0/credit-billing-verification.md)
 - **ATL-4B-CONFIG 选型**：Build your own / SDK path（不选 RAG Agent / Agent Traces，原因见 [cloud-smoke-run/README.md](cases/castform-hermes-phase-closer-v0/cloud-smoke-run/README.md)）
 - **ATL-4B-CONFIG 配置**：
   - run name: `hermes-phase-closer-smoke`
@@ -33,7 +43,7 @@
   - `cloud_launch_allowed = false`
   - `current_readiness = BLOCKED_BY_UNCLEAR_CHARGES`
   - launch guard 默认拒绝 launch
-- **ATL-4B 下一步**：用户人工确认 credit / billing / auto-charge / cost visibility，把 `Ready status` 同步到 [account-billing-preflight.md](cases/castform-hermes-phase-closer-v0/account-billing-preflight.md)；只有 `READY_FOR_CLOUD_SMOKE_RUN` 后才进入 ATL-4C guarded upload preflight
+- **ATL-4A-CREDIT-FILL 下一步**：进入 ATL-4C guarded cloud smoke preflight（**not** immediate launch）—— guarded preflight 显式将 `cloud_launch_allowed` 升级为 `true` 之前，launch 始终 blocked
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS

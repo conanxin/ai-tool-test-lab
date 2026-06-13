@@ -1,10 +1,11 @@
 # Castform Account / Credit / Billing Preflight — Castform Hermes Phase Closer v0
 
-**Phase**: ATL-4A → ATL-4B-CONFIG (gated)
-**Status**: ATL-4B-CONFIG cloud smoke run dry configuration scaffold ready; launch still BLOCKED_BY_UNCLEAR_CHARGES
+**Phase**: ATL-4A → ATL-4B-CONFIG (gated) → ATL-4A-CREDIT-FILL
+**Status**: free credit confirmed ($50) · user-declared READY with unresolved billing/charge unknowns · launch remains blocked
 **Created**: 2026-06-13
 **Baseline**: commit `5f06de9` (ATL-3C)
 **ATL-4A baseline**: commit `ff22241`
+**ATL-4B-CONFIG baseline**: commit `b364bb7`
 
 > 本文件只记录**结构化非敏感字段**。任何 API key、信用卡号、cookie、token 均**不得**写入本文件。
 > 完整 checklist 见 `docs/CASTFORM_ACCOUNT_BILLING_PREFLIGHT.md`。
@@ -73,3 +74,19 @@
 - ATL-4B-CONFIG 已准备 dry configuration 包，但 billing / credit 未确认 → launch 仍 blocked。
 - 下一步：用户人工确认 credit / billing / auto-charge / cost visibility → `READY_FOR_CLOUD_SMOKE_RUN` 后才进入 ATL-4C。
 - 只有 `READY_FOR_CLOUD_SMOKE_RUN` 后，仓库才会进入 ATL-4C guarded upload preflight。
+
+## ATL-4A-CREDIT-FILL 摘要 (本阶段交付)
+
+- **Credit status**: confirmed, $50 free credit visible（首次出现 YES 项）
+- **Credit expiration visible**: NO
+- **Usage page visible**: YES
+- **Billing status**: billing page **NOT visible**（多 UNKNOWN）
+- **Cost visibility**: 全部 UNKNOWN（estimated / model / GPU / endpoint）
+- **Run controls**: 全部 UNKNOWN（cancel / delete run / delete dataset / LoRA download）
+- **Data policy**: 全部 UNKNOWN（terms / privacy / retention / deletion policy）
+- **User-declared readiness**: `READY_FOR_CLOUD_SMOKE_RUN`
+- **Risk-adjusted note**: `READY` declared while billing / charge visibility / run controls / data policy 仍 UNKNOWN；guarded preflight required before launch
+- **Cloud launch allowed**: **NO**（`cloud_launch_allowed` 保持 `false`）
+- **Guard status**: `current_readiness` 保持 `BLOCKED_BY_UNCLEAR_CHARGES`，由 ATL-4C 显式升级
+- **详细见**: `cases/castform-hermes-phase-closer-v0/credit-billing-verification.md`
+- **下一阶段**: ATL-4C guarded cloud smoke preflight（**not** immediate launch）

@@ -63,7 +63,7 @@
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
     <p><strong>当前阶段：</strong>ATL-4A — Account / Credit / Billing Manual Preflight (scaffold ready, awaiting human input)</p>
-    <p><strong>测试状态：</strong>ATL-4B-CONFIG cloud smoke run dry configuration ready · ATL-3C 10/10 PASS · launch blocked by unclear charges · 未调用 API · 未训练 · 仅本地准备</p>
+    <p><strong>测试状态：</strong>ATL-4A-CREDIT-FILL credit/billing result recorded · $50 free credit confirmed · READY declared with guarded preflight required · ATL-3C 10/10 PASS · launch still blocked · 未调用 API · 未训练 · 仅本地准备</p>
   </div>
 
   <div class="section">
@@ -184,6 +184,73 @@
   </div>
 
   <div class="section">
+    <h2>ATL-4A-CREDIT-FILL — Credit / Billing Result Recorded</h2>
+    <p><strong>当前阶段：</strong>记录用户人工 credit / billing 检查结果；不调用 API · 不上传 · 不训练 · 不创建 API key</p>
+
+    <p><strong>用户人工检查结果摘要：</strong></p>
+    <ul>
+      <li>Free credit visible: <strong>YES</strong></li>
+      <li>Free credit amount: <strong>$50</strong></li>
+      <li>Credit expiration visible: <strong>NO</strong></li>
+      <li>Usage page visible: <strong>YES</strong></li>
+      <li>Billing page visible: <strong>NO</strong></li>
+      <li>Billing method required: <strong>UNKNOWN</strong></li>
+      <li>Credit card required before launch: <strong>UNKNOWN</strong></li>
+      <li>Auto-charge risk: <strong>UNKNOWN</strong></li>
+      <li>Estimated cost visible before launch: <strong>UNKNOWN</strong></li>
+      <li>Model / GPU / endpoint cost visible: <strong>UNKNOWN</strong></li>
+      <li>Cancel / delete run / delete dataset / LoRA download: <strong>UNKNOWN</strong></li>
+      <li>Terms / privacy / data retention / deletion policy: <strong>UNKNOWN</strong></li>
+    </ul>
+
+    <p><strong>用户声明 Final readiness：</strong><code>READY_FOR_CLOUD_SMOKE_RUN</code></p>
+    <p><strong>Risk note：</strong><code>READY</code> declared while billing / charge visibility / run controls / data policy 仍多项 <code>UNKNOWN</code>；guarded preflight required before launch。</p>
+
+    <p><strong>当前 guard 状态：</strong></p>
+    <div class="status-grid">
+      <div class="status-item">
+        <div class="label">Free credit</div>
+        <div class="value ready">$50 visible</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Usage page</div>
+        <div class="value ready">YES</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Billing page</div>
+        <div class="value blocked">NO</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Cost visibility</div>
+        <div class="value blocked">UNKNOWN</div>
+      </div>
+      <div class="status-item">
+        <div class="label">User-declared readiness</div>
+        <div class="value pending">READY (with unknowns)</div>
+      </div>
+      <div class="status-item">
+        <div class="label">cloud_launch_allowed</div>
+        <div class="value blocked">false (unchanged)</div>
+      </div>
+      <div class="status-item">
+        <div class="label">API call</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Upload</div>
+        <div class="value blocked">none</div>
+      </div>
+      <div class="status-item">
+        <div class="label">Training</div>
+        <div class="value blocked">none</div>
+      </div>
+    </div>
+
+    <p><strong>本阶段交付：</strong><a href="credit-billing-verification.md">credit-billing-verification.md</a> 已创建并记录用户人工检查的完整字段；本案例页同步摘要。</p>
+    <p><strong>下一阶段：</strong>ATL-4C guarded cloud smoke preflight（<strong>not</strong> immediate launch）—— guarded preflight 显式将 <code>cloud_launch_allowed</code> 升级为 <code>true</code> 之前，launch 始终 blocked。</p>
+  </div>
+
+  <div class="section">
     <h2>测试数据</h2>
     <p><strong>训练样本：</strong>42 条（sample-train.jsonl）</p>
     <p><strong>评估样本：</strong>7 条（sample-eval.jsonl）</p>
@@ -226,7 +293,8 @@
       <li><strong>ATL-3C</strong>（2026-06-13）：映射 <code>benchmax.platform.validation.validate_env</code>，构造 <code>HermesPhaseCloserLocalEnv(BaseEnv)</code>，真实本地 validate_env <strong>10/10 PASS</strong>（api_key=None + local=True → 零网络、零上传、零训练）</li>
       <li><strong>ATL-4A</strong>（2026-06-13）：Account / Credit / Billing 人工 preflight scaffold 创建完毕；<code>validate_atl4a_preflight_scaffold.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>；等待用户人工填写 <a href="account-billing-preflight.md">account-billing-preflight.md</a> 后才能进入 ATL-4B</li>
       <li><strong>ATL-4B-CONFIG</strong>（2026-06-13）：Cloud smoke run <strong>dry configuration</strong> 包已准备（<a href="cloud-smoke-run/README.md">cloud-smoke-run/README.md</a>），选型 <code>Build your own / SDK</code> · base model <code>Qwen/Qwen3.5-4B</code> · 8 train / 2 eval preview 子集已生成 · <code>cloud_launch_allowed=false</code> · <code>current_readiness=BLOCKED_BY_UNCLEAR_CHARGES</code>；<code>validate_atl4b_cloud_smoke_config.py</code> PASS；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>、<strong>未创建</strong> API key</li>
-      <li><strong>ATL-4C</strong>（计划中，gated）：Guarded upload preflight（仅在用户确认 credit / billing / cost visibility 之后）</li>
+      <li><strong>ATL-4A-CREDIT-FILL</strong>（2026-06-13）：用户人工填写 credit / billing / cost / run controls / data policy 字段（<a href="credit-billing-verification.md">credit-billing-verification.md</a>）：<strong>Free credit $50 visible + usage page visible</strong>（首次 YES 项）但 billing / auto-charge / cost estimate / cancellation / deletion / data policy 仍多项 <code>UNKNOWN</code>；用户声明 <code>READY_FOR_CLOUD_SMOKE_RUN</code>，<code>cloud_launch_allowed</code> 保持 <code>false</code>，<strong>guarded preflight required</strong>；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong></li>
+      <li><strong>ATL-4C</strong>（计划中，gated）：Guarded cloud smoke preflight（仅在 ATL-4A-CREDIT-FILL 留档的 risk-adjusted note 下推进，且仍不 launch）</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
@@ -490,7 +558,7 @@
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-4B-CONFIG cloud smoke run dry configuration 阶段</p>
+  <p>AI Tool Test Lab — ATL-4A-CREDIT-FILL credit / billing result recorded 阶段</p>
 </footer>
 </body>
 </html>
