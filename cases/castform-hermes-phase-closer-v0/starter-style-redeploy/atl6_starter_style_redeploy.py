@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-ATL-6A: atl6_starter_style_redeploy.py
+ATL-6: atl6_starter_style_redeploy.py
 
 Starter-style Castform redeploy script. Mirrors the ATL-5B retry script
 structure (4-gate + local validate_env + upload + launch + result JSON) but
-embeds the ATL-6A fix points:
+embeds the ATL-6 fix points:
 
   1. dataset = starter-train.preview.jsonl (16) + starter-eval.preview.jsonl (4)
      (NOT the ATL-5 8/2 smoke subset, NOT the full 49-row dataset)
@@ -12,7 +12,7 @@ embeds the ATL-6A fix points:
      - no-tools (list_tools -> [], run_tool -> "" no raise)
      - 0.0~1.0 reward (format / coverage / score)
      - no custom load_dataset override
-  3. run_name = "hermes-phase-closer-smoke-atl6a"
+  3. run_name = "hermes-phase-closer-starter-style-atl6"
      (does NOT overwrite ATL-5 / ATL-5B run records)
   4. result file = atl6_starter_style_redeploy_result.json
      (separate from atl5_cloud_smoke_result.json +
@@ -33,18 +33,18 @@ Hard rules:
   - No auto-retry.
   - Stop on billing/credit/quota error.
   - Stop on upload success + launch failure (do not retry).
-  - Phase field in result JSON = "ATL-6A".
+  - Phase field in result JSON = "ATL-6".
 
 Required environment variables (all four must be set):
   - CASTFORM_API_KEY: must be present (any non-empty value)
   - ATL_ALLOW_CASTFORM_UPLOAD: must equal "YES" exactly
   - ATL_ALLOW_CASTFORM_LAUNCH: must equal "YES" exactly
   - ATL_USER_AUTHORIZATION: must equal exactly
-      "I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY"
+      "I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
 
 Any deviation => refuse, write a sanitized blocked result, exit 1.
 
-Agent does NOT run this script during ATL-6A-SCRIPT-PREP.
+Agent does NOT run this script during ATL-6-SCRIPT-PREP.
 User runs it manually after confirming all gates.
 """
 
@@ -82,7 +82,7 @@ REQUIRED_GATES = {
     "ATL_ALLOW_CASTFORM_LAUNCH": ("exact", "YES"),
     "ATL_USER_AUTHORIZATION": (
         "exact",
-        "I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY",
+        "I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY",
     ),
 }
 
@@ -100,7 +100,7 @@ LAUNCHER_ARGS = {
 TRAIN_SAMPLES = 16
 EVAL_SAMPLES = 4
 BASE_MODEL = "Qwen/Qwen3.5-4B"
-RUN_NAME = "hermes-phase-closer-smoke-atl6a"
+RUN_NAME = "hermes-phase-closer-starter-style-atl6"
 
 SAFE_UPLOAD_FIELDS = (
     "env_cls_path",
@@ -155,7 +155,7 @@ def _write_result(payload: dict) -> None:
 
 def _base_payload(local_validate_env_result: str = "NOT_EXECUTED") -> dict:
     return {
-        "phase": "ATL-6A",
+        "phase": "ATL-6",
         "local_validate_env_result": local_validate_env_result,
         "upload_attempted": False,
         "upload_succeeded": False,
@@ -180,7 +180,7 @@ def _base_payload(local_validate_env_result: str = "NOT_EXECUTED") -> dict:
             "no-tools env (list_tools=[] / run_tool='' no raise)",
             "0.0~1.0 reward (format / coverage / score)",
             "no custom load_dataset override (BaseEnv default)",
-            "new run_name hermes-phase-closer-smoke-atl6a (does not overwrite ATL-5 / ATL-5B run records)",
+            "new run_name hermes-phase-closer-starter-style-atl6 (does not overwrite ATL-5 / ATL-5B run records)",
             "old failed run c83f971d-... not referenced",
         ],
         "old_failed_run_referenced": False,
@@ -287,7 +287,7 @@ def _build_uploaded_payload(uploaded_obj: object) -> dict:
 
 
 def main() -> int:
-    print("[INFO] ATL-6A starter-style redeploy starting")
+    print("[INFO] ATL-6 starter-style redeploy starting")
     print("[INFO] This script will call Castform API if all gates pass.")
 
     # A. Gate check
@@ -324,7 +324,7 @@ def main() -> int:
         return 1
 
     # D. Upload
-    print("[INFO] Uploading training run to Castform (ATL-6A)...")
+    print("[INFO] Uploading training run to Castform (ATL-6)...")
     api_key = os.environ["CASTFORM_API_KEY"]
     upload_attempted = True
     upload_succeeded = False
@@ -380,7 +380,7 @@ def main() -> int:
     uploaded_payload_present = bool(safe_payload)
 
     # F. Launch
-    print("[INFO] Launching training run on Castform (ATL-6A)...")
+    print("[INFO] Launching training run on Castform (ATL-6)...")
     launch_attempted = True
     launch_succeeded = False
     launch_error = None
@@ -453,7 +453,7 @@ def main() -> int:
     payload["error_category"] = None
     payload["error_summary"] = None
     _write_result(payload)
-    print("[INFO] ATL-6A starter-style redeploy complete.")
+    print("[INFO] ATL-6 starter-style redeploy complete.")
     print(f"[INFO] run_id: {run_id}")
     print(f"[INFO] experiment_url: {experiment_url}")
     return 0

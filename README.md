@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-6A — Starter-style redeploy prepared (16 train / 4 eval preview · no-tools env · 0.0~1.0 reward · no custom load_dataset override · new run_name `hermes-phase-closer-smoke-atl6a`; awaiting user authorization `I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY`)
+- **阶段**：ATL-6A — Starter-style redeploy prepared (16 train / 4 eval preview · no-tools env · 0.0~1.0 reward · no custom load_dataset override · new run_name `hermes-phase-closer-starter-style-atl6`; awaiting user authorization `I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY`)
 - **目标**：准备 starter-style redeploy 脚本、环境、reward、验证器和报告；agent 不调用 Castform API；不重复使用旧 failed run；新 run 走独立 result 文件
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — starter-style redeploy prepared; awaiting user authorization
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — starter-style redeploy script ready; manual execution required
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -137,17 +137,18 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
   - `cases/.../starter-style-redeploy/reward_starter_style.py` — 0.0~1.0 `score_completion` 返回 `{format, coverage, score}`；secret-pattern 检测强制 score=0
   - `cases/.../starter-style-redeploy/environment_starter_style.py` — `HermesPhaseCloserStarterStyleEnv`：`BaseEnv` 子类；no-tools（`list_tools=[]` / `run_tool=""` 不 raise）；no custom `load_dataset` override；system_prompt 固定 7 字段结构
   - `cases/.../starter-style-redeploy/validate_starter_style_env.py` — 本地 validate runner（`local=True` / `api_key=None`）；已实测 `VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)` with 5 train + 2 eval rows
-  - `cases/.../starter-style-redeploy/atl6_starter_style_redeploy.py` — 云端 redeploy 脚本（4 重 gate 含 `I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY` 授权语句；run_name `hermes-phase-closer-smoke-atl6a`；独立 result 文件 `atl6_starter_style_redeploy_result.json`；launcher_args 同 ATL-5B 修正后版本；不引用旧 run_id `c83f971d-...`；不覆盖 ATL-5 / ATL-5B 历史）
-  - `scripts/validate_atl6a_starter_style_redeploy.py` — stdlib 验证器：5 文件存在 + AST 语法，env class 结构 + `run_tool` 返回空字符串 + 无 `load_dataset` override，reward 0.0~1.0 clamp，16/4 dataset，`run_name` 命中，授权语句匹配，旧 `run_id` 不被引用，15 secret patterns scan，**PASS**
+  - `cases/.../starter-style-redeploy/atl6_starter_style_redeploy.py` — 云端 redeploy 脚本（4 重 gate 含 `I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY` 授权语句；run_name `hermes-phase-closer-starter-style-atl6`；独立 result 文件 `atl6_starter_style_redeploy_result.json`；launcher_args 同 ATL-5B 修正后版本；不引用旧 run_id `c83f971d-...`；不覆盖 ATL-5 / ATL-5B 历史）
+  - `cases/.../starter-style-redeploy/ATL6_STARTER_STYLE_REDEPLOY_NOTES.md` — why ATL-6, starter-task lessons, old run context, fix points, authorization statement, "not done" boundaries, manual execution recipe
+  - `scripts/validate_atl6_starter_style_redeploy.py` — stdlib 验证器（per formal spec）：starter-style-redeploy 目录 / 16 train / 4 eval / `run_tool` 不 raise / reward 0.0~1.0 / `launcher_args` 不含 `batch_size` 含 `learning_rate` / result JSON secret-pattern scan + train/eval samples + launch_succeeded 时 run_id + experiment_url 含 app.castform.com / result 缺失时输出 SKIPPED_RESULT_NOT_PRESENT 但 PASS，**PASS**
 - **ATL-6A 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未运行 `atl6_starter_style_redeploy.py`；API key 未记录；API key 前缀或片段未记录；未提交 `.env`；未提交 `.venv`；未记录信用卡 / cookie / Authorization header / 用户邮箱 / 截图；不伪造 `run_id` / `experiment_url`；不覆盖 ATL-5 / ATL-5B 历史 result；不引用旧 failed run `c83f971d-...`
-- **ATL-6A 下一步**：用户在本地 WSL 显式授权 `I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY`（连同 `CASTFORM_API_KEY` + `ATL_ALLOW_CASTFORM_UPLOAD=YES` + `ATL_ALLOW_CASTFORM_LAUNCH=YES`）后手动运行：
+- **ATL-6A 下一步**：用户在本地 WSL 显式授权 `I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY`（连同 `CASTFORM_API_KEY` + `ATL_ALLOW_CASTFORM_UPLOAD=YES` + `ATL_ALLOW_CASTFORM_LAUNCH=YES`）后手动运行：
   ```
   .venv-castform-local/bin/python \
     cases/castform-hermes-phase-closer-v0/starter-style-redeploy/atl6_starter_style_redeploy.py
   ```
   真实 Castform API 调用由用户执行；agent 仅监督 `run_id` / `experiment_url` / `training_started` 状态
 - **ATL-6A 验证（追加）**：
-  - `validate_atl6a_starter_style_redeploy.py` PASS（9 检查：5 文件存在 + AST 语法 / env class `HermesPhaseCloserStarterStyleEnv` / `BaseEnv` import / `run_tool` 返回 `""` / no custom `load_dataset` override / reward `score_completion` + 0.0~1.0 clamp / 16 train + 4 eval dataset / `run_name=hermes-phase-closer-smoke-atl6a` / 授权语句 `I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY` / 旧 `run_id c83f971d-...` 不被引用 / 15 secret patterns scan 全部通过）
+  - `validate_atl6_starter_style_redeploy.py` PASS（per formal spec：starter-style-redeploy 目录 / 16 train / 4 eval / `run_tool` 不 raise / reward 0.0~1.0 / `launcher_args` 不含 `batch_size` 含 `learning_rate` / result JSON secret-pattern scan + train/eval samples + launch_succeeded 时 run_id + experiment_url 含 app.castform.com / result 缺失时输出 SKIPPED_RESULT_NOT_PRESENT 但 PASS，9 检查全部通过）
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS

@@ -62,8 +62,8 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-6A — Starter-style redeploy prepared (16/4 dataset, no-tools env, 0.0~1.0 reward, no load_dataset override, new run_name)</p>
-    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no train data · no eval data · no rollouts · ATL-5D support bundle prepared · ATL-6A starter-style redeploy script ready: <code>hermes-phase-closer-smoke-atl6a</code> · 16 train / 4 eval preview · <code>HermesPhaseCloserStarterStyleEnv</code> (no-tools, no <code>load_dataset</code> override, 0.0~1.0 reward) · <code>validate_starter_style_env.py</code> local 10/10 PASS · next: user authorizes <code>I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY</code> and runs the redeploy script</p>
+    <p><strong>当前阶段：</strong>ATL-6A — Starter-style redeploy prepared (16 train / 4 eval, no-tools env, run_tool returns empty string, reward normalized to 0.0~1.0, batch_size removed, new run_name <code>hermes-phase-closer-starter-style-atl6</code>)</p>
+    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no train data · no eval data · no rollouts · ATL-5D support bundle prepared · ATL-6A starter-style redeploy script ready · run_name <code>hermes-phase-closer-starter-style-atl6</code> · 16 train / 4 eval preview · <code>HermesPhaseCloserStarterStyleEnv</code> (no-tools, no <code>load_dataset</code> override, 0.0~1.0 reward) · <code>validate_starter_style_env.py</code> local 10/10 PASS · execution status: not run · next: user authorizes <code>I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY</code> and runs the redeploy script manually</p>
   </div>
 
   <div class="section">
@@ -572,44 +572,49 @@ cd /mnt/d/AI/ai-tool-test-lab
 
   <div class="section">
     <h2 id="atl-6a">ATL-6A — Starter-Style Redeploy (Prepared)</h2>
-    <p><strong>Current phase:</strong> Starter-style redeploy script + env + reward + dataset prepared (script not run by agent)</p>
-    <p><strong>Motivation:</strong> ATL-5B's first run <code>c83f971d-...</code> failed at step 0 with no UI-visible traceback. ATL-6A switches to a starter-style path that minimises custom code in the cloud trainer: 16/4 dataset, no-tools env, no custom <code>load_dataset</code> override, deterministic 0.0~1.0 reward, fresh run_name.</p>
+    <p><strong>Current phase:</strong> Starter-style redeploy prepared</p>
+    <p><strong>Reason:</strong> ATL-5B run <code>c83f971d-...</code> failed at step 0 before rollouts (see ATL-5C monitoring). ATL-6A does not wait for backend logs and instead pivots to a starter-style path that is more likely to produce a real rollout on the cloud trainer.</p>
 
-    <p><strong>Fix points (vs ATL-5/5B):</strong></p>
+    <p><strong>Starter-task lessons applied:</strong></p>
+    <ul>
+      <li><strong>Simple, no-tools env</strong> — minimal <code>BaseEnv</code> surface, no RAG, no agent traces, no custom <code>load_dataset</code> override</li>
+      <li><strong>Enough dataset examples</strong> — 16 train / 4 eval preview (doubled from ATL-5B's 8/2)</li>
+      <li><strong>Simple deterministic reward</strong> — 0.0~1.0 rule-based, no LLM judge, no embedding lookup, no network call</li>
+    </ul>
+
+    <p><strong>Changes (vs ATL-5B):</strong></p>
     <ul>
       <li><strong>16 train / 4 eval preview subset</strong> (was 8 train / 2 eval in ATL-5B; never uploads the full 49-row dataset)</li>
-      <li><strong>no-tools env</strong>: <code>list_tools</code> returns <code>[]</code>; <code>run_tool</code> returns <code>""</code> (no raise, no <code>NotImplementedError</code>)</li>
-      <li><strong>0.0~1.0 reward</strong>: <code>score_completion</code> returns <code>{format, coverage, score}</code> clamped to <code>[0.0, 1.0]</code></li>
-      <li><strong>no custom <code>load_dataset</code> override</strong>: closer to BaseEnv default behaviour</li>
-      <li><strong>new run_name</strong>: <code>hermes-phase-closer-smoke-atl6a</code> (separate from ATL-5 / ATL-5B run records)</li>
-      <li><strong>old failed run not reused</strong>: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> is never referenced by the new script</li>
+      <li><strong><code>run_tool</code> returns empty string</strong> and never raises <code>NotImplementedError</code> (no-tools contract)</li>
+      <li><strong>Reward normalized to 0.0~1.0</strong> via <code>reward_starter_style.py</code>; secret-pattern detection forces <code>score = 0.0</code> (defensive)</li>
+      <li><strong><code>batch_size</code> removed</strong> from <code>launcher_args</code> (Castform does not accept it); accepted args are <code>model</code>, <code>learning_rate</code>, <code>num_epochs</code>, <code>group_size</code>, <code>max_rollout_len</code>, <code>max_turns</code>, <code>lora_rank</code>, <code>lora_alpha</code></li>
     </ul>
 
-    <p><strong>Local validate (already exercised by agent):</strong></p>
-    <ul>
-      <li><code>.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/starter-style-redeploy/validate_starter_style_env.py</code></li>
-      <li>Result: <code>VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code> — 5 train rows + 2 eval rows, local=True, api_key=None, no upload, no training, no network</li>
-    </ul>
+    <p><strong>Execution status:</strong> <span class="value blocked">NOT RUN</span> — agent did not call Castform API. The script is prepared; the user runs it manually after explicit authorization.</p>
 
-    <p><strong>Next step — user manual ATL-6A execution from local WSL shell:</strong></p>
+    <p><strong>Next step — user manual ATL-6 redeploy from local WSL shell:</strong></p>
     <pre><code>cd /mnt/d/AI/ai-tool-test-lab
+export CASTFORM_API_KEY=&lt;your-castform-api-key&gt;
+export ATL_ALLOW_CASTFORM_UPLOAD=YES
+export ATL_ALLOW_CASTFORM_LAUNCH=YES
+export ATL_USER_AUTHORIZATION=*** AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
 .venv-castform-local/bin/python \
   cases/castform-hermes-phase-closer-v0/starter-style-redeploy/atl6_starter_style_redeploy.py</code></pre>
-    <p>Requires explicit user authorization: <code>I AUTHORIZE ATL-6A STARTER-STYLE REDEPLOY</code> (set as <code>ATL_USER_AUTHORIZATION</code> env var, alongside <code>CASTFORM_API_KEY</code>, <code>ATL_ALLOW_CASTFORM_UPLOAD=YES</code>, <code>ATL_ALLOW_CASTFORM_LAUNCH=YES</code>).</p>
-    <p>Result is written to <code>cases/castform-hermes-phase-closer-v0/starter-style-redeploy/atl6_starter_style_redeploy_result.json</code> — does not overwrite <code>atl5_cloud_smoke_result.json</code> or <code>atl5b_second_upload_launch_retry_result.json</code>.</p>
+    <p>Result is written to <code>cases/castform-hermes-phase-closer-v0/starter-style-redeploy/atl6_starter_style_redeploy_result.json</code> — independent of ATL-5 / ATL-5B result files. See <a href="starter-style-redeploy/ATL6_STARTER_STYLE_REDEPLOY_NOTES.md">ATL6_STARTER_STYLE_REDEPLOY_NOTES.md</a> for the full rationale.</p>
 
-    <p><strong>No additional upload. No additional launch.</strong> ATL-6A is a script-and-validator preparation phase only. Agent did not call Castform API, did not visit Castform UI, did not upload data, did not start training, did not run the redeploy script, did not record the API key (no prefix, no fragment). The old failed run <code>c83f971d-...</code> is preserved as historical evidence and never re-referenced.</p>
+    <p><strong>No additional upload. No additional launch.</strong> ATL-6A is a documentation + script-prep phase only. Agent did not call Castform API, did not visit Castform UI, did not upload data, did not start training, did not run the redeploy script, did not record the API key (no prefix, no fragment), and did not delete the old failed run <code>c83f971d-...</code>.</p>
 
     <p><strong>Files (this phase):</strong></p>
     <ul>
+      <li><a href="starter-style-redeploy/ATL6_STARTER_STYLE_REDEPLOY_NOTES.md">starter-style-redeploy/ATL6_STARTER_STYLE_REDEPLOY_NOTES.md</a> — why we need ATL-6, starter-task lessons, old run context, fix points, authorization statement, "not done" boundaries, manual execution recipe</li>
       <li><a href="starter-style-redeploy/prepare_starter_style_subset.py">starter-style-redeploy/prepare_starter_style_subset.py</a> — stdlib subset prep (16 train / 4 eval) · PASS</li>
       <li><a href="starter-style-redeploy/starter-train.preview.jsonl">starter-style-redeploy/starter-train.preview.jsonl</a> — 16 rows</li>
       <li><a href="starter-style-redeploy/starter-eval.preview.jsonl">starter-style-redeploy/starter-eval.preview.jsonl</a> — 4 rows</li>
       <li><a href="starter-style-redeploy/reward_starter_style.py">starter-style-redeploy/reward_starter_style.py</a> — 0.0~1.0 <code>score_completion</code> returning <code>{format, coverage, score}</code></li>
-      <li><a href="starter-style-redeploy/environment_starter_style.py">starter-style-redeploy/environment_starter_style.py</a> — <code>HermesPhaseCloserStarterStyleEnv</code> (BaseEnv, no custom load_dataset, no-tools, 0.0~1.0 reward)</li>
+      <li><a href="starter-style-redeploy/environment_starter_style.py">starter-style-redeploy/environment_starter_style.py</a> — <code>HermesPhaseCloserStarterStyleEnv</code> (BaseEnv, no custom load_dataset, no-tools, <code>run_tool=""</code> no raise, 0.0~1.0 reward)</li>
       <li><a href="starter-style-redeploy/validate_starter_style_env.py">starter-style-redeploy/validate_starter_style_env.py</a> — local validate_env runner · <code>VALIDATE_ENV_LOCAL_PASS (local 10/10)</code></li>
-      <li><a href="starter-style-redeploy/atl6_starter_style_redeploy.py">starter-style-redeploy/atl6_starter_style_redeploy.py</a> — cloud redeploy script (4 gates + local validate_env + upload + launch + result JSON)</li>
-      <li><a href="../../../scripts/validate_atl6a_starter_style_redeploy.py">scripts/validate_atl6a_starter_style_redeploy.py</a> — stdlib validator (9 checks: 5 files exist + syntax OK, env class, reward clamp, run_name, auth, dataset sizes, no old run ref, no secret leak) · PASS</li>
+      <li><a href="starter-style-redeploy/atl6_starter_style_redeploy.py">starter-style-redeploy/atl6_starter_style_redeploy.py</a> — cloud redeploy script (4 gates + local validate_env + upload + launch + result JSON); run_name <code>hermes-phase-closer-starter-style-atl6</code>; auth <code>I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY</code></li>
+      <li><a href="../../../scripts/validate_atl6_starter_style_redeploy.py">scripts/validate_atl6_starter_style_redeploy.py</a> — stdlib validator (per formal spec: dir / 16+4 dataset / run_tool no-raise / 0.0~1.0 reward / no batch_size + learning_rate / result-JSON secret+samples+url checks / SKIPPED_RESULT_NOT_PRESENT branch) · PASS</li>
     </ul>
   </div>
 
@@ -703,7 +708,7 @@ cd /mnt/d/AI/ai-tool-test-lab
       <li><strong>ATL-5D</strong>（2026-06-13）：read-only SDK probe 确认无 status/log 方法（<code>NO_READ_ONLY_STATUS_METHOD_FOUND</code>）→ 创建 support-ready failure bundle：<a href="cloud-smoke-run/support/ATL5D_SUPPORT_REQUEST.md">ATL5D_SUPPORT_REQUEST.md</a>（粘贴给 Castform support / Castie 询问 backend worker log）+ <a href="cloud-smoke-run/support/ATL5D_FAILURE_SUMMARY.md">ATL5D_FAILURE_SUMMARY.md</a>（ruled out: 缺 API key / upload 失败 / batch_size 拒绝 / 缺 run / 缺 UI route；not yet ruled out: remote env load / dataset load / 依赖安装 / trainer bootstrap / quota-billing / worker 内部错误）；创建 <a href="../../../scripts/validate_atl5d_support_bundle.py">validate_atl5d_support_bundle.py</a> PASS；agent 未调用 API、未访问 UI、未上传、未训练、未重复 launch、未记录 API key（前缀/片段均未记录）</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
-      <li><strong>ATL-6A</strong>（2026-06-13 准备完成，等待用户授权 + 手动运行）：starter-style redeploy（16/4 dataset, no-tools env, 0.0~1.0 reward, no <code>load_dataset</code> override, run_name <code>hermes-phase-closer-smoke-atl6a</code>）；详见 <a href="#atl-6a">本页面 ATL-6A 段</a></li>
+      <li><strong>ATL-6A</strong>（2026-06-13 准备完成，等待用户授权 + 手动运行）：starter-style redeploy（16/4 dataset, no-tools env, 0.0~1.0 reward, no <code>load_dataset</code> override, run_name <code>hermes-phase-closer-starter-style-atl6</code>, 授权语句 <code>I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY</code>）；详见 <a href="starter-style-redeploy/ATL6_STARTER_STYLE_REDEPLOY_NOTES.md">ATL6_STARTER_STYLE_REDEPLOY_NOTES.md</a> + <a href="#atl-6a">本页面 ATL-6A 段</a></li>
       <li><strong>ATL-6</strong>（更广义的"下一个工具测试案例"计划，仍待定）</li>
     </ul>
   </div>
