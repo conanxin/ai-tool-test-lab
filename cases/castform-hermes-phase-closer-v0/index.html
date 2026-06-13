@@ -62,8 +62,8 @@
     <h2>测试摘要</h2>
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
-    <p><strong>当前阶段：</strong>ATL-5B-RESULT — Second upload and launch retry result (training started; awaiting ATL-5C monitor)</p>
-    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id recorded · training_started YES · API key not recorded · full dataset not uploaded · batch_size removed · learning_rate added · ATL-3C 10/10 PASS · 未调用 API · 仅本地记录</p>
+    <p><strong>当前阶段：</strong>ATL-5C — First-run monitor (failed before first rollout, no failure traceback visible)</p>
+    <p><strong>测试状态：</strong>ATL-5B launched: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> · run_id <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · ATL-5C observed: status=<code>failed</code> · step=<code>0</code> · no train data · no eval data · no rollouts · compare external gpt-5.4 completed (reward 10.000, $0.01/request) · failure details not visible · monitoring status <code>FAILED_STEP_0_NO_ROLLOUTS</code> · next: read-only SDK status probe (user runs locally)</p>
   </div>
 
   <div class="section">
@@ -487,6 +487,59 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py</code></pre>
   </div>
 
   <div class="section">
+    <h2>ATL-5C — First-Run Monitor: Failed at Step 0, No Rollouts</h2>
+    <p><strong>Current phase:</strong> First-run monitor · user observed the launched run in Castform UI · status = <code>failed</code> at step 0 · no rollouts recorded.</p>
+
+    <p><strong>Run identity:</strong></p>
+    <ul>
+      <li><code>run_id</code>: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code></li>
+      <li><strong>documented experiment URL</strong>: <code>https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286</code> → <strong>Not Found</strong> in the live UI (stale reference)</li>
+      <li><strong>actual UI URL</strong>: <a href="https://app.castform.com/train/c83f971d-2b2c-42b8-9774-ca64938c1286?tab=train">https://app.castform.com/train/c83f971d-2b2c-42b8-9774-ca64938c1286?tab=train</a></li>
+      <li><strong>display name</strong>: <code>simple-28de6dd2</code></li>
+      <li><strong>started</strong>: about 39–41 minutes before observation</li>
+    </ul>
+
+    <p><strong>Tab observations (user-observed in Castform UI):</strong></p>
+    <ul>
+      <li><strong>train data available</strong>: NO</li>
+      <li><strong>train rollouts recorded</strong>: NO</li>
+      <li><strong>eval data available</strong>: NO</li>
+      <li><strong>eval rollouts recorded</strong>: NO</li>
+      <li><strong>compare external eval</strong>: completed with <code>gpt-5.4</code> · reward <code>10.000</code> · inference cost ~$0.01/request</li>
+      <li><strong>your model generated rollouts</strong>: NO</li>
+      <li><strong>config tab visible</strong>: YES (model, paths, lr, max_turns, n_samples_per_prompt, num_epoch, response length 512, environment code)</li>
+      <li><strong>settings tab visible</strong>: YES (download checkpoint · Hugging Face connect · external batch eval · delete training run)</li>
+    </ul>
+
+    <p><strong>Failure details:</strong> not visible in the UI. No UI-visible traceback or worker log has been captured. Exact root cause remains unknown.</p>
+
+    <p><strong>Monitoring status:</strong> <code>FAILED_STEP_0_NO_ROLLOUTS</code></p>
+
+    <p><strong>Next step — read-only SDK status probe (user runs locally):</strong></p>
+    <pre><code>export CASTFORM_API_KEY=&lt;YOUR_CASTFORM_API_KEY&gt;   # runtime only; do NOT write to .env
+cd /mnt/d/AI/ai-tool-test-lab
+.venv-castform-local/bin/python \\
+  cases/castform-hermes-phase-closer-v0/cloud-smoke-run/monitoring/atl5c_readonly_status_probe.py \\
+  --run-id c83f971d-2b2c-42b8-9774-ca64938c1286</code></pre>
+    <p>The probe introspects <code>benchmax.platform.client.TrainerClient</code> for read-only methods (<code>get_*</code> / <code>list_*</code> / <code>status_*</code> / <code>describe_*</code> etc.) and refuses any destructive verb. If no read-only method exists, it prints <code>NO_READ_ONLY_STATUS_METHOD_FOUND</code>.</p>
+
+    <p><strong>No additional upload. No additional launch.</strong> ATL-5C is monitoring only. The failure is logged; the root cause is not yet captured.</p>
+
+    <p><strong>Next-step branches:</strong></p>
+    <ul>
+      <li>If the probe surfaces a backend error / traceback → <strong>ATL-5D — failure root cause record</strong></li>
+      <li>If the probe prints <code>NO_READ_ONLY_STATUS_METHOD_FOUND</code> → <strong>ATL-5E — support-ready failure bundle</strong></li>
+    </ul>
+
+    <p><strong>Files (this phase):</strong></p>
+    <ul>
+      <li><a href="cloud-smoke-run/monitoring/atl5c-first-run-failed-step0.md">cloud-smoke-run/monitoring/atl5c-first-run-failed-step0.md</a> — user-observed record</li>
+      <li><a href="cloud-smoke-run/monitoring/atl5c-failure-diagnostics-template.md">cloud-smoke-run/monitoring/atl5c-failure-diagnostics-template.md</a> — diagnostic scaffold</li>
+      <li><a href="cloud-smoke-run/monitoring/atl5c_readonly_status_probe.py">cloud-smoke-run/monitoring/atl5c_readonly_status_probe.py</a> — read-only status probe (agent does NOT run; user runs locally with their API key)</li>
+    </ul>
+  </div>
+
+  <div class="section">
     <h2>ATL-5 / ATL-5A — Cloud Smoke Run Result</h2>
     <p><strong>ATL-5 首次运行：</strong></p>
     <ul>
@@ -572,6 +625,7 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py</code></pre>
       <li><strong>ATL-5A</strong>（2026-06-13）：修复 launcher_args（删除 <code>batch_size</code>，增加 <code>learning_rate: 1e-5</code>）；增强脚本保存 <code>uploaded_payload</code>；创建 <a href="cloud-smoke-run/live/ATL5A_LAUNCH_ARGS_FIX_NOTES.md">ATL5A_LAUNCH_ARGS_FIX_NOTES.md</a>；创建 <a href="cloud-smoke-run/live/atl5b_second_upload_retry_guard.py">atl5b_second_upload_retry_guard.py</a>；agent 未调用 API、未上传、未训练</li>
       <li><strong>ATL-5B</strong>（2026-06-13）：second upload + launch retry 脚本已准备（<a href="cloud-smoke-run/live/atl5b_second_upload_launch_retry.py">atl5b_second_upload_launch_retry.py</a>，独立 result 文件 <code>atl5b_second_upload_launch_retry_result.json</code>，<code>run_name=hermes-phase-closer-smoke-atl5b</code>，修正后 launcher_args 不含 <code>batch_size</code> 含 <code>learning_rate</code>）；创建 <a href="cloud-smoke-run/live/ATL5B_SECOND_UPLOAD_RETRY_NOTES.md">ATL5B_SECOND_UPLOAD_RETRY_NOTES.md</a> 和 <a href="../../../scripts/validate_atl5b_second_upload_retry_result.py">validate_atl5b_second_upload_retry_result.py</a>；agent 未运行 retry 脚本、未调用 API、未上传、未训练；等待用户显式授权 <code>I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY</code> 后手动运行</li>
       <li><strong>ATL-5B-RESULT</strong>（2026-06-13）：用户在本地 WSL 手动运行 retry 脚本 → <code>PASS_CLOUD_SMOKE_LAUNCHED</code>；<strong>run_id</strong> <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> · <strong>experiment_url</strong> <a href="https://app.castform.com/experiments/c83f971d-2b2c-42b8-9774-ca64938c1286">app.castform.com/experiments/...</a> · <code>api_key_recorded=false</code> · <code>uploaded_payload_present=true</code> · <code>training_started=true</code>；<code>validate_atl5b_second_upload_retry_result.py</code> PASS；同步修复 retry 脚本 gate 日志：API key 仅显示 <code>present: True|False</code>，不再输出 key 前缀/片段</li>
+      <li><strong>ATL-5C</strong>（2026-06-13）：用户在 Castform UI 观察到 launched run 状态 = <code>failed</code> · step = <code>0</code> · no train data / no eval data / no rollouts · compare external gpt-5.4 完成 (reward 10.000, $0.01/request) · documented <code>/experiments/&lt;run_id&gt;</code> 返回 Not Found · actual UI URL = <code>/train/&lt;run_id&gt;?tab=train</code> · failure details 不可见 · 监控状态 <code>FAILED_STEP_0_NO_ROLLOUTS</code>；创建 <a href="cloud-smoke-run/monitoring/atl5c-first-run-failed-step0.md">atl5c-first-run-failed-step0.md</a> · <a href="cloud-smoke-run/monitoring/atl5c-failure-diagnostics-template.md">atl5c-failure-diagnostics-template.md</a> · <a href="cloud-smoke-run/monitoring/atl5c_readonly_status_probe.py">atl5c_readonly_status_probe.py</a> · <a href="../../../scripts/validate_atl5c_failed_step0_record.py">validate_atl5c_failed_step0_record.py</a> PASS；agent 未调用 API、未访问 UI、未重复 launch、未读取 API key</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
@@ -835,7 +889,7 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py</code></pre>
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-5B-RESULT cloud smoke run launched; awaiting ATL-5C monitor 阶段</p>
+  <p>AI Tool Test Lab — ATL-5C first-run monitor (failed at step 0, no rollouts) 阶段</p>
 </footer>
 </body>
 </html>

@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-5B-RESULT — Second upload and launch retry result (training started; awaiting ATL-5C monitor)
-- **目标**：记录 ATL-5B retry 实际运行结果（用户本地 WSL 手动执行），同步修复 retry 脚本 gate 日志避免打印 key 前缀/片段，更新页面 / cases.json / 报告
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — cloud smoke run launched; monitoring required
+- **阶段**：ATL-5C — First-run monitor (failed at step 0, no rollouts)
+- **目标**：记录用户在 Castform UI 观察到的 launched run 状态（failed at step 0）+ 创建 read-only SDK status probe（用户本地运行，agent 不跑）
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — cloud smoke launched; failed at step 0 before rollouts
 - **ATL-3C 收口**：`benchmax.platform.validation.validate_env` 真实本地调用 **10/10 PASS**（api_key=None + local=True → 零网络、零上传、零训练）
 - **ATL-4A 收口**：Account / Credit / Billing 人工 preflight scaffold ready；用户已人工进入 Castform Web App，确认 example setup flows (starter task · rag agent · agent traces) 与 Export to VSCode 按钮可见，base model `Qwen/Qwen3.5-4B` 在 setup pages 中可见
 - **ATL-4A-CREDIT-FILL 收口**：
@@ -101,6 +101,23 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
 - **ATL-5B-RESULT 硬边界**：agent 未调用 Castform API；agent 未重复运行 retry 脚本；agent 未读取 API key；agent 未记录 API key 片段；不伪造 `run_id` / `experiment_url`
 - **ATL-5B-RESULT 同步修复**：retry 脚本 `atl5b_second_upload_launch_retry.py` 的 `check_gates` 日志已硬化 — API key 仅显示 `present: True|False`（不再用 `_mask_key` 输出 4 字符前缀）；gate mismatch 仅显示 gate 名 + 期望字面量，不再回显用户填入的授权字符串。`_mask_key` 函数已删除。
 - **ATL-5B-RESULT 下一步**：**ATL-5C monitor first Castform training run** — 轮询 experiment URL，捕获 training status（queued / running / completed / failed）+ metrics；运行到终态后更新页面 / cases.json / 报告。
+- **ATL-5C 收口**（用户在 Castform UI 观察到 launched run 状态）：
+  - **ATL-5B cloud smoke run launched**：run_id `c83f971d-2b2c-42b8-9774-ca64938c1286`
+  - **actual UI URL discovered**：`https://app.castform.com/train/c83f971d-2b2c-42b8-9774-ca64938c1286?tab=train`（documented `/experiments/<run_id>` 路径在 live UI 中返回 Not Found）
+  - **run failed at step 0**：status = `failed`, step = `0`, started ≈ 39–41 min ago
+  - **no train / eval data**：train tab 与 eval tab 均无数据
+  - **no model rollouts**：train rollout deepdive 与 eval rollout deepdive 均无 rollouts
+  - **compare external eval works**：external `gpt-5.4` batch eval completed，reward = 10.000，per-request cost ≈ $0.01
+  - **failure details not visible**：UI 中无 traceback / worker log；config / settings tab 可见
+  - **monitoring status**：`FAILED_STEP_0_NO_ROLLOUTS`
+  - **next step**：read-only SDK status probe (用户本地 WSL 跑 `cases/castform-hermes-phase-closer-v0/cloud-smoke-run/monitoring/atl5c_readonly_status_probe.py`)
+- **ATL-5C 交付**：
+  - `cases/.../monitoring/atl5c-first-run-failed-step0.md` — 用户观察记录
+  - `cases/.../monitoring/atl5c-failure-diagnostics-template.md` — 诊断模板
+  - `cases/.../monitoring/atl5c_readonly_status_probe.py` — read-only probe（introspect `TrainerClient` 找 `get_*` / `list_*` / `status_*` / `describe_*`，拒绝 destructive verb；找不到时输出 `NO_READ_ONLY_STATUS_METHOD_FOUND`）
+  - `scripts/validate_atl5c_failed_step0_record.py` — 三文件存在 + 必要字段 + 无 secret 字面量校验，PASS
+- **ATL-5C 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未重复运行 retry 脚本；API key 未记录；API key 前缀或片段未记录；未提交 `.env`；未提交 `.venv`；未记录信用卡 / cookie / Authorization header / 用户邮箱 / 截图；不伪造 failure reason；不伪造 metrics
+- **ATL-5C 下一步**：用户本地 WSL 运行 `atl5c_readonly_status_probe.py --run-id c83f971d-...`；若发现 backend error / traceback → 进入 **ATL-5D failure root cause record**；若 probe 输出 `NO_READ_ONLY_STATUS_METHOD_FOUND` → 进入 **ATL-5E support-ready failure bundle**
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
