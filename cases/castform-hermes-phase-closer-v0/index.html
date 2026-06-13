@@ -63,7 +63,7 @@
     <p><strong>测试对象：</strong>Castform — 模型微调平台，支持 RL 后训练</p>
     <p><strong>测试目标：</strong>训练 "Hermes Phase Closer" 模型，输入 agent 阶段报告，输出结构化 JSON 总结</p>
     <p><strong>当前阶段：</strong>ATL-4A — Account / Credit / Billing Manual Preflight (scaffold ready, awaiting human input)</p>
-    <p><strong>测试状态：</strong>ATL-5-SCRIPT-PREP live script ready · $50 free credit confirmed · user authorized · guarded preflight complete · ATL-3C 10/10 PASS · launch blocked by config gate (cloud_launch_allowed=false) · 未调用 API · 未训练 · 仅本地准备</p>
+    <p><strong>测试状态：</strong>ATL-5A launch args fixed · upload succeeded · launch failed (batch_size rejected) · ATL-5B guarded retry ready · ATL-3C 10/10 PASS · 未调用 API · 仅本地记录</p>
   </div>
 
   <div class="section">
@@ -315,70 +315,84 @@
     </div>
 
     <p><strong>验证：</strong><code>validate_atl4c_guarded_preflight.py</code> PASS（59/59 OK；upload guard exit 1 + banner 6/6；launch guard exit 1 + banner 6/6；secret 扫描 clean；forbidden-call 扫描 clean）。</p>
-    <p><strong>下一阶段：</strong>ATL-5-SCRIPT-PREP — live script ready（agent 只生成脚本，不执行；用户手动运行 <code>atl5_cloud_smoke_run.py</code>）。</p>
+    <p><strong>下一阶段：</strong>ATL-5B — Second upload + launch retry（用户手动运行 <code>atl5b_second_upload_retry_guard.py</code>，需显式授权：<code>I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY</code>）。</p>
   </div>
 
   <div class="section">
-    <h2>ATL-5-SCRIPT-PREP — Live Script Ready</h2>
-    <p><strong>当前阶段：</strong>Live script prepared, not executed yet</p>
-    <p><strong>本阶段硬边界：</strong>agent 不调用 Castform API · 不上传数据 · 不启动训练 · 不读取 API key · 不运行 <code>atl5_cloud_smoke_run.py</code> · 只生成脚本和验证器。</p>
+    <h2>ATL-5A — Upload Succeeded, Launch Failed, Args Fixed</h2>
+    <p><strong>当前阶段：</strong>Upload succeeded · Launch failed · Args fixed · Awaiting ATL-5B authorization</p>
+    <p><strong>本阶段硬边界：</strong>agent 不调用 Castform API · 不上传数据 · 不启动训练 · 不运行 atl5_cloud_smoke_run.py · 只修复脚本和记录结果。</p>
+
+    <p><strong>ATL-5 首次运行结果：</strong></p>
+    <ul>
+      <li>Local validate_env: <strong>PASS</strong> (<code>VALIDATE_ENV_LOCAL_PASS</code>)</li>
+      <li>Upload: <strong>SUCCEEDED</strong> (dataset uploaded to Castform)</li>
+      <li>Launch: <strong>FAILED</strong> (<code>JobLaunchError: Unknown launch arg: "batch_size"</code>)</li>
+    </ul>
+
+    <p><strong>失败原因：</strong> Castform 不接受 <code>batch_size</code> 作为 launcher arg。用户已查询 Castform 当前 accepted launch args：</p>
+    <ul>
+      <li>Accepted: <code>model</code>, <code>learning_rate</code>, <code>num_epochs</code>, <code>group_size</code>, <code>max_rollout_len</code>, <code>max_turns</code>, <code>lora_rank</code>, <code>lora_alpha</code></li>
+      <li>Rejected: <code>batch_size</code></li>
+    </ul>
+
+    <p><strong>修复后的 launcher_args：</strong></p>
+    <pre class="code-block">{
+  "model": "Qwen/Qwen3.5-4B",
+  "learning_rate": 1e-5,
+  "num_epochs": 1,
+  "group_size": 2,
+  "max_rollout_len": 512,
+  "max_turns": 1,
+  "lora_rank": 16,
+  "lora_alpha": 32
+}</pre>
+
+    <p><strong>upload metadata 缺失：</strong>第一次运行结果 JSON 中缺少 <code>uploaded_payload</code>（env_cls_path / env_metadata_path / train_dataset_path / eval_dataset_path）。因此 <strong>不能只做 launch retry</strong>，必须重新 upload + launch。</p>
 
     <p><strong>产物文件：</strong></p>
     <ul class="file-list">
-      <li><a href="cloud-smoke-run/live/atl5_cloud_smoke_run.py">cloud-smoke-run/live/atl5_cloud_smoke_run.py</a> — ATL-5 live cloud smoke run 脚本（gate 检查 → 本地 validate_env → upload → launch → 结果 JSON）</li>
-      <li><a href="cloud-smoke-run/live/atl5_cloud_smoke_result.json">cloud-smoke-run/live/atl5_cloud_smoke_result.json</a> — 当前为 placeholder（status = SCRIPT_READY_NO_CLOUD_CALL）</li>
-      <li><a href="../../scripts/validate_atl5_cloud_smoke_result.py">scripts/validate_atl5_cloud_smoke_result.py</a> — ATL-5 结果验证器</li>
-    </ul>
-
-    <p><strong>脚本行为：</strong></p>
-    <ul>
-      <li>Gate 检查：CASTFORM_API_KEY present + ATL_ALLOW_CASTFORM_UPLOAD=YES + ATL_ALLOW_CASTFORM_LAUNCH=YES + ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-5 CLOUD SMOKE RUN"</li>
-      <li>数据集检查：smoke-train.preview.jsonl = 8 行，smoke-eval.preview.jsonl = 2 行</li>
-      <li>本地 validate_env：使用 ATL-3C 已通过的 HermesPhaseCloserLocalEnv + benchmax.validate_env（local=True, api_key=None）</li>
-      <li>Upload：调用 <code>upload_training_run</code>（env + dataset → Castform）</li>
-      <li>Launch：调用 <code>TrainerClient.launch_training_run</code>（Qwen/Qwen3.5-4B · 1 epoch · batch_size=2 · group_size=2 · max_turns=1 · lora_rank=16）</li>
-      <li>结果：写入 <code>atl5_cloud_smoke_result.json</code>（不含 secret）</li>
-      <li>异常捕获：billing/credit/quota → BLOCKED_BY_CASTFORM_BILLING_OR_CREDIT；upload 成功但 launch 失败 → UPLOAD_DONE_LAUNCH_FAILED</li>
+      <li><a href="cloud-smoke-run/live/ATL5A_LAUNCH_ARGS_FIX_NOTES.md">cloud-smoke-run/live/ATL5A_LAUNCH_ARGS_FIX_NOTES.md</a> — 详细修复记录和 Castform 接受参数列表</li>
+      <li><a href="cloud-smoke-run/live/atl5b_second_upload_retry_guard.py">cloud-smoke-run/live/atl5b_second_upload_retry_guard.py</code> — ATL-5B 二次 upload + launch 脚本（gate 检查 → 本地 validate_env → upload → launch → 结果 JSON）</li>
     </ul>
 
     <p><strong>当前状态：</strong></p>
     <div class="status-grid">
       <div class="status-item">
-        <div class="label">cloud_launch_allowed</div>
-        <div class="value blocked">false (unchanged)</div>
+        <div class="label">upload</div>
+        <div class="value pass">SUCCEEDED (first run)</div>
       </div>
       <div class="status-item">
-        <div class="label">current_readiness</div>
-        <div class="value blocked">BLOCKED_BY_UNCLEAR_CHARGES</div>
+        <div class="label"> launch</div>
+        <div class="value blocked">FAILED (batch_size rejected)</div>
       </div>
       <div class="status-item">
-        <div class="label">actual_upload_allowed</div>
-        <div class="value blocked">false</div>
+        <div class="label">local validate_env</div>
+        <div class="value pass">PASS</div>
       </div>
       <div class="status-item">
-        <div class="label">actual_launch_allowed</div>
-        <div class="value blocked">false</div>
+        <div class="label">dataset_uploaded</div>
+        <div class="value pass">true (first run)</div>
+      </div>
+      <div class="status-item">
+        <div class="label">training_started</div>
+        <div class="value blocked">false (launch failed)</div>
       </div>
       <div class="status-item">
         <div class="label">API call</div>
-        <div class="value blocked">none (script not run)</div>
+        <div class="value blocked">none (agent phase)</div>
       </div>
       <div class="status-item">
         <div class="label">Upload</div>
-        <div class="value blocked">none</div>
+        <div class="value blocked">none (agent phase)</div>
       </div>
       <div class="status-item">
         <div class="label">Training</div>
-        <div class="value blocked">none</div>
-      </div>
-      <div class="status-item">
-        <div class="label">API key created</div>
-        <div class="value blocked">NO</div>
+        <div class="value blocked">none (agent phase)</div>
       </div>
     </div>
 
-    <p><strong>验证：</strong><code>validate_atl5_cloud_smoke_result.py</code> PASS（placeholder JSON 合法，无 secret，train=8，eval=2）。</p>
-    <p><strong>下一步：</strong>用户在本地 WSL shell 中运行 <code>.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5_cloud_smoke_run.py</code>。</p>
+    <p><strong>下一步：</strong>ATL-5B — 用户手动运行 <code>.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/cloud-smoke-run/live/atl5b_second_upload_retry_guard.py</code>，需显式授权：<code>I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY</code>。</p>
   </div>
 
   <div class="section">
@@ -427,7 +441,9 @@
       <li><strong>ATL-4A-CREDIT-FILL</strong>（2026-06-13）：用户人工填写 credit / billing / cost / run controls / data policy 字段（<a href="credit-billing-verification.md">credit-billing-verification.md</a>）：<strong>Free credit $50 visible + usage page visible</strong>（首次 YES 项）但 billing / auto-charge / cost estimate / cancellation / deletion / data policy 仍多项 <code>UNKNOWN</code>；用户声明 <code>READY_FOR_CLOUD_SMOKE_RUN</code>，<code>cloud_launch_allowed</code> 保持 <code>false</code>，<strong>guarded preflight required</strong>；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong></li>
       <li><strong>ATL-4C</strong>（2026-06-13）：Guarded cloud smoke preflight 包已准备（<a href="guarded-cloud-preflight/README.md">guarded-cloud-preflight/README.md</a>），含 dual gate 架构（env var 授权 + 脚本级 guard + 配置级 tripwire）、<code>guarded_upload_preflight.py</code> / <code>guarded_launch_preflight.py</code>（默认拒绝 exit 1）、<code>FINAL_LAUNCH_GATE.md</code>（7 大 gate 清单）、<code>API_KEY_RUNTIME_ONLY.md</code>（read -s + export 注入规则）；<code>validate_atl4c_guarded_preflight.py</code> PASS（59/59 OK）；<code>cloud_launch_allowed</code> 保持 <code>false</code>，<code>actual_upload_allowed_in_this_phase=false</code>，<code>actual_launch_allowed_in_this_phase=false</code>；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>、<strong>未创建</strong> API key</li>
       <li><strong>ATL-5-SCRIPT-PREP</strong>（2026-06-13）：Live cloud smoke run 脚本已准备（<a href="cloud-smoke-run/live/atl5_cloud_smoke_run.py">cloud-smoke-run/live/atl5_cloud_smoke_run.py</a>），含 gate 检查 → 本地 validate_env → upload → launch → 结果 JSON；<code>validate_atl5_cloud_smoke_result.py</code> PASS；agent 未执行脚本；<strong>未调用</strong> Castform API、<strong>未上传</strong>、<strong>未训练</strong>、<strong>未读取</strong> API key</li>
-      <li><strong>ATL-5</strong>（计划中，gated）：Real cloud smoke run（用户手动运行 atl5_cloud_smoke_run.py）</li>
+      <li><strong>ATL-5</strong>（2026-06-13）：用户手动运行 atl5_cloud_smoke_run.py：local validate_env PASS → upload SUCCEEDED → launch FAILED（<code>JobLaunchError: Unknown launch arg: "batch_size"</code>）；dataset_uploaded=true；training_started=false；<strong>未记录</strong> API key</li>
+      <li><strong>ATL-5A</strong>（2026-06-13）：修复 launcher_args（删除 <code>batch_size</code>，增加 <code>learning_rate: 1e-5</code>）；增强脚本保存 <code>uploaded_payload</code>；创建 <a href="cloud-smoke-run/live/ATL5A_LAUNCH_ARGS_FIX_NOTES.md">ATL5A_LAUNCH_ARGS_FIX_NOTES.md</a>；创建 <a href="cloud-smoke-run/live/atl5b_second_upload_retry_guard.py">atl5b_second_upload_retry_guard.py</a>；agent 未调用 API、未上传、未训练</li>
+      <li><strong>ATL-5B</strong>（计划中，gated）：Second upload + launch retry（用户手动运行 atl5b_second_upload_retry_guard.py，需显式授权：<code>I AUTHORIZE ATL-5B SECOND UPLOAD AND LAUNCH RETRY</code>）</li>
       <li><strong>ATL-4</strong>（计划中）：Castform account / credit / billing preflight（仅当用户显式提供 API key 后启动，且仍先 preflight 而非真实训练）</li>
       <li><strong>ATL-5</strong>（计划中）：Playground 评估与页面更新</li>
       <li><strong>ATL-6</strong>（计划中）：新增第二个 AI 工具测试案例</li>
@@ -691,7 +707,7 @@
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-5-SCRIPT-PREP live script ready 阶段</p>
+  <p>AI Tool Test Lab — ATL-5A upload succeeded, launch failed, args fixed, ATL-5B retry ready 阶段</p>
 </footer>
 </body>
 </html>
