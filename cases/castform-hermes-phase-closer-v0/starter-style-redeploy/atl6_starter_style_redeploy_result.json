@@ -1,0 +1,48 @@
+{
+  "phase": "ATL-6",
+  "local_validate_env_result": "VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)",
+  "upload_attempted": true,
+  "upload_succeeded": true,
+  "launch_attempted": true,
+  "launch_succeeded": true,
+  "run_id": "56cb5701-6b3e-424e-b671-fc2efc932aa8",
+  "experiment_url": "https://app.castform.com/experiments/56cb5701-6b3e-424e-b671-fc2efc932aa8",
+  "base_model": "Qwen/Qwen3.5-4B",
+  "train_samples": 16,
+  "eval_samples": 4,
+  "api_key_recorded": false,
+  "dataset_uploaded": true,
+  "training_started": true,
+  "launcher_args_used": {
+    "model": "Qwen/Qwen3.5-4B",
+    "learning_rate": 1e-05,
+    "num_epochs": 1,
+    "group_size": 2,
+    "max_rollout_len": 512,
+    "max_turns": 1,
+    "lora_rank": 16,
+    "lora_alpha": 32
+  },
+  "uploaded_payload_present": true,
+  "uploaded_payload": {
+    "env_cls_path": "envs/hermes-phase-closer-starter-style-atl6/ab31b4b4b99d38be/env-cls.pkl",
+    "env_metadata_path": "envs/hermes-phase-closer-starter-style-atl6/ab31b4b4b99d38be/env-metadata.json",
+    "train_dataset_path": "datasets/hermes-phase-closer-starter-style-atl6/c9433eb4/train.jsonl",
+    "eval_dataset_path": "datasets/hermes-phase-closer-starter-style-atl6/c9433eb4/eval.jsonl"
+  },
+  "env_cls_path": "cases.castform-hermes-phase-closer-v0.starter-style-redeploy.environment_starter_style:HermesPhaseCloserStarterStyleEnv",
+  "env_metadata_path": "/mnt/d/AI/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/starter-style-redeploy/environment_starter_style.py",
+  "env_name": "HermesPhaseCloserStarterStyleEnv",
+  "env_fix_points": [
+    "16 train / 4 eval preview subset (vs ATL-5 8/2)",
+    "no-tools env (list_tools=[] / run_tool='' no raise)",
+    "0.0~1.0 reward (format / coverage / score)",
+    "no custom load_dataset override (BaseEnv default)",
+    "new run_name hermes-phase-closer-starter-style-atl6 (does not overwrite ATL-5 / ATL-5B run records)",
+    "old failed run c83f971d-... not referenced"
+  ],
+  "old_failed_run_referenced": false,
+  "error_category": null,
+  "error_summary": null,
+  "status": "PASS_CLOUD_SMOKE_LAUNCHED"
+}
