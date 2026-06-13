@@ -102,11 +102,16 @@ M scripts/validate_site.py
 
 ## commit hash
 
-（commit 后填入）
+- baseline commit: `951c4c5`
+- ATL-STD-1 commit: `8404f8b`
 
 ## 是否 push
 
-（push 后填入）
+- push status: SUCCESS（`951c4c5..8404f8b main -> main`）
+- Pages URL: <https://conanxin.github.io/ai-tool-test-lab/> · HTTP/2 200
+- Castform 案例页 URL: <https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/> · HTTP/2 200
+- 首页 "Case workflow standard" 段已上线（1 hit）
+- 案例页 "Canonical example note" 段已上线（1 hit）
 
 ## 明确说明
 
