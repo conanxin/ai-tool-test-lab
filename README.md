@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-RESUME-2A — Prepare Castform vendor-fix retest script · retest script prepared · vendor fix recorded · real retest requires explicit user authorization
-- **目标**：在 vendor 修复后基于 ATL-6 starter-style 配置准备 retest 脚本；新 run_name 不复用旧 failed run；本阶段只准备脚本和验证器，不调用 Castform API / 不访问 UI / 不上传 / 不训练 / 不读取 API key
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — vendor fix retest script prepared; awaits user manual execution
+- **阶段**：ATL-RESUME-2B — Record Castform vendor-fix retest launch result · retest launched (run_id `e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d`) · monitoring required
+- **目标**：transcribe 用户本地 WSL 手动执行的 vendor-fix retest 结果到 case page / cases.json / README / 报告；on-disk verify result JSON 后再写入；agent 不调用 API、不访问 UI、不上传、不训练、不重复运行 retest、不读取 API key、不伪造 sample count 或 monitoring 状态
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — vendor-fix retest launched; awaiting user UI monitoring of run progress beyond step 0
 - **AI Tool Test Lab published**: `https://conanxin.github.io/ai-tool-test-lab/` (HTTP/2 200)
 - **Castform case published**: `https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/` (HTTP/2 200)
 - **AI Tool Test Lab 已成功发布；Castform case 已成功发布** — 详见 [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) + [reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md](reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md)
@@ -205,6 +205,26 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
   - true retest requires explicit user authorization
   - no API call / no upload / no training by agent
 - **ATL-RESUME-2A 下一步建议**：ATL-RESUME-2B — 用户本地 WSL 显式授权后手动运行 `atl_resume2_vendor_fix_retest.py`，agent 仅做 on-disk result verify + transcribe 到 case page / cases.json / 报告（不调用 API、不访问 UI、不上传、不启动训练）
+- **ATL-RESUME-2B 收口**（用户本地 WSL 手动运行 retest 后 transcribe；agent 仅做 on-disk verify + transcribe）：
+  - **run_id**: `e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d`
+  - **experiment_url**: `https://app.castform.com/experiments/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d`
+  - **expected train UI URL**: `https://app.castform.com/train/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d?tab=train`（documented `/experiments/<run_id>` 在 live UI 可能返回 Not Found；实际 UI URL 为 `/train/<run_id>?tab=train`，per ATL-5C precedent）
+  - **actual_ui_url**: `null`（用户 UI discovery 待 ATL-RESUME-2C backfill）
+  - **base model**: `Qwen/Qwen3.5-4B`
+  - **sample count**: 16 train / 4 eval（on-disk result JSON 为准；用户原文的 "5 行训练数据" 指 local validate_env 的 5-row preview slice，**不是** cloud upload）
+  - **result status**: `PASS_CLOUD_SMOKE_LAUNCHED` · `local_validate_env_result`: `VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)` · `upload_succeeded`: true · `launch_succeeded`: true · `training_started`: true · `dataset_uploaded`: true · `uploaded_payload_present`: true（env_cls_path / env_metadata_path / train_dataset_path / eval_dataset_path saved） · `api_key_recorded`: false · `error_category`: null
+  - `cases/.../vendor-fix-retest/atl_resume2_vendor_fix_retest_result.json` — on-disk result JSON
+  - `cases/.../index.html` — 新增 "ATL-RESUME-2B — Vendor-Fix Retest Launch Result" 模块 + 更新 footer
+  - `data/cases.json` — Castform case phase=`ATL-RESUME-2B vendor-fix retest launched` · status=`vendor-fix retest launched; monitoring required` · final_status=`VENDOR_FIX_RECEIVED_RETEST_PENDING`（保留作为审计） · canonical_example / workflow_reference 保留 · updated_at=2026-06-14
+  - `scripts/validate_atl_resume2_vendor_fix_retest.py` PASS（on-disk result JSON 完整，所有 invariants 通过：phase / train_samples==16 / eval_samples==4 / api_key_recorded==false / launch_succeeded + run_id 非空 + experiment_url 含 app.castform.com / 16 secret patterns + 1 forbidden literal scan clean）
+- **ATL-RESUME-2B 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未重复运行 retest 脚本；agent 未读取 API key 任何片段；未创建 .env；未提交 .venv；未记录用户邮箱 / 截图 / API key / cookie / Authorization header / 信用卡；未伪造 sample count（16 train / 4 eval from result JSON，不是 5）；未伪造 monitoring 状态（`MONITORING_REQUIRED`）；不改写历史事实（两个旧 run 仍记录为 step 0 failed）；新 retest 不引用旧 run_id 作为输入
+- **ATL-RESUME-2B 状态**：
+  - vendor-fix retest launched
+  - run_id: `e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d`
+  - expected train UI URL: `https://app.castform.com/train/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d?tab=train`
+  - sample count from result JSON: 16 train / 4 eval
+  - next phase: monitor whether it progresses beyond step 0
+- **ATL-RESUME-2B 下一步建议**：ATL-RESUME-2C — 用户在 Castform UI 观察 vendor-fix retest run 状态（expected train UI URL），检查 launch 是否真的产生 train data / eval data / rollouts，并观察 run 是否突破 step 0；agent 在 ATL-RESUME-2C 阶段仍不调用 API、不访问 UI、不上传、不训练，仅做 result-recording
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS

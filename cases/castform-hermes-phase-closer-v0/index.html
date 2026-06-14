@@ -1168,10 +1168,77 @@ cd /mnt/d/AI/ai-tool-test-lab
 .venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/vendor-fix-retest/atl_resume2_vendor_fix_retest.py
 python3 scripts/validate_atl_resume2_vendor_fix_retest.py</code></pre>
   </div>
+
+  <div class="section">
+    <h2>ATL-RESUME-2B — Vendor-Fix Retest Launch Result</h2>
+    <p><strong>Current phase:</strong> Vendor-fix retest launched</p>
+    <p><strong>Local validate_env:</strong> <code>PASS</code> · <code>VALIDATE_ENV_LOCAL_PASS (local 10/10 checks)</code> (per on-disk result JSON)</p>
+    <p><strong>Upload:</strong> <code>SUCCESS</code></p>
+    <p><strong>Launch:</strong> <code>SUCCESS</code></p>
+    <p><strong>Result status:</strong> <code>PASS_CLOUD_SMOKE_LAUNCHED</code></p>
+    <p><strong>Monitoring status:</strong> <code>MONITORING_REQUIRED</code></p>
+
+    <p><strong>Run identity (from result JSON, verified on-disk):</strong></p>
+    <ul>
+      <li><strong>run_id</strong>: <code>e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d</code></li>
+      <li><strong>experiment_url</strong>: <a href="https://app.castform.com/experiments/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d">https://app.castform.com/experiments/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d</a></li>
+      <li><strong>expected train UI URL</strong>: <a href="https://app.castform.com/train/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d?tab=train">https://app.castform.com/train/e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d?tab=train</a> (documented <code>/experiments/&lt;run_id&gt;</code> may return Not Found; actual UI URL is <code>/train/&lt;run_id&gt;?tab=train</code> per ATL-5C precedent)</li>
+      <li><strong>actual_ui_url</strong>: <code>null</code> in result JSON (user-side UI discovery pending; will be backfilled in ATL-RESUME-2C)</li>
+      <li><strong>base model</strong>: <code>Qwen/Qwen3.5-4B</code></li>
+      <li><strong>run_name</strong>: <code>hermes-phase-closer-vendor-fix-retest</code></li>
+    </ul>
+
+    <p><strong>Sample count (from result JSON):</strong></p>
+    <ul>
+      <li><strong>train_samples</strong>: <code>16</code></li>
+      <li><strong>eval_samples</strong>: <code>4</code></li>
+    </ul>
+    <p><em>Note: the "5 行训练数据" mentioned in local user output refers to local validate_env's 5-row preview slice used for the local smoke check, <strong>not</strong> the cloud upload. The cloud upload was the full 16 train / 4 eval starter-style preview subset. The on-disk result JSON is the authoritative source.</em></p>
+
+    <p><strong>Run state (from result JSON):</strong></p>
+    <ul>
+      <li><strong>upload_attempted</strong>: <code>true</code></li>
+      <li><strong>upload_succeeded</strong>: <code>true</code></li>
+      <li><strong>launch_attempted</strong>: <code>true</code></li>
+      <li><strong>launch_succeeded</strong>: <code>true</code></li>
+      <li><strong>dataset_uploaded</strong>: <code>true</code></li>
+      <li><strong>training_started</strong>: <code>true</code></li>
+      <li><strong>uploaded_payload_present</strong>: <code>true</code> (env_cls_path / env_metadata_path / train_dataset_path / eval_dataset_path saved for audit trail)</li>
+      <li><strong>api_key_recorded</strong>: <code>false</code> · result JSON has no API key field; no <code>.env</code> created; no API key fragment anywhere in repo or commit</li>
+      <li><strong>error_category</strong>: <code>null</code></li>
+    </ul>
+
+    <p><strong>uploaded_payload (clean Castform blob paths only, no signed URLs):</strong></p>
+    <pre><code>env_cls_path: envs/hermes-phase-closer-vendor-fix-retest/&lt;hash&gt;/env-cls.pkl
+env_metadata_path: envs/hermes-phase-closer-vendor-fix-retest/&lt;hash&gt;/env-metadata.json
+train_dataset_path: datasets/hermes-phase-closer-vendor-fix-retest/&lt;hash&gt;/train.jsonl
+eval_dataset_path: datasets/hermes-phase-closer-vendor-fix-retest/&lt;hash&gt;/eval.jsonl</code></pre>
+    <p><em>(Exact hash values are in the on-disk result JSON; not echoed here to keep page concise.)</em></p>
+
+    <p><strong>本阶段声明（agent 边界）：</strong></p>
+    <ul>
+      <li>agent 未调用 Castform API</li>
+      <li>agent 未访问 Castform UI</li>
+      <li>agent 未上传数据</li>
+      <li>agent 未启动训练</li>
+      <li>agent 未重复运行 retest 脚本</li>
+      <li>agent 未读取 API key 任何片段</li>
+      <li>agent 未记录 API key / email / screenshot / cookie / Authorization header / 信用卡</li>
+      <li>result JSON 来源于用户本地 WSL shell 手动运行；agent 仅做 on-disk verify + transcribe</li>
+    </ul>
+
+    <p><strong>相关文件：</strong></p>
+    <ul class="file-list">
+      <li><a href="vendor-fix-retest/atl_resume2_vendor_fix_retest_result.json">vendor-fix-retest/atl_resume2_vendor_fix_retest_result.json</a> — on-disk retest result（verify with <code>python3 scripts/validate_atl_resume2_vendor_fix_retest.py</code> → PASS）</li>
+      <li><a href="../../../reports/ATL_RESUME2B_VENDOR_FIX_RETEST_LAUNCH_RESULT_REPORT.md">reports/ATL_RESUME2B_VENDOR_FIX_RETEST_LAUNCH_RESULT_REPORT.md</a> — ATL-RESUME-2B 阶段报告</li>
+    </ul>
+
+    <p><strong>Next step — ATL-RESUME-2C monitor vendor-fix retest run:</strong> 用户打开 expected train UI URL，检查 launch 是否真的产生 train data / eval data / rollouts，并观察 run 是否突破 step 0。agent 在 ATL-RESUME-2C 阶段仍不调用 API、不访问 UI、不上传、不训练，仅做 result-recording。</p>
+  </div>
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-RESUME-2A · retest script prepared · vendor fix recorded · real retest requires explicit user authorization · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail</p>
+  <p>AI Tool Test Lab — ATL-RESUME-2B · retest launched (run_id <code>e4abb2dc-...</code>) · monitoring required · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail · vendor-fix retest is a new independent run</p>
 </footer>
 </body>
 </html>
