@@ -1235,10 +1235,72 @@ eval_dataset_path: datasets/hermes-phase-closer-vendor-fix-retest/&lt;hash&gt;/e
 
     <p><strong>Next step — ATL-RESUME-2C monitor vendor-fix retest run:</strong> 用户打开 expected train UI URL，检查 launch 是否真的产生 train data / eval data / rollouts，并观察 run 是否突破 step 0。agent 在 ATL-RESUME-2C 阶段仍不调用 API、不访问 UI、不上传、不训练，仅做 result-recording。</p>
   </div>
+
+  <div class="section">
+    <h2>ATL-RESUME-2C — Vendor Fix Confirmed by Retest</h2>
+    <p><strong>Current phase:</strong> Vendor-fix retest monitoring result</p>
+    <p><strong>Retest run identity (from on-disk result JSON, verified):</strong></p>
+    <ul>
+      <li><strong>run_id</strong>: <code>e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d</code></li>
+      <li><strong>display name</strong>: <code>simple-ed08313b</code></li>
+      <li><strong>launch_status</strong>: <code>PASS_CLOUD_SMOKE_LAUNCHED</code> (per result JSON at launch time)</li>
+    </ul>
+
+    <p><strong>User-observed retest result (from Castform UI):</strong></p>
+    <ul>
+      <li><strong>observed status</strong>: <code>complete</code></li>
+      <li><strong>step</strong>: <code>1 / 1</code></li>
+      <li><strong>started</strong>: about 39 minutes before observation</li>
+      <li><strong>train rollout deepdive</strong>: visible</li>
+      <li><strong>train rollouts recorded</strong>: <code>YES</code></li>
+      <li><strong>average reward chart</strong>: visible</li>
+      <li><strong>response length chart</strong>: visible</li>
+      <li><strong>max reward chart</strong>: visible</li>
+      <li><strong>solve rate chart</strong>: visible</li>
+      <li><strong>reward components visible</strong>: <code>coverage</code> / <code>format</code> / <code>score</code></li>
+      <li><strong>sample rollout rewards observed around</strong>: <code>2.00</code> / <code>2.05</code> / <code>2.11</code> / <code>1.95</code> / <code>2.10</code> / <code>1.97</code></li>
+    </ul>
+
+    <p><strong>Previous failure mode:</strong> repeated step 0 no rollouts</p>
+    <p><strong>Current result:</strong> <code>VENDOR_FIX_CONFIRMED_BY_RETEST</code></p>
+    <p><strong>Final interpretation:</strong> Castform fix confirmed</p>
+
+    <p><strong>Old runs preserved as audit trail:</strong></p>
+    <ul>
+      <li>Old Run 1: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> (ATL-5B result) — step 0 failed, no rollouts</li>
+      <li>Old Run 2: <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> (ATL-6 result) — step 0 failed, no rollouts</li>
+    </ul>
+
+    <p><strong>Status progression:</strong></p>
+    <ol>
+      <li><code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> (ATL-CLOSEOUT)</li>
+      <li><code>VENDOR_FIX_RECEIVED_RETEST_PENDING</code> (ATL-RESUME-1, vendor response received)</li>
+      <li><code>VENDOR_FIX_CONFIRMED_BY_RETEST</code> (ATL-RESUME-2C, vendor fix confirmed by retest run)</li>
+    </ol>
+
+    <p><strong>本阶段声明（agent 边界）：</strong></p>
+    <ul>
+      <li>agent 未调用 Castform API</li>
+      <li>agent 未访问 Castform UI</li>
+      <li>agent 未上传数据</li>
+      <li>agent 未启动训练</li>
+      <li>agent 未重复运行 retest 脚本</li>
+      <li>agent 未读取 API key 任何片段</li>
+      <li>agent 未记录 API key / email / screenshot / cookie / Authorization header / 信用卡</li>
+      <li>agent 仅做 on-disk verify（pitfall #22 trust-but-verify）+ transcribe 用户报告的脱敏 UI 观察结果</li>
+      <li>agent 未伪造 metrics；上文 sample rollout rewards / chart 列表均来自用户报告</li>
+    </ul>
+
+    <p><strong>相关文件：</strong></p>
+    <ul class="file-list">
+      <li><a href="VENDOR_FIX_CONFIRMED.md">VENDOR_FIX_CONFIRMED.md</a> — 完整 vendor fix confirmed 记录</li>
+      <li><a href="../../../reports/ATL_RESUME2C_VENDOR_FIX_CONFIRMED_REPORT.md">reports/ATL_RESUME2C_VENDOR_FIX_CONFIRMED_REPORT.md</a> — ATL-RESUME-2C 阶段报告</li>
+    </ul>
+  </div>
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — ATL-RESUME-2B · retest launched (run_id <code>e4abb2dc-...</code>) · monitoring required · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail · vendor-fix retest is a new independent run</p>
+  <p>AI Tool Test Lab — VENDOR-FIX-CONFIRMED · <code>VENDOR_FIX_CONFIRMED_BY_RETEST</code> · Castform vendor fix confirmed by retest (run_id <code>e4abb2dc-...</code>, display name <code>simple-ed08313b</code>, complete step 1/1) · previous step 0 failure resolved · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail</p>
 </footer>
 </body>
 </html>

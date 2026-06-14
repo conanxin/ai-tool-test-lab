@@ -103,3 +103,18 @@ New status: VENDOR_FIX_RECEIVED_RETEST_PENDING.
 > Note: the historical closeout status `PAUSED_PENDING_CASTFORM_BACKEND_LOGS` above remains
 > preserved as audit trail. This update is appended in place and does not delete or overwrite
 > any earlier conclusion. See `VENDOR_FIX_RESPONSE.md` for the full vendor response record.
+
+## Vendor Fix Confirmed by Retest
+
+- Vendor fix response was received.
+- Retest run e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d completed.
+- The run reached step 1/1.
+- Train rollout records appeared.
+- The previous repeated step 0 failure is resolved.
+- Current status: VENDOR_FIX_CONFIRMED_BY_RETEST.
+
+> Note: the historical closeout status `PAUSED_PENDING_CASTFORM_BACKEND_LOGS` and the
+> intermediate `VENDOR_FIX_RECEIVED_RETEST_PENDING` both remain preserved above as audit
+> trail. This update is appended in place and does not delete or overwrite any earlier
+> conclusion. See `VENDOR_FIX_RESPONSE.md` (response received) and `VENDOR_FIX_CONFIRMED.md`
+> (response confirmed by retest) for the two-stage vendor fix records.

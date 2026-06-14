@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-RESUME-2B — Record Castform vendor-fix retest launch result · retest launched (run_id `e4abb2dc-cc68-4b52-8ba5-2195c3f12d1d`) · monitoring required
-- **目标**：transcribe 用户本地 WSL 手动执行的 vendor-fix retest 结果到 case page / cases.json / README / 报告；on-disk verify result JSON 后再写入；agent 不调用 API、不访问 UI、不上传、不训练、不重复运行 retest、不读取 API key、不伪造 sample count 或 monitoring 状态
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — vendor-fix retest launched; awaiting user UI monitoring of run progress beyond step 0
+- **阶段**：ATL-RESUME-2C — Record Castform vendor fix confirmed by retest · final_status `VENDOR_FIX_CONFIRMED_BY_RETEST` · Castform vendor fix 已被真实 retest 确认
+- **目标**：transcribe 用户在 Castform UI 观察到的 retest run 成功结果到 case page / cases.json / README / 报告；on-disk verify result JSON 后再写入；agent 不调用 API、不访问 UI、不上传、不训练、不重复 launch、不读取 API key、不伪造 metrics
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — VENDOR_FIX_CONFIRMED_BY_RETEST; Castform case 状态机推进到 vendor fix confirmed；下一步可以开始下一个 AI Tool Test Lab 案例
 - **AI Tool Test Lab published**: `https://conanxin.github.io/ai-tool-test-lab/` (HTTP/2 200)
 - **Castform case published**: `https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/` (HTTP/2 200)
 - **AI Tool Test Lab 已成功发布；Castform case 已成功发布** — 详见 [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) + [reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md](reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md)
@@ -225,6 +225,21 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
   - sample count from result JSON: 16 train / 4 eval
   - next phase: monitor whether it progresses beyond step 0
 - **ATL-RESUME-2B 下一步建议**：ATL-RESUME-2C — 用户在 Castform UI 观察 vendor-fix retest run 状态（expected train UI URL），检查 launch 是否真的产生 train data / eval data / rollouts，并观察 run 是否突破 step 0；agent 在 ATL-RESUME-2C 阶段仍不调用 API、不访问 UI、不上传、不训练，仅做 result-recording
+- **ATL-RESUME-2C 收口**（用户在 Castform UI 观察 retest run 成功，agent 做 on-disk verify + transcribe）：
+  - `cases/.../VENDOR_FIX_CONFIRMED.md` — 完整 vendor fix confirmed 记录（status / summary / retest run / previous failure mode / what changed / current conclusion / sensitive information exclusion）
+  - `cases/.../CASE_CLOSEOUT.md` — append-only 追加 "Vendor Fix Confirmed by Retest" 段；历史 `PAUSED_PENDING_CASTFORM_BACKEND_LOGS` 与 `VENDOR_FIX_RECEIVED_RETEST_PENDING` 全部保留为 audit trail
+  - `cases/.../index.html` — 新增 "ATL-RESUME-2C — Vendor Fix Confirmed by Retest" 模块 + 更新 footer
+  - `data/cases.json` — Castform case phase=`ATL-RESUME-2C vendor fix confirmed by retest` · status=`vendor fix confirmed by retest` · final_status=`VENDOR_FIX_CONFIRMED_BY_RETEST` · canonical_example / workflow_reference 保留 · updated_at=2026-06-14
+  - `scripts/validate_vendor_fix_confirmed.py` — stdlib 验证器（VENDOR_FIX_CONFIRMED.md 存在 / VENDOR_FIX_CONFIRMED_BY_RETEST 出现 / run_id 出现 / data/cases.json final_status=VENDOR_FIX_CONFIRMED_BY_RETEST / 16 secret patterns + 1 forbidden literal scan），**PASS**
+  - `reports/ATL_RESUME2C_VENDOR_FIX_CONFIRMED_REPORT.md` — 阶段报告
+- **ATL-RESUME-2C 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未重复 launch；agent 未读取 API key 任何片段；未创建 .env；未提交 .venv；未记录用户邮箱 / 截图 / API key / cookie / Authorization header / 信用卡；未伪造 metrics（sample rollout rewards / chart 列表均来自用户报告）；不改写历史事实（两个旧 run 仍记录为 step 0 failed）；新 retest run 不引用旧 run_id 作为输入
+- **Castform case 当前状态**：
+  - vendor fix confirmed by retest
+  - retest run completed
+  - train rollouts recorded
+  - previous step 0 failure resolved
+  - final_status: VENDOR_FIX_CONFIRMED_BY_RETEST
+- **ATL-RESUME-2C 下一步建议**：Update final closeout / begin next AI Tool Test Lab case（per ATL-STD-1 模板的 case workflow 启动下一个 case 的 ATL-0 scaffold）
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS
