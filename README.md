@@ -20,9 +20,9 @@
 
 ## 当前状态
 
-- **阶段**：ATL-RESUME-1 — Record Castform vendor fix response · <code>VENDOR_FIX_RECEIVED_RETEST_PENDING</code> · prior status <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> preserved as audit trail
-- **目标**：记录 Castform 创始人 Girish 的官方修复反馈；将 Castform case 状态从 paused pending backend logs 更新为 vendor fix received / retest pending；只更新文档、页面、cases.json；不调用 Castform API / 不访问 UI / 不上传 / 不训练 / 不读取 API key / 不伪造 retest 成功
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — vendor fix received; retest pending; resume starter-style Castform run after vendor fix
+- **阶段**：ATL-RESUME-2A — Prepare Castform vendor-fix retest script · retest script prepared · vendor fix recorded · real retest requires explicit user authorization
+- **目标**：在 vendor 修复后基于 ATL-6 starter-style 配置准备 retest 脚本；新 run_name 不复用旧 failed run；本阶段只准备脚本和验证器，不调用 Castform API / 不访问 UI / 不上传 / 不训练 / 不读取 API key
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — vendor fix retest script prepared; awaits user manual execution
 - **AI Tool Test Lab published**: `https://conanxin.github.io/ai-tool-test-lab/` (HTTP/2 200)
 - **Castform case published**: `https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/` (HTTP/2 200)
 - **AI Tool Test Lab 已成功发布；Castform case 已成功发布** — 详见 [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) + [reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md](reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md)
@@ -190,7 +190,21 @@ python3 scripts/validate_atl5b_second_upload_retry_result.py
   - Root cause confirmed by Castform: raw data dict trainer incompatibility
   - $100 extra credits added
   - Retest pending
-- **ATL-RESUME-1 下一步建议**：ATL-RESUME-2 — 在 vendor 修复后跑 starter-style Castform retest（仍走用户本地 WSL 手动授权，不让 agent 自动 launch）
+- **ATL-RESUME-1 下一步建议**：ATL-RESUME-2 — 基于 vendor 修复后重新跑 starter-style Castform retest（仍走用户本地 WSL 手动授权，不让 agent 自动 launch）
+- **ATL-RESUME-2A 收口**（准备 vendor-fix retest 脚本；agent 不运行）：
+  - `cases/.../vendor-fix-retest/atl_resume2_vendor_fix_retest.py` — retest 脚本（gate check → 本地 validate_env → upload → launch → 独立 result JSON `atl_resume2_vendor_fix_retest_result.json`；run_name `hermes-phase-closer-vendor-fix-retest`；复用 ATL-6 starter-style env / reward / 16 train / 4 eval；no batch_size / learning_rate included / no custom load_dataset override；旧 run_id 不引用作为输入；授权语句 `I AUTHORIZE ATL-RESUME-2 CASTFORM RETEST AFTER VENDOR FIX`）
+  - `cases/.../vendor-fix-retest/ATL_RESUME2_VENDOR_FIX_RETEST_NOTES.md` — retest notes（vendor fix context / expected signal / authorization / hard rules）
+  - `cases/.../index.html` — 新增 "ATL-RESUME-2A — Vendor-Fix Retest Prepared" 模块 + 更新 footer
+  - `data/cases.json` — Castform case phase=`ATL-RESUME-2A vendor-fix retest prepared` · status=`vendor fix recorded; retest script ready` · final_status=`VENDOR_FIX_RECEIVED_RETEST_PENDING`（保留作为审计） · canonical_example / workflow_reference 保留 · updated_at=2026-06-14
+  - `scripts/validate_atl_resume2_vendor_fix_retest.py` — stdlib 验证器（retest dir 存在 / 脚本 compile / no batch_size + learning_rate / auth 字符串 / run_name / 旧 run_id 不引用；result JSON 缺失 → `SKIPPED_RESULT_NOT_PRESENT` exit 0；有 result → 16 secret patterns + 1 forbidden literal scan + train_samples==16 + eval_samples==4 + api_key_recorded==false + launch_succeeded invariants），**PASS**（SKIPPED 模式）
+  - `reports/ATL_RESUME2A_VENDOR_FIX_RETEST_PREP_REPORT.md` — 阶段报告
+- **ATL-RESUME-2A 硬边界**：agent 未调用 Castform API；agent 未访问 Castform UI；agent 未上传数据；agent 未启动训练；agent 未运行 ATL-5B / ATL-6 / 新 retest 脚本；agent 未读取 API key 任何片段；未创建 .env；未提交 .venv；未记录用户邮箱 / 截图 / API key / cookie / Authorization header / 信用卡；不改写历史事实（两个旧 run 仍记录为 step 0 failed）；新 retest 不引用旧 run_id 作为输入；不伪造 retest 成功
+- **ATL-RESUME-2A 状态**：
+  - vendor fix recorded
+  - retest script prepared
+  - true retest requires explicit user authorization
+  - no API call / no upload / no training by agent
+- **ATL-RESUME-2A 下一步建议**：ATL-RESUME-2B — 用户本地 WSL 显式授权后手动运行 `atl_resume2_vendor_fix_retest.py`，agent 仅做 on-disk result verify + transcribe 到 case page / cases.json / 报告（不调用 API、不访问 UI、不上传、不启动训练）
 - **验证**：
   - validate_jsonl.py PASS
   - validate_site.py PASS

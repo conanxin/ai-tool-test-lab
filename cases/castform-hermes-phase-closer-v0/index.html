@@ -1119,10 +1119,59 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
       <li><a href="../../../reports/ATL_RESUME1_CASTFORM_VENDOR_FIX_RESPONSE_REPORT.md">reports/ATL_RESUME1_CASTFORM_VENDOR_FIX_RESPONSE_REPORT.md</a> — ATL-RESUME-1 阶段报告</li>
     </ul>
   </div>
+
+  <div class="section">
+    <h2>ATL-RESUME-2A — Vendor-Fix Retest Prepared</h2>
+    <p><strong>Current phase:</strong> Vendor-fix retest prepared</p>
+    <p><strong>Vendor fix:</strong> received</p>
+    <p><strong>Root cause:</strong> raw data dict trainer incompatibility (confirmed by Castform)</p>
+    <p><strong>Extra credits:</strong> $100</p>
+    <p><strong>Retest config:</strong> ATL-6 starter-style (16 train / 4 eval / Qwen/Qwen3.5-4B / no-tools env / 0.0~1.0 reward / no batch_size / learning_rate included / no custom load_dataset override)</p>
+    <p><strong>New run_name:</strong> <code>hermes-phase-closer-vendor-fix-retest</code> (independent from ATL-5B / ATL-6 run records)</p>
+    <p><strong>Execution status:</strong> <em>not run</em> — script prepared; agent does not call Castform API, does not upload, does not start training</p>
+
+    <p><strong>Authorization phrase (must be exact):</strong></p>
+    <pre><code>I AUTHORIZE ATL-RESUME-2 CASTFORM RETEST AFTER VENDOR FIX</code></pre>
+
+    <p><strong>Run identity (audit trail preserved):</strong></p>
+    <ul>
+      <li>Old Run 1: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code> — preserved, NOT referenced as retest input</li>
+      <li>Old Run 2: <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code> — preserved, NOT referenced as retest input</li>
+    </ul>
+
+    <p><strong>本阶段声明（agent 边界）：</strong></p>
+    <ul>
+      <li>agent 未调用 Castform API</li>
+      <li>agent 未访问 Castform UI</li>
+      <li>agent 未上传数据</li>
+      <li>agent 未启动训练</li>
+      <li>agent 未运行 ATL-5B / ATL-6 / 新 retest 脚本</li>
+      <li>agent 未读取 API key 任何片段</li>
+      <li>agent 未记录 API key / email / screenshot / cookie / Authorization header / 信用卡</li>
+    </ul>
+
+    <p><strong>相关文件：</strong></p>
+    <ul class="file-list">
+      <li><a href="vendor-fix-retest/atl_resume2_vendor_fix_retest.py">vendor-fix-retest/atl_resume2_vendor_fix_retest.py</a> — retest script (gate check → 本地 validate_env → upload → launch → 独立 result JSON)</li>
+      <li><a href="vendor-fix-retest/ATL_RESUME2_VENDOR_FIX_RETEST_NOTES.md">vendor-fix-retest/ATL_RESUME2_VENDOR_FIX_RETEST_NOTES.md</a> — retest notes (vendor fix context / expected signal / authorization / hard rules)</li>
+      <li><a href="../../../scripts/validate_atl_resume2_vendor_fix_retest.py">scripts/validate_atl_resume2_vendor_fix_retest.py</a> — stdlib 验证器（SKIPPED_RESULT_NOT_PRESENT 模式 / 16 secret patterns + 1 forbidden literal scan）</li>
+      <li><a href="../../../reports/ATL_RESUME2A_VENDOR_FIX_RETEST_PREP_REPORT.md">reports/ATL_RESUME2A_VENDOR_FIX_RETEST_PREP_REPORT.md</a> — ATL-RESUME-2A 阶段报告</li>
+    </ul>
+
+    <p><strong>Next step — user manual ATL-RESUME-2 retest from local WSL shell:</strong></p>
+    <pre><code>export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-RESUME-2 CASTFORM RETEST AFTER VENDOR FIX"
+export ATL_ALLOW_CASTFORM_UPLOAD="YES"
+export ATL_ALLOW_CASTFORM_LAUNCH="YES"
+read -s CASTFORM_API_KEY &amp;&amp; export CASTFORM_API_KEY
+
+cd /mnt/d/AI/ai-tool-test-lab
+.venv-castform-local/bin/python cases/castform-hermes-phase-closer-v0/vendor-fix-retest/atl_resume2_vendor_fix_retest.py
+python3 scripts/validate_atl_resume2_vendor_fix_retest.py</code></pre>
+  </div>
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — VENDOR-FIX-RECEIVED · <code>VENDOR_FIX_RECEIVED_RETEST_PENDING</code> · Castform confirmed issue fixed (raw data dict trainer incompatibility) · +$100 credits added · retest pending · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail</p>
+  <p>AI Tool Test Lab — ATL-RESUME-2A · retest script prepared · vendor fix recorded · real retest requires explicit user authorization · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail</p>
 </footer>
 </body>
 </html>
