@@ -1087,10 +1087,42 @@ export ATL_USER_AUTHORIZATION="I AUTHORIZE ATL-6 STARTER STYLE REDEPLOY"
       <li><a href="castform-env-stub.py">castform-env-stub.py</a> — 环境 stub</li>
     </ul>
   </div>
+
+  <div class="section">
+    <h2>Vendor fix received</h2>
+    <p><strong>Previous final status:</strong> <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code></p>
+    <p><strong>Vendor response:</strong> issue fixed</p>
+    <p><strong>Vendor-confirmed root cause:</strong> raw data dict caused trainer incompatibilities</p>
+    <p><strong>Credits:</strong> $100 extra credits added</p>
+    <p><strong>Current status:</strong> <code>VENDOR_FIX_RECEIVED_RETEST_PENDING</code></p>
+    <p><strong>Next step:</strong> retest starter-style Castform run</p>
+
+    <p><strong>Run identity preserved for audit trail:</strong></p>
+    <ul>
+      <li>Run 1: <code>c83f971d-2b2c-42b8-9774-ca64938c1286</code></li>
+      <li>Run 2: <code>56cb5701-6b3e-424e-b671-fc2efc932aa8</code></li>
+    </ul>
+
+    <p><strong>本阶段声明（agent 边界）：</strong></p>
+    <ul>
+      <li>agent 未调用 Castform API</li>
+      <li>agent 未访问 Castform UI</li>
+      <li>agent 未上传数据</li>
+      <li>agent 未启动训练</li>
+      <li>agent 未读取 API key 任何片段</li>
+      <li>agent 未记录 API key / email / screenshot / cookie / Authorization header / 信用卡</li>
+    </ul>
+
+    <p><strong>相关文件：</strong></p>
+    <ul class="file-list">
+      <li><a href="VENDOR_FIX_RESPONSE.md">VENDOR_FIX_RESPONSE.md</a> — 完整 vendor fix response 记录</li>
+      <li><a href="../../../reports/ATL_RESUME1_CASTFORM_VENDOR_FIX_RESPONSE_REPORT.md">reports/ATL_RESUME1_CASTFORM_VENDOR_FIX_RESPONSE_REPORT.md</a> — ATL-RESUME-1 阶段报告</li>
+    </ul>
+  </div>
 </div>
 
 <footer style="margin-top:3rem;text-align:center;color:var(--muted);font-size:0.85rem;">
-  <p>AI Tool Test Lab — CASE-CLOSEOUT · <code>PAUSED_PENDING_CASTFORM_BACKEND_LOGS</code> · Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> both step 0 failed before any rollout · support request prepared · no further cloud runs planned</p>
+  <p>AI Tool Test Lab — VENDOR-FIX-RECEIVED · <code>VENDOR_FIX_RECEIVED_RETEST_PENDING</code> · Castform confirmed issue fixed (raw data dict trainer incompatibility) · +$100 credits added · retest pending · historical Run 1 <code>c83f971d-...</code> + Run 2 <code>56cb5701-...</code> preserved as audit trail</p>
 </footer>
 </body>
 </html>

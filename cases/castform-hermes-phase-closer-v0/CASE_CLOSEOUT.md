@@ -90,3 +90,16 @@ This case excludes:
 - Authorization header
 - user email
 - screenshots with private account data
+
+## Vendor Fix Update
+
+Vendor response received.
+Castform confirmed the issue was fixed.
+Vendor-confirmed root cause: raw data dict caused trainer incompatibilities.
+Castform added $100 extra credits.
+Case can be resumed for retest.
+New status: VENDOR_FIX_RECEIVED_RETEST_PENDING.
+
+> Note: the historical closeout status `PAUSED_PENDING_CASTFORM_BACKEND_LOGS` above remains
+> preserved as audit trail. This update is appended in place and does not delete or overwrite
+> any earlier conclusion. See `VENDOR_FIX_RESPONSE.md` for the full vendor response record.

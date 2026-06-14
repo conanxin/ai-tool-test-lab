@@ -1,3 +1,11 @@
+## Follow-up
+
+Vendor response received. Castform says the issue has been fixed and was caused by raw data dict incompatibilities with their trainer. Retest is pending.
+
+---
+
+# Original Support Request (preserved verbatim)
+
 Hi, I'm testing Castform's Build your own / SDK workflow.
 
 Final status: PAUSED_PENDING_CASTFORM_BACKEND_LOGS
