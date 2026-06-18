@@ -1,0 +1,29 @@
+{
+  "type": "Gene",
+  "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "category": "optimize",
+  "signals_match": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context",
+    "tool_bypass:exec-on-grep",
+    "repeated_tool_usage:exec",
+    "protocol_drift:wrong-tool-for-file-read",
+    "session_context:openclaw",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "strategy": [
+    "Read files with the read tool before referencing their content in reasoning.",
+    "Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.",
+    "Use the search tool for repo-wide content search before falling back to rg via exec.",
+    "Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.",
+    "Re-run validators after each substantive change."
+  ],
+  "constraints": {
+    "max_files": 12,
+    "forbidden_paths": [".git", "node_modules", ".evolver", "memory"]
+  },
+  "summary": "OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization."
+}

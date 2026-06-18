@@ -1,0 +1,12 @@
+Loaded 12 existing genes from .evolver/gep/genes.json
+Appending new gene: gene_distilled_openclaw-tool-use-discipline-bare-compatible
+Wrote 13 genes to .evolver/gep/genes.json
+Appended to .evolver/gep/genes.jsonl
+VERIFIED: gene 'gene_distilled_openclaw-tool-use-discipline-bare-compatible' in GEP store
+  signals_match count: 10
+  contains bare signal: tool_bypass
+  contains bare signal: repeated_tool_usage
+  contains bare signal: protocol_drift
+  contains bare signal: session_context
+  contains bare signal: repo_context
+Install complete.

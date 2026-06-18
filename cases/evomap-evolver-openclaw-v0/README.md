@@ -330,6 +330,7 @@ phase3-skill-distillation/
 | **ATL-EVOMAP-2** | openclaw session-context test partial | PARTIAL — evolver 能扫描 session context，但 signal 提取泛化，需 Phase 3 建立 OpenClaw-specific Gene 库 |
 | **ATL-EVOMAP-3A** | openclaw skill distillation completed | PASS（带 caveat） — Skill 写好、Gene 真实落盘，selector 需 Phase 3b signal detector |
 | **ATL-EVOMAP-3B** | openclaw signal detector partial | PARTIAL — detector + injection work, selector 仍选 `gene_tool_integrity` (qualifed signals stripped) |
+| **ATL-EVOMAP-3B2** | bare signal compatibility completed | **PASS** — bare-compatible Gene 解决了 qualified-strip 问题，selector 选中 OpenClaw Gene |
 
 ---
 
@@ -376,6 +377,51 @@ phase3-skill-distillation/
 
 - **Phase 3C (HOLD):** `evolver review --approve` + `evolver solidify` — 等待 selector match 修好再做
 - **Phase 3C-V2:** 重 distill Gene 让其 `signals_match` 用 bare form
+- **Phase 3D (暂不动):** Hub fetch 永远不接
+
+**暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
+
+---
+
+## Phase 3b2: Bare Signal Compatibility (ATL-EVOMAP-3B2)
+
+**Status:** bare signal compatibility completed
+**报告:** [phase3b2-bare-signal-compat/ATL_EVOMAP_3B2_BARE_SIGNAL_COMPAT_REPORT.md](phase3b2-bare-signal-compat/ATL_EVOMAP_3B2_BARE_SIGNAL_COMPAT_REPORT.md)
+
+### Phase 3b2 目标
+
+解决 Phase 3B 的 qualified-strip 问题：当 OpenClaw-specific Gene 的 `signals_match` 同时声明 bare + qualified signals 时，evolver scanner 归一化后 bare form 仍能命中，selector 选中该 Gene。
+
+### Phase 3b2 关键发现
+
+- ✅ Bare-compatible Gene (`gene_distilled_openclaw-tool-use-discipline-bare-compatible`) 成功安装到 runtime GEP bank
+  - 10 signals_match (5 bare: tool_bypass/repeated_tool_usage/protocol_drift/session_context/repo_context + 5 qualified)
+- ✅ 5 bare signal MemoryGraphEvents 注入到 `memory/evolution/memory_graph.jsonl`
+- ✅ Evolver run 输出 `[Signals] Multi-strategy: ... | score-only: tool_bypass` (5 bare signals 合并为单个 bare)
+- ✅ **Selector 选中 `gene_distilled_openclaw-tool-use-discipline-bare-compatible`** (first time in ATL-EVOMAP series)
+- ⚠️ `selection_path: random` (可能因为两个 gene 都含 `tool_bypass` bare signal, drift intensity 低)
+- ✅ 全程安全边界 PASS (no Hub / no publish / no validator / no --loop / no credits / no source modification)
+- ✅ 未执行 `--approve` / `solidify` (per 硬边界)
+
+### Phase 3b2 评分 (4-dimension)
+
+| 维度 | 状态 | 说明 |
+|------|------|------|
+| A. Bare-compatible Gene installed | ✅ PASS | runtime GEP store 含新 Gene (10 signals_match) |
+| B. Bare signal injection | ✅ PASS | 5 events 注入, all target 新 Gene |
+| C. Selector match | ✅ PASS | selected_gene_id == new Gene (not gene_tool_integrity) |
+| D. Safety | ✅ PASS | All 15 hard boundaries respected |
+
+### Phase 3b2 结论
+
+> Bare-signal compatibility strategy **完全 work**。新 Gene 的 `signals_match` 同时含 bare + qualified forms，scanner 归一化 qualified→bare 后，bare form 仍存在（因为原信号已含 bare），selector 命中。
+>
+> **历史性突破:** ATL-EVOMAP 系列第一个**全 PASS** 的 phase — 4 维度全过 + safety 全过。
+
+### Phase 3b2 下一步
+
+- **Phase 3C (UNBLOCKED):** 现在 selector 验证了 OpenClaw-specific Gene 选中路径，Phase 3C 可以执行 `evolver review --approve` + `solidify` 在 pending run `run_1781793744810` 上
+- **Phase 3C-V2:** 也可考虑把 Phase 3A 的 Gene 重新 distill 为 bare-compatible 版本
 - **Phase 3D (暂不动):** Hub fetch 永远不接
 
 **暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接

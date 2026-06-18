@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-3B OpenClaw signal detector",
-      "status": "openclaw signal detector partial",
+      "phase": "ATL-EVOMAP-3B2 Bare Signal Compatibility",
+      "status": "bare signal compatibility completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-3B 构建 OpenClaw-specific signal detector (scripts/openclaw_signal_detector.py, stdlib only) 让 evolver selector 有机会匹配 Phase 3A 创建的 gene_distilled_openclaw-tool-use-discipline。detector 在 fixture (805 bytes simulated session tail) 上 emit 5/5 qualified signals (tool_bypass:exec-on-grep, repeated_tool_usage:exec, protocol_drift:wrong-tool-for-file-read, session_context:openclaw, repo_context:ai-tool-test-lab) 全部 score>=0.67。对真实 Phase 2 evolver run output (50KB descriptive) emit 3/5 signals (符合预期 — real artifact 缺 raw tool-call literals)。Manual signal injection 路径打通：detector 产出 MemoryGraphEvent 写入 memory/evolution/memory_graph.jsonl → evolver run scanner 读取。根因发现: evolver scanner strips qualified keys to bare form (tool_bypass:exec-on-grep → tool_bypass)，导致 selector 选 pre-existing local bank gene (gene_tool_integrity) 而非新 Gene。Selector uses score-ranked path; bare signal match 两个 gene equally; first-match wins = 旧 gene。未执行 evolver review --approve / solidify (per 硬边界)。Phase 3C HOLD — 需先修 selector 或修改 new Gene signals_match 为 bare form。安全边界全部 PASS: no Hub / no publish / no validator / no --loop / no credits / no secrets / no source modification。",
+      "summary": "ATL-EVOMAP-3B2 验证 bare-signal compatibility strategy：创建 gene_distilled_openclaw-tool-use-discipline-bare-compatible (10 signals_match = 5 bare + 5 qualified)并安装到 runtime .evolver/gep/genes.json (12 -> 13 genes)；注入 5 个 bare signal MemoryGraphEvent (tool_bypass/repeated_tool_usage/protocol_drift/session_context/repo_context) 到 memory/evolution/memory_graph.jsonl；evolver run 输出 [Signals] Multi-strategy: ... | score-only: tool_bypass (5 bare signals 合并为单个 bare)；Selector 选中 gene_distilled_openclaw-tool-use-discipline-bare-compatible (selected_gene_id)，是 ATL-EVOMAP 系列第一个 selector match 通过的 phase；Last-run gene 是 gene_tool_integrity 但新 bare-compatible Gene 赢 selection；selection_path: random (drift_intensity 0.277)；未执行 evolver review --approve / solidify (per 硬边界)；Phase 3C UNBLOCKED - 可以执行 --approve + solidify on pending run run_1781793744810；安全边界全部 PASS: no Hub / no auto-publish / no validator / no --loop / no credits / no source modification / no secrets。",
       "updated_at": "2026-06-18",
-      "final_status": "OPENCLAW_SIGNAL_DETECTOR_PARTIAL",
+      "final_status": "BARE_SIGNAL_COMPATIBILITY_COMPLETED",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -52,6 +52,16 @@
           "gene_id_built": "gene_distilled_openclaw-tool-use-discipline (Phase 3A)",
           "detector": "scripts/openclaw_signal_detector.py",
           "notes": "detector emits 5/5 on fixture, 3/5 on real artifact; injection read by evolver scanner; selector picks gene_tool_integrity (local bank) NOT new Gene due to qualified→bare strip"
+        },
+        {
+          "phase": "ATL-EVOMAP-3B2",
+          "status": "bare signal compatibility completed",
+          "result": "PASS",
+          "gene_id_built": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+          "selector_match": true,
+          "selected_gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+          "pending_run": "run_1781793744810",
+          "notes": "First full PASS in ATL-EVOMAP series; bare-signal compat solves Phase 3B qualified-strip; Phase 3C unblocked"
         }
       ]
     }

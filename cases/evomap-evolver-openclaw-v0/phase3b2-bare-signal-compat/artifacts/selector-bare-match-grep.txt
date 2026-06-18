@@ -1,0 +1,22 @@
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-review-bare-signal-output.txt:  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-review-bare-signal-output.txt:  Summary:  OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization.
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-review-bare-signal-output.txt:  - tool_bypass
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:[Signals] Multi-strategy: regex=0, score=1, llm=0, merged=1 | score-only: tool_bypass
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:   Reason: signals match gene.signals_match; signals: tool_bypass; drift_intensity: 0.277; selection_path: random
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:2. Selection: Selected Gene "gene_distilled_openclaw-tool-use-discipline-bare-compatible".
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:ACTIVE STRATEGY (gene_distilled_openclaw-tool-use-discipline-bare-compatible):
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:["tool_bypass"]
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:      "tool_bypass|工具绕过|ツール迂回|도구우회",
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:      "If tool_bypass detected, strengthen constraint enforcement in prompt assembly or tool routing",
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:    "id": "gene_tool_integrity",
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:      "tool_bypass|工具绕过|ツール迂回|도구우회"
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:  - params: Signals: tool_bypass
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/evolver-run-bare-signal-output.txt:- Last run gene: gene_tool_integrity
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/gene-openclaw-tool-use-discipline-bare-compatible.json:  "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/gene-openclaw-tool-use-discipline-bare-compatible.json:    "tool_bypass",
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/gene-openclaw-tool-use-discipline-bare-compatible.json:    "tool_bypass:exec-on-grep",
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/gene-openclaw-tool-use-discipline-bare-compatible.json:  "summary": "OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization."
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/install-bare-compatible-gene-output.txt:Appending new gene: gene_distilled_openclaw-tool-use-discipline-bare-compatible
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/install-bare-compatible-gene-output.txt:VERIFIED: gene 'gene_distilled_openclaw-tool-use-discipline-bare-compatible' in GEP store
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/install-bare-compatible-gene-output.txt:  contains bare signal: tool_bypass
+cases/evomap-evolver-openclaw-v0/phase3b2-bare-signal-compat/artifacts/manual-bare-signal-injection.jsonl:{"type": "MemoryGraphE
