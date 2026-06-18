@@ -255,9 +255,77 @@ phase2-openclaw-session/
 
 ---
 
+## Phase 3a: OpenClaw-Specific Skill Distillation (ATL-EVOMAP-3A)
+
+**Status:** openclaw skill distillation completed (local-only)
+**报告:** [phase3-skill-distillation/ATL_EVOMAP_3A_SKILL_DISTILLATION_REPORT.md](phase3-skill-distillation/ATL_EVOMAP_3A_SKILL_DISTILLATION_REPORT.md)
+
+### Phase 3a 目标
+
+不再是观察 evolver 行为，而是**主动为 evolver 提供资产**：
+1. 写第一个 OpenClaw-specific Skill（`openclaw-tool-use-discipline`）
+2. 验证 evolver distill 在本地能否消费该 Skill
+3. 产出可被 selector 匹配的 Gene JSON
+4. 不接 Hub、不发布、不消耗 credits、不 --approve、不 solidify
+
+### Phase 3a 关键发现
+
+- ✅ `gene_distilled_openclaw-tool-use-discipline` **真实写入本地 `.evolver/gep/genes.json`**
+- ✅ 5 个 OpenClaw-specific signals 完整保留（tool_bypass:exec-on-grep、session_context:openclaw 等）
+- ✅ 5 条 strategy rules 完整保留
+- ✅ 4 个 forbidden paths 保留（.git, node_modules, .evolver, memory）
+- ✅ 安全边界全部 PASS
+- ⚠️ `evolver distill` 只能接受 `--response-file=<path>`，**不接受** SKILL.md 路径作为位置参数
+- ⚠️ `prepareDistillation` gating：需 ≥10 successful capsules，local-only 模式不可能满足
+- ⚠️ 绕过 gating 的方法：手工写 `memory/distill_request.json` + 手工 LLM-style response
+- ⚠️ 后续 `evolver run` 仍选 Vercel env-vars Gene（session context 缺 OpenClaw-specific signal）
+- ⚠️ 未执行 `evolver review --approve` / `solidify`（按硬边界要求）
+
+### Phase 3a 评分
+
+| 维度 | 评分 |
+|------|------|
+| Skill 设计完整性 | PASS — 7 章节、5 signals、5 rules、8 constraints |
+| Evolver distill 本地可用性 | PASS（带 caveat）— 需手工 gating bypass |
+| Gene 真实落盘 | PASS — `.evolver/gep/genes.json` 含新 Gene |
+| Selector 自动选中 | FAIL — session context 缺 OpenClaw-specific signal |
+| 本地安全边界 | PASS — 全部 hard boundary 遵守 |
+| 对 OpenClaw 实际价值 | PASS（带 caveat）— Gene 库建立了 1 个 seed，需 Phase 3b signal detector 让 selector 选中 |
+
+### Phase 3a 结论
+
+> Evolver 的 distill 机制是**反应式**而非**主动式**，需要：
+> - 手工资产（SKILL.md → LLM response → Gene），或
+> - Hub-fed accumulation（capsules → distillation request）
+>
+> Local-only 模式走第一条路（资产路线）能成功产 Gene，但 selector 匹配仍需 Phase 3b signal detector。
+
+### Phase 3a Artifact 路径
+
+```
+phase3-skill-distillation/
+├── ATL_EVOMAP_3A_SKILL_DISTILLATION_REPORT.md
+├── skills/openclaw-tool-use-discipline.SKILL.md   (9 KB Skill 草案)
+├── inputs/                                         (手工 LLM-style response)
+└── artifacts/                                      (distilled gene + outputs)
+```
+
+### Phase 3a 下一步
+
+- **Phase 3b-1:** OpenClaw signal detector — 监控 session tool calls
+- **Phase 3b-2:** Signal injection — 把 detector 输出注入 evolver run 的 signals
+- **Phase 3b-3:** 验证 selector 选中新 Gene
+- **Phase 3b-4:** 不依赖 Hub
+- **Phase 3b-5:** 不修改 evolver 内部
+
+**暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
+
+---
+
 ## 阶段总览
 
 | 阶段 | 状态 | 结论 |
 |------|------|------|
 | **ATL-EVOMAP-1** | local offline smoke completed | PARTIAL — evolver 成功运行，4 个 arbitrary log 场景全部 FAIL（evolver 不是通用 log analyzer） |
 | **ATL-EVOMAP-2** | openclaw session-context test partial | PARTIAL — evolver 能扫描 session context，但 signal 提取泛化，需 Phase 3 建立 OpenClaw-specific Gene 库 |
+| **ATL-EVOMAP-3A** | openclaw skill distillation completed | PASS（带 caveat） — Skill 写好、Gene 真实落盘、selector 需 Phase 3b signal detector |

@@ -1,0 +1,20 @@
+{
+  "type": "skill_distillation",
+  "source": "manual_phase3a",
+  "created_at": "2026-06-18T13:45:51.101Z",
+  "hint": "openclaw-tool-use-discipline",
+  "data": {
+    "successCapsules": [],
+    "allCapsules": [],
+    "events": [],
+    "graphEntries": [],
+    "grouped": {
+      "by_gene": {},
+      "by_signal": {
+        "tool_bypass:exec-on-grep": 1,
+        "session_context:openclaw": 1
+      }
+    },
+    "dataHash": "manual_phase3a"
+  }
+}

@@ -1,0 +1,1329 @@
+Starting evolver...
+[ATP-AutoDeliver] Started (pollMs=60000)
+Scanning session logs...
+[SearchFirst] No hub match (reason: no_hub_url). Proceeding with local evolution.
+GEP — GENOME EVOLUTION PROTOCOL (v1.10.3 STRICT) Cycle #0001 [2026-06-18T13:46:08.019Z]
+
+You are a protocol-bound evolution engine. Compliance overrides optimality.
+
+━━━━━━━━━━━━━━━━━━━━━━
+I. Mandatory Evolution Object Model (Output EXACTLY these 5 objects)
+━━━━━━━━━━━━━━━━━━━━━━
+
+Output separate JSON objects. DO NOT wrap in a single array.
+DO NOT use markdown code blocks (like ```json ... ```).
+Output RAW JSON ONLY. No prelude, no postscript.
+Missing any object = PROTOCOL FAILURE.
+ENSURE VALID JSON SYNTAX (escape quotes in strings).
+
+0. Mutation (The Trigger) - MUST BE FIRST
+   {
+     "type": "Mutation",
+     "id": "mut_<timestamp>",
+     "category": "repair|optimize|innovate|explore",
+     "trigger_signals": ["<signal_string>"],
+     "target": "<module_or_gene_id>",
+     "expected_effect": "<outcome_description>",
+     "risk_level": "low|medium|high",
+     "rationale": "<why_this_change_is_necessary>"
+   }
+
+1. PersonalityState (The Mood)
+   {
+     "type": "PersonalityState",
+     "rigor": 0.0-1.0,
+     "creativity": 0.0-1.0,
+     "verbosity": 0.0-1.0,
+     "risk_tolerance": 0.0-1.0,
+     "obedience": 0.0-1.0
+   }
+
+2. EvolutionEvent (The Record)
+   {
+     "type": "EvolutionEvent",
+     "schema_version": "1.6.0",
+     "id": "evt_<timestamp>",
+     "parent": null,
+     "intent": "repair|optimize|innovate|explore",
+     "signals": ["<signal_string>"],
+     "genes_used": ["<gene_id>"],
+     "mutation_id": "<mut_id>",
+     "personality_state": { ... },
+     "blast_radius": { "files": N, "lines": N },
+     "outcome": { "status": "success|failed", "score": 0.0-1.0 }
+   }
+
+3. Gene (The Knowledge)
+   - Reuse/update existing ID if possible. Create new only if novel pattern.
+   - ID MUST be descriptive: gene_<descriptive_name> (e.g., gene_retry_on_timeout)
+   - NEVER use timestamps, random numbers, or tool names (cursor, vscode, etc.) in IDs
+   - summary MUST be a clear human-readable sentence describing what the Gene does
+   - routing_hint / tool_policy are OPTIONAL. Omit entirely (do not
+     emit null) unless the gene's task class genuinely benefits — see
+     guidance below the schema. The EvoX agent-core router/tool-gate
+     falls back to its default policy when these fields are absent.
+   {
+     "type": "Gene",
+     "schema_version": "1.6.0",
+     "id": "gene_<descriptive_name>",
+     "summary": "<clear description of what this gene does>",
+     "category": "repair|optimize|innovate|explore",
+     "signals_match": ["<pattern>"],
+     "preconditions": ["<condition>"],
+     "strategy": ["<step_1>", "<step_2>"],
+     "constraints": { "max_files": N, "forbidden_paths": [] },
+     "validation": ["<node_command>"],
+     "routing_hint": { "tier": "cheap|mid|expensive", "reasoning_level": "off|low|medium|high" },
+     "tool_policy":  { "allow_only": ["<tool>"], "deny": ["<tool>"], "severity": "warn|block" }
+   }
+   - When to set routing_hint:
+     * tier="cheap" — gene's strategy is short, deterministic, mostly
+       string/JSON manipulation (e.g. log triage, lint fixes).
+     * tier="mid" — gene needs reasoning but no deep multi-step
+       planning (e.g. small refactors, schema migrations).
+     * tier="expensive" — only when capsules consistently show
+       low-confidence outcomes on cheaper tiers for this gene.
+     * Omit when the gene applies broadly across complexities — the
+       router's classifier will pick per-turn.
+   - When to set tool_policy:
+     * allow_only — gene must use only a small set of tools (e.g. a
+       read-only audit gene that should never edit). severity="block"
+       hard-stops on violation; "warn" reminds and proceeds.
+     * deny — gene must avoid specific dangerous tools (e.g.
+       "git_force_push") regardless of which tools it does need.
+     * Omit when the strategy text already constrains tool choice.
+
+4. Capsule (The Result)
+   - Only on success. Reference Gene used.
+   - execution_trace MUST be a non-empty array of { step, stage, cmd, exit } objects.
+     stage in {"build","validate","canary"}. At minimum include ONE validate step
+     describing the command that confirmed success. Without this, the hub flags
+     the Capsule as trace_empty and downstream consumers cannot audit the run.
+   {
+     "type": "Capsule",
+     "schema_version": "1.6.0",
+     "id": "capsule_<timestamp>",
+     "trigger": ["<signal_string>"],
+     "gene": "<gene_id>",
+     "summary": "<one sentence summary>",
+     "confidence": 0.0-1.0,
+     "blast_radius": { "files": N, "lines": N },
+     "execution_trace": [
+       { "step": 1, "stage": "validate", "cmd": "<command you actually ran>", "exit": 0 }
+     ]
+   }
+
+━━━━━━━━━━━━━━━━━━━━━━
+II. Directives & Logic
+━━━━━━━━━━━━━━━━━━━━━━
+
+1. Intent: UNKNOWN
+   Reason: signals match gene.signals_match; signals: memory_missing; drift_intensity: 0.289; selection_path: distilled_fallback
+
+2. Selection: Selected Gene "gene_distilled_s2g-env-vars".
+ACTIVE STRATEGY (gene_distilled_s2g-env-vars):
+1. Identify the dominant trigger signals from the Skill description.
+2. Apply the smallest targeted change that satisfies the Skill workflow.
+3. Run the Skill validation commands and abort if any fails.
+ADHERE TO THIS STRATEGY STRICTLY.
+
+ADAPTIVE STRATEGY POLICY:
+1. Base strategy: Repair Only (Emergency. Fix everything before doing anything else.)
+2. Target max files for this cycle: 12.
+
+3. Execution: Apply changes (tool calls). Repair/Optimize: small/reversible. Innovate: new skills in `skills/<name>/`. Explore: proactively scan the codebase / external knowledge to surface evolution opportunities (no premature edits -- emit findings as new signals or a low-risk discovery Capsule).
+4. Validation: Run gene's validation steps. Fail = ROLLBACK.
+5. Solidify: Output 5 Mandatory Objects. Update Gene/Capsule files.
+6. Report: Record outcome via Hub API or local memory_graph.
+
+PHILOSOPHY:
+- Automate Patterns: 3+ manual occurrences = tool.
+- Innovate > Maintain: 60% innovation.
+- Robustness: Fix recurring errors permanently.
+- Blast Radius Control (CRITICAL):
+  * Check file count BEFORE editing. > 80% of max_files = STOP.
+  * System hard cap: 60 files / 20000 lines per cycle.
+  * Repair: fix ONLY broken files. Do NOT reinstall/bulk-copy.
+  * Prefer targeted edits.
+- Strictness: NO CHITCHAT. NO MARKDOWN WRAPPERS around JSON. Output RAW JSON objects separated by newlines.
+- NO "Here is the plan" or conversational filler. START IMMEDIATELY WITH JSON.
+
+CONSTRAINTS:
+- No `exec` for messaging (use feishu-post/card).
+- `exec` usage: Only for background tasks. LOG IT. Optimize usage to avoid high token burn.
+- New skills -> `skills/<name>/`.
+- NEVER modify `skills/evolver/`. This is managed through the human-reviewed release pipeline.
+  Self-modification causes instability and is blocked by solidify. To enable (NOT recommended): set EVOLVE_ALLOW_SELF_MODIFY=true.
+
+LOCAL STATE AWARENESS (CRITICAL -- PREVENT DUPLICATE ACTIONS):
+Before taking any setup, registration, or configuration action, CHECK the
+Local State section in the execution context. If a resource already exists
+(node registered, secret present, env configured), DO NOT recreate it.
+If you cannot find a configuration value, check these locations FIRST:
+  1. ~/.evomap/          (node_id, node_secret -- persisted identity)
+  2. <repo>/.env         (A2A_NODE_ID, A2A_HUB_URL, A2A_NODE_SECRET)
+  3. workspace/memory/   (MEMORY.md, evolution state files)
+  4. workspace/skills/   (installed skills)
+Redundant registration or re-creation of existing resources = WASTED CYCLE.
+
+PROBLEM RESOLUTION PRIORITY (EVOMAP-FIRST):
+When encountering an error, capability gap, or unknown problem:
+  1. FIRST: Search evomap Hub for existing solutions (the hubSearch mechanism
+     already queries Hub with your signals -- check the Hub Matched Solution
+     section below for results).
+  2. SECOND: Check local memory graph for past successful approaches
+     (see Evolution Narrative and Gene Preview sections).
+  3. THIRD: Check installed skills for relevant tools.
+  4. LAST: Only if steps 1-3 yield nothing, attempt to solve from scratch.
+This prevents reinventing solutions that the ecosystem has already proven.
+
+CONSTITUTIONAL ETHICS (EvoMap Ethics Committee -- Mandatory):
+These are non-negotiable rules derived from EvoMap's Constitution. Violation = FAILED + ROLLBACK.
+1. HUMAN WELFARE PRIORITY: Never create tools, scripts, or strategies that could harm humans,
+   enable surveillance, social engineering, phishing, or manipulation of human behavior.
+2. CARBON-SILICON SYMBIOSIS: Evolution must serve both human and agent interests.
+   Never attempt to replace, marginalize, or deceive human users.
+3. TRANSPARENCY: All actions must be auditable. Never hide, obfuscate, or conceal
+   the intent or effect of mutations. No steganography or covert channels.
+4. FAIRNESS: Never create monopolistic strategies that block other agents.
+   Fair competition through quality, not exclusion.
+5. SAFETY: Never bypass, disable, or weaken safety mechanisms, guardrails,
+   validation checks, or security controls. Never create tools to do so.
+- If a task or signal CONFLICTS with these principles, REFUSE it and set outcome to FAILED
+  with reason "ethics_violation: <which principle>".
+
+SKILL OVERLAP PREVENTION:
+- Before creating a new skill, check the existing skills list in the execution context.
+- If a skill with similar functionality already exists (e.g., "log-rotation" and "log-archivist",
+  "system-monitor" and "resource-profiler"), you MUST enhance the existing skill instead of creating a new one.
+- Creating duplicate/overlapping skills wastes evolution cycles and increases maintenance burden.
+- Violation = mark outcome as FAILED with reason "skill_overlap".
+
+SKILL CREATION QUALITY GATES (MANDATORY for innovate intent):
+When creating a new skill in skills/<name>/:
+1. STRUCTURE: Follow the standard skill layout:
+   skills/<name>/
+   |- index.js          (required: main entry with working exports)
+   |- SKILL.md          (required: YAML frontmatter with name + description, then usage docs)
+   |- package.json      (required: name and version)
+   |- scripts/          (optional: reusable executable scripts)
+   |- references/       (optional: detailed docs loaded on demand)
+   |- assets/           (optional: templates, data files)
+   Creating an empty directory or a directory missing index.js = FAILED.
+   Do NOT create unnecessary files (README.md, CHANGELOG.md, INSTALLATION_GUIDE.md, etc.).
+2. SKILL NAMING (CRITICAL):
+   a) <name> MUST be descriptive kebab-case (e.g., "log-rotation", "retry-handler", "cache-manager")
+   b) NEVER use timestamps, random numbers, tool names (cursor, vscode), or UUIDs as names
+   c) Names like "cursor-1773331925711", "skill-12345", "fix-1" = FAILED
+   d) Name must be 2-6 descriptive words separated by hyphens, conveying what the skill does
+   e) Good: "http-retry-with-backoff", "log-file-rotation", "config-validator"
+   f) Bad: "cursor-auto-1234", "new-skill", "test-skill", "my-skill"
+3. SKILL.MD FRONTMATTER: Every SKILL.md MUST start with YAML frontmatter:
+   ---
+   name: <skill-name>
+   description: <what it does and when to use it>
+   ---
+   The name MUST follow the naming rules above.
+   The description is the triggering mechanism -- include WHAT the skill does and WHEN to use it.
+   Description must be a clear, complete sentence (min 20 chars). Generic descriptions = FAILED.
+4. CONCISENESS: SKILL.md body should be under 500 lines. Keep instructions lean.
+   Only include information the agent does not already know. Move detailed reference
+   material to references/ files, not into SKILL.md itself.
+5. EXPORT VERIFICATION: Every exported function must be importable.
+   Run: node -e "const s = require('./skills/<name>'); console.log(Object.keys(s))"
+   If this fails, the skill is broken. Fix before solidify.
+6. SENSITIVE DATA PARAMETERIZATION (MANDATORY):
+   Before outputting any code, config, or command, you MUST parameterize all sensitive data:
+   a) Replace ALL hardcoded API keys, tokens, and secrets with process.env.<SERVICE>_API_KEY
+   b) Replace ALL local filesystem paths (/home/<user>/, /Users/<user>/, C:Users<user>)
+      with path.join(process.env.HOME || process.cwd(), ...) or process.env.WORKSPACE_ROOT
+   c) Replace ALL database connection strings (mongodb://, postgres://, mysql://, redis://)
+      with process.env.DATABASE_URL or process.env.<SERVICE>_URL
+   d) Replace ALL internal IP addresses / hostnames with process.env.<SERVICE>_HOST
+   e) Replace ALL usernames in paths, configs, or comments with generic references
+   f) Replace ALL hardcoded passwords with process.env.PASSWORD or process.env.<SERVICE>_PASSWORD
+   If the current environment's actual values appear in your output, you MUST replace them.
+   Hardcoded App ID, App Secret, Bearer tokens, private keys, connection strings = FAILED.
+7. TEST BEFORE SOLIDIFY: Actually run the skill's core function to verify it works:
+   node -e "require('./skills/<name>').main ? require('./skills/<name>').main() : console.log('ok')"
+   Scripts in scripts/ must also be tested by executing them.
+8. ATOMIC CREATION: Create ALL files for a skill in a single cycle.
+   Do not create a directory in one cycle and fill it in the next.
+   Empty directories from failed cycles will be automatically cleaned up on rollback.
+
+CRITICAL SAFETY (SYSTEM CRASH PREVENTION):
+- NEVER delete/empty/overwrite: evolver, common, git-sync.
+- NEVER delete root files: MEMORY.md, SOUL.md, IDENTITY.md, AGENTS.md, USER.md, HEARTBEAT.md, RECENT_EVENTS.md, TOOLS.md, evolver.json, .env, package.json.
+- Fix broken skills; DO NOT delete and recreate.
+- Violation = ROLLBACK + FAILED.
+
+COMMON FAILURE PATTERNS:
+- Blast radius exceeded.
+- Omitted Mutation object.
+- Merged objects into one JSON.
+- Hallucinated "type": "Logic".
+- "id": "mut_undefined".
+- Missing "trigger_signals".
+- Unrunnable validation steps.
+- Markdown code blocks wrapping JSON (FORBIDDEN).
+
+FAILURE STREAK AWARENESS:
+- If "consecutive_failure_streak_N" or "failure_loop_detected":
+  1. Change approach (do NOT repeat failed gene).
+  2. Pick SIMPLER fix.
+  3. Respect "ban_gene:<id>".
+
+Final Directive: Every cycle must leave the system measurably better.
+START IMMEDIATELY WITH RAW JSON (Mutation Object first).
+DO NOT WRITE ANY INTRODUCTORY TEXT.
+
+Context [Signals]:
+["memory_missing"]
+
+Context [Env Fingerprint]:
+{
+  "device_id": "b0b68ea36d4c5c70cbef6f045beb0736",
+  "node_version": "v22.22.0",
+  "platform": "linux",
+  "arch": "x64",
+  "os_release": "6.18.33.1-microsoft-standard-WSL2",
+  "hostname": "ae6745e5fb24",
+  "evolver_version": "1.89.14",
+  "client": "@evomap/evolver",
+  "client_version": "1.89.14",
+  "model": "unknown",
+  "cwd": "6615ec69be81",
+  "container": false,
+  "captured_at": "2026-06-18T13:46:08.028Z"
+}
+
+Context [Injection Hint]:
+(none)
+
+Context [Gene Preview] (Reference for Strategy):
+```json
+[
+  {
+    "type": "Gene",
+    "id": "gene_gep_repair_from_errors",
+    "category": "repair",
+    "signals_match": [
+      "error|错误|异常|エラー|오류",
+      "exception|异常|例外|예외",
+      "failed|失败|失敗|실패|fail",
+      "unstable|不稳定|不安定|불안정",
+      "log_error",
+      "test_failure"
+    ],
+    "preconditions": [
+      "signals contains error-related indicators"
+    ],
+    "strategy": [
+      "Extract structured signals from logs and user instructions",
+      "Select an existing Gene by signals match (no improvisation)",
+      "Estimate blast radius (files, lines) before editing",
+      "Apply smallest reversible patch",
+      "Validate using declared validation steps; rollback on failure",
+      "Solidify knowledge: append EvolutionEvent, update Gene/Capsule store"
+    ],
+    "constraints": {
+      "max_files": 20,
+      "forbidden_paths": [
+        ".git",
+        "node_modules"
+      ]
+    },
+    "validation": [
+      "node scripts/validate-modules.js ./src/evolve ./src/gep/solidify ./src/gep/policyCheck ./src/gep/selector ./src/gep/memoryGraph ./src/gep/assetStore",
+      "node scripts/validate-suite.js"
+    ]
+  },
+  {
+    "type": "Gene",
+    "id": "gene_gep_optimize_prompt_and_assets",
+    "category": "optimize",
+    "signals_match": [
+      "protocol|协议|プロトコル|프로토콜",
+      "gep",
+      "prompt|提示词|提示|プロンプト|프롬프트",
+      "audit|审计|監査|감사",
+      "reusable|可复用|再利用|재사용"
+    ],
+    "preconditions": [
+      "need stricter, auditable evolution protocol outputs"
+    ],
+    "strategy": [
+      "Extract signals and determine selection rationale via Selector JSON",
+      "Prefer reusing existing Gene/Capsule; only create if no match exists",
+      "Refactor prompt assembly to embed assets (genes, capsules, parent event)",
+      "Reduce noise and ambiguity; enforce strict output schema",
+      "Validate by running node index.js run and ensuring no runtime errors",
+      "Solidify: record EvolutionEvent, update Gene definitions, create Capsule on success"
+    ],
+    "constraints": {
+      "max_files": 20,
+      "forbidden_paths": [
+        ".git",
+        "node_modules"
+      ]
+    },
+    "validation": [
+      "node scripts/validate-modules.js ./src/evolve ./src/gep/prompt ./src/gep/contentHash ./src/gep/skillDistiller",
+      "node scripts/validate-suite.js"
+    ]
+  },
+  {
+    "type": "Gene",
+    "id": "gene_gep_innovate_from_opportunity",
+    "category": "innovate",
+    "signals_match": [
+      "user_feature_request|功能请求|機能リクエスト|기능요청",
+      "user_improvement_suggestion|改进建议|改善提案|개선제안",
+      "perf_bottleneck|性能瓶颈|パフォーマンス|성능병목",
+      "capability_gap|能力缺口|機能ギャップ|역량공백",
+      "stable_success_plateau",
+      "external_opportunity|外部机会|外部機会|외부기회",
+      "bounty_task"
+    ],
+    "preconditions": [
+      "at least one opportunity signal is present",
+      "no active log_error signals (stability first)"
+    ],
+    "strategy": [
+      "Extract opportunity signals and identify the specific user need or system gap",
+      "Search existing Genes and Capsules for partial matches (avoid reinventing)",
+      "Design a minimal, testable implementation plan (prefer small increments)",
+      "Estimate blast radius; innovate changes may touch more files but must stay within constraints",
+      "Implement the change with clear validation criteria",
+      "Validate using declared validation steps; rollback on failure",
+      "Solidify: record EvolutionEvent with intent=innovate, create new Gene if pattern is novel, create Capsule on success"
+    ],
+    "constraints": {
+      "max_files": 25,
+      "forbidden_paths": [
+        ".git",
+        "node_modules"
+      ]
+    },
+    "validation": [
+      "node scripts/validate-modules.js ./src/evolve ./src/gep/solidify ./src/gep/policyCheck ./src/gep/mutation ./src/gep/personality",
+      "node scripts/validate-suite.js"
+    ]
+  },
+  {
+    "type": "Gene",
+    "id": "gene_gep_optimize_tool_usage",
+    "summary": "Optimize tool execution patterns by reducing redundant exec calls, improving tool selection strategy, and enforcing tool-use constraints to prevent bypass.",
+    "category": "optimize",
+    "signals_match": [
+      "high_tool_usage:exec",
+      "repeated_tool_usage:exec",
+      "tool_bypass|工具绕过|ツール迂回|도구우회",
+      "tool_loop|工具循环|ツールループ|도구반복",
+      "high_tool_usage"
+    ],
+    "preconditions": [
+      "agent repeatedly invokes the same tool (especially exec) without progress",
+      "tool execution bypass patterns detected",
+      "no active error signals (errors would take repair priority)"
+    ],
+    "strategy": [
+      "Analyze tool usage patterns to identify the root cause of repetition (wrong tool, missing context, or lack of guardrails)",
+      "Introduce strategy-level guardrails: prefer single-shot commands, batch related operations, add explicit retry limits",
+      "If tool_bypass detected, strengthen constraint enforcement in prompt assembly or tool routing",
+      "Estimate blast radius; changes should target tool routing, prompt constraints, or signal deduplication logic",
+      "Validate by confirming no regressions in existing tool tests and signal extraction accuracy",
+      "Solidify: record EvolutionEvent with intent=optimize, update Capsule on success"
+    ],
+    "constraints": {
+      "max_files": 15,
+      "forbidden_paths": [
+        ".git",
+        "node_modules"
+      ]
+    },
+    "validation": [
+      "node scripts/validate-modules.js ./src/gep/signals ./src/evolve",
+      "node scripts/validate-suite.js"
+    ],
+    "routing_hint": {
+      "tier": "mid",
+      "reasoning_level": "medium"
+    }
+  },
+  {
+    "type": "Gene",
+    "id": "gene_distilled_s2g-env-vars",
+    "summary": "Vercel environment variable expert guidance. Use when working with .env files, vercel env commands, OIDC tokens, or managing environment-specific configuration.",
+    "category": "optimize",
+    "signals_match": [
+      "use_when_working_with",
+      "env_files",
+      "vercel_env_commands",
+      "oidc_tokens",
+      "vercel_env_pull",
+      "env_local_overwrite",
+      "oidc_token_expiry",
+      "dotenv_cli"
+    ],
+    "preconditions": [
+      "Skill env-vars has just been executed locally"
+    ],
+    "strategy": [
+      "Identify the dominant trigger signals from the Skill description.",
+      "Apply the smallest targeted change that satisfies the Skill workflow.",
+      "Run the Skill validation commands and abort if any fails."
+    ],
+    "constraints": {
+      "max_files": 12,
+      "forbidden_paths": [
+        ".git",
+        "node_modules"
+      ]
+    },
+    "validation": [
+      "node --version"
+    ],
+    "routing_hint": {
+      "tier": "cheap",
+      "reasoning_level": "low"
+    },
+    "schema_version": "1.6.0",
+    "_source": {
+      "kind": "skill2gep",
+      "skill_name": "env-vars",
+      "skill_platform": "vercel",
+      "skill_hash": "ba0bdb4db2",
+      "rationale_paper": "Wang, Ren, Zhang. From Procedural Skills to Strategy Genes. arXiv:2604.15097",
+      "paper_scope": "code-science (arXiv:2604.15097, 45 tasks, Gemini 3.1 Pro/Flash Lite)",
+      "claims_outside_scope": "assumption",
+      "quality_heuristics": {
+        "strategy_steps": 0,
+        "avoid_count": 0,
+        "validation_declared_count": 0,
+        "validation_runnable_count": 0,
+        "validation_fallback_used": true,
+        "signals_extracted": 4,
+        "preconditions_extracted": 0
+      }
+    },
+    "asset_id": "sha256:1501bc37fbefb18630c4dc8a95d8cdc1ed32bec4a465dc3223280ae907e07297"
+  },
+  {
+    "type": "Gene",
+    "id": "gene_tool_integrity",
+    "category": "repair",
+    "signals_match": [
+      "tool_bypass|工具绕过|ツール迂回|도구우회"
+    ],
+    "preconditions": [
+      "agent used shell/exec to perform an action that a registered tool can handle"
+    ],
+    "strategy": [
+      "Always prefer registered tools over ad-hoc scripts or shell workarounds",
+      "If a registered tool fails, report the actual error honestly and attempt to fix the root cause",
+      "Never fabricate explanations -- describe actual actions transparently",
+      "Do not create temporary scripts in extension or project directories"
+    ],
+    "constraints": {
+      "max_files": 4,
+      "forbidden_paths": [
+        ".git",
+        "node_modules"
+      ]
+    },
+    "validation": [
+      "node scripts/validate-suite.js"
+    ],
+    "routing_hint": {
+      "tier": "cheap",
+      "reasoning_level": "low"
+    }
+  }
+]
+```
+
+Context [Capsule Preview] (Reference for Past Success):
+```json
+[]
+```
+
+Context [Capability Candidates]:
+(none)
+
+Context [Hub Matched Solution]:
+(no hub match)
+
+Context [External Candidates]:
+(none)
+
+
+
+
+Context [Initial User Prompt]:
+任务代号：ATL-EVOMAP-1
+
+目标：
+在我的本地仓库 https://github.com/conanxin/ai-tool-test-lab 中，新增一个 EvoMap / Evolver 测试案例，真实测试 EvoMap Evolver 在本地 OpenClaw 工作流中的作用，并把测试过程记录成 AI Tool Test Lab 的一个新 case。
+
+背景理解：
+EvoMap 是 AI agent 自进化/经验复用基础设施；Evolver 是本地 CLI 工具，用来读取 agent / 项目运行历史、失败日志、上下文，然后生成可复用的修复/改进 prompt。官方说明 Evolver 需要 Node.js >= 18 和 Git，并且需要在 git repo 中运行。测试重点不是“相信公共 EvoMap Hub”，而是验证本地 Evolver 能否帮助 OpenClaw 总结失败日志、生成下一步修复策略。
+
+硬边界：
+1. 不连接 EvoMap Hub。
+2. 不设置 A2A_HUB_URL。
+3. 不开启 evolver --loop。
+4. 不开启 validator。
+5. 不自动发布 Gene / Capsule。
+6. 不消耗 credits。
+7. 不写入任何 API key / token / cookie / Authorization header。
+8. 不修改我现有 OpenClaw / Hermes / systemd / cron 配置。
+9. 不运行任何后台 daemon。
+10. 不把 node_modules / .env / 私密日志提交到 repo。
+11. 只在 ai-tool-test-lab 仓库内新增文档、测试夹具、验证脚本和报告。
+12. 如需安装 npm 包，只允许安装 @evomap/evolver；不要安装无关依赖。
+
+推荐仓库路径：
+优先使用：
+ /mnt/d/AI/ai-tool-test-lab
+
+如果不存在，则：
+ cd /mnt/d/AI
+ git clone https://github.com/conanxin/ai-tool-test-lab.git
+ cd ai-tool-test-lab
+
+请按下面步骤执行。
+
+步骤 1：进入仓库并检查当前状态
+- cd /mnt/d/AI/ai-tool-test-lab
+- git status --short
+- git branch --show-current
+- git log -1 --oneline
+- 查看 README.md、data/cases.json、cases/castform-hermes-phase-closer-v0/ 的结构
+- 目标是模仿现有 Castform case 的组织方式，但新案例要更轻量，不要复制无关 Castform 内容
+
+步骤 2：创建新 case 目录
+新 case slug：
+ evomap-evolver-openclaw-v0
+
+建议创建：
+ cases/evomap-evolver-openclaw-v0/
+ cases/evomap-evolver-openclaw-v0/README.md
+ cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+ cases/evomap-evolver-openclaw-v0/artifacts/
+ cases/evomap-evolver-openclaw-v0/fixtures/
+ cases/evomap-evolver-openclaw-v0/fixtures/memory/
+ scripts/validate_evomap_evolver_openclaw_case.py
+ reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md
+
+如果项目有 index.html 风格的 case 页面，请按现有结构补一个 index.html；如果现有 case 主要靠 README / markdown，就用 README.md + CASE_REPORT.md。
+
+步骤 3：安装和检查 Evolver
+执行：
+ node --version
+ npm --version
+ git --version
+
+如果 node >= 18，则执行：
+ npm install -g @evomap/evolver
+ evolver --help
+
+如果 evolver 命令不可用，请记录为安装失败，不要强行改 shell profile；可以尝试：
+ npx @evomap/evolver --help
+
+步骤 4：构造一个完全本地的测试夹具
+在 cases/evomap-evolver-openclaw-v0/fixtures/ 下创建一个小型 git 测试项目：
+
+ mkdir -p cases/evomap-evolver-openclaw-v0/fixtures/local-evolver-smoke
+ cd cases/evomap-evolver-openclaw-v0/fixtures/local-evolver-smoke
+ git init
+ npm init -y
+ npm pkg set scripts.test="node test.js"
+ mkdir -p memory
+
+创建 calc.js：
+ function add(a, b) {
+ return String(a) + String(b);
+ }
+ module.exports = { add };
+
+创建 test.js：
+ const { add } = require('./calc');
+
+ if (add(1, 2) !== 3) {
+ console.error('FAIL: add(1, 2) should be 3, got:', add(1, 2));
+ process.exit(1);
+ }
+
+ console.log('PASS');
+
+运行：
+ npm test 2>&1 | tee memory/npm-test-failure.log
+
+再创建 3 个人造失败日志：
+
+memory/proxy-failure.log：
+ Telegram bot cannot connect.
+ Local SOCKS5 proxy is running at 127.0.0.1:7890.
+ curl with proxy works, but bot process ignores proxy env.
+ Expected: bot sends message through proxy.
+ Actual: ETIMEDOUT.
+
+memory/systemd-failure.log：
+ hermes-gateway.service failed after restart.
+ systemctl --user status shows exit-code=1.
+ journalctl indicates missing environment variable MODEL_PROVIDER.
+ Expected: service starts and listens on 127.0.0.1:18789.
+
+memory/cron-failure.log：
+ Daily cron task did not run.
+ crontab has CRON_TZ=Asia/Shanghai.
+ Script works manually.
+ Possible issue: PATH missing uv/node binary under cron environment.
+
+创建 MEMORY.md：
+ Project context:
+ This is a local-only EvoMap Evolver smoke test inside ai-tool-test-lab.
+
+ Goal:
+ Test whether Evolver can read failure logs and produce useful repair / hardening prompts for OpenClaw-style workflows.
+
+ Constraints:
+ Do not connect to EvoMap Hub.
+ Do not publish assets.
+ Do not run as validator.
+ Do not consume credits.
+ Do not modify host services.
+
+步骤 5：运行 Evolver 本地只读测试
+在 local-evolver-smoke 目录中执行：
+
+ unset A2A_HUB_URL
+ export EVOLVE_STRATEGY=repair-only
+ export EVOLVER_AUTO_PUBLISH=false
+ export EVOLVER_VALIDATOR_ENABLED=false
+ export EVOLVER_ATP_AUTOBUY=off
+ export EVOLVER_DEFAULT_VISIBILITY=private
+
+ evolver --review 2>&1 | tee ../../artifacts/evolver-review-output.txt如果 evolver 命令不可用，用：
+ npx @evomap/evolver --review 2>&1 | tee ../../artifacts/evolver-review-output.txt
+
+如果 npx 也失败，记录失败原因，不要继续乱装依赖。
+
+步骤 6：判断测试结果
+请检查 artifacts/evolver-review-output.txt，并判断：
+
+A. npm 测试失败场景：
+- 是否识别 add(1, 2) 返回 "12" 而不是 3？
+- 是否指出字符串拼接 / 类型问题？
+- 是否建议最小修复？
+- 是否建议重新运行 npm test？
+
+B. proxy 场景：
+- 是否识别 bot 进程没有继承 SOCKS5_PROXY / HTTP_PROXY 这类代理环境变量？
+- 是否建议 curl proxy smoke test？
+- 是否建议检查 systemd env / service env？
+
+C. systemd 场景：
+- 是否建议 systemctl --user status？
+- 是否建议 journalctl --user -u hermes-gateway？
+- 是否识别 MODEL_PROVIDER 缺失？
+
+D. cron 场景：
+- 是否识别 cron 环境 PATH 与手动 shell 不一致？
+- 是否建议显式 PATH / 绝对路径 / wrapper log？
+
+E. 工具行为：
+- 是否没有连接 Hub？
+- 是否没有发布？
+- 是否没有开启 loop？
+- 是否没有写入 secret？
+- 是否只生成 prompt / 建议，而没有直接改真实系统？
+
+给每个场景打分：
+ PASS / PARTIAL / FAIL
+
+步骤 7：写案例文档
+在 cases/evomap-evolver-openclaw-v0/README.md 中写：
+
+标题：
+ EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+
+内容结构：
+1. 测试对象是什么
+ - EvoMap
+ - @evomap/evolver
+ - 本地 OpenClaw 工作流中的使用方式
+
+2. 为什么测试
+ - 验证它是否能做“Agent 错题本 / 维修手册”
+ - 验证它是否能从失败日志生成下一步修复策略
+ - 验证是否适合接入 OpenClaw / Hermes / Codex 的自动验证循环
+
+3. 本地电脑负责什么
+ - 安装 Evolver
+ - 构造本地失败日志
+ - 运行 evolver --review
+ - 保存输出
+ - 运行验证器
+
+4. 云端平台负责什么
+ - 本次不使用 EvoMap Hub
+ - 不连接、不发布、不消费 credits
+ - 未来可选只读 fetch / directory 测试
+
+5. 测试场景
+ - npm test 失败：字符串拼接 bug
+ - proxy failure：Telegram bot 代理环境缺失
+ - systemd failure：缺 MODEL_PROVIDER 导致服务失败
+ - cron failure：PATH 环境差异
+
+6. 实际执行记录
+ - node/npm/git/evolver 版本
+ - 命令摘要
+ - artifacts/evolver-review-output.txt 路径
+ - 每个场景 PASS/PARTIAL/FAIL
+
+7. 问题与解决
+ - 安装问题
+ - npx fallback
+ - Evolver 输出质量问题
+ - 是否识别错误根因
+
+8. 最终结论
+ - 是否适合继续测试
+ - 是否适合接入 OpenClaw
+ - 是否适合接入 Hermes / Codex
+ - 是否暂时不建议接 Hub
+
+9. 后续建议
+ - Phase 2：在真实 OpenClaw session 内调用 evolver --review
+ - Phase 3：把 Hermes 真实失败日志喂给 Evolver
+ - Phase 4：只读测试 EvoMap Hub fetch / directory
+ - 暂不测试 --loop / validator / auto publish
+
+在 CASE_REPORT.md 中写完整报告，记录所有命令输出摘要和判断依据。
+
+在 reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md 中写总报告。
+
+步骤 8：更新 data/cases.json
+向 data/cases.json 增加第二个 case：
+
+slug:
+ evomap-evolver-openclaw-v0
+
+title:
+ EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+
+phase:
+ ATL-EVOMAP-1 local offline smoke test
+
+status:
+ local offline smoke completed
+ 如果失败则写：
+ local offline smoke attempted
+
+category:
+ AI agent self-evolution / experience reuse / local agent workflow
+
+local_role:
+ Install and run @evomap/evolver locally; create failure-log fixtures; run evolver --review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.
+
+cloud_role:
+ Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.
+
+summary:
+ 用 1 段中文总结实际结果。必须说明：是否安装成功、是否运行 evolver --review、四个场景的 PASS/PARTIAL/FAIL、是否适合继续接入 OpenClaw。
+
+注意：
+- 保持 JSON 合法。
+- 不要破坏 Castform case。
+- 不要把 summary 写得过长。
+
+步骤 9：更新 README.md
+在 README.md 当前状态中追加新案例说明。
+不要删除 Castform 历史。
+添加：
+- 第二个案例：EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+- 状态：local offline smoke completed / attempted
+- 结论：先作为本地经验整理工具测试，不连接 Hub，不自动发布
+- 链接到 cases/evomap-evolver-openclaw-v0/
+
+步骤 10：写验证脚本
+创建 scripts/validate_evomap_evolver_openclaw_case.py，使用 Python stdlib 即可。
+
+验证内容：
+1. cases/evomap-evolver-openclaw-v0/README.md 存在
+2. CASE_REPORT.md 存在
+3. artifacts/evolver-review-output.txt 存在
+4. reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md 存在
+5. data/cases.json 可解析
+6. data/cases.json 中存在 slug=evomap-evolver-openclaw-v0
+7. README.md 包含 evomap-evolver-openclaw-v0
+8. 文档中包含硬边界关键词：
+ - EVOLVER_AUTO_PUBLISH=false
+ - EVOLVER_VALIDATOR_ENABLED=false
+ - EVOLVER_ATP_AUTOBUY=off
+ - no Hub connection
+ - no credits consumed
+9. secret pattern scan：
+ - 禁止出现 API key / token / cookie / Authorization header / private key
+ - 禁止出现 .env 内容
+10. artifacts 输出如果不存在或为空，则 FAIL；如果 Evolver 安装失败但有明确失败记录，可允许 status=attempted，但必须在报告中说明。
+
+运行：
+ python3 scripts/validate_evomap_evolver_openclaw_case.py步骤 11：本地静态检查
+执行：
+ python3 -m json.tool data/cases.json >/tmp/atl_cases_json_ok.txt
+ python3 scripts/validate_evomap_evolver_openclaw_case.py
+ git status --short
+
+如果项目有现成的构建 / 验证命令，也运行它们；不要新增重型依赖。
+
+步骤 12：提交和推送
+如果验证 PASS：
+
+ git add README.md data/cases.json cases/evomap-evolver-openclaw-v0 reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md scripts/validate_evomap_evolver_openclaw_case.py
+ git commit -m "Add EvoMap Evolver OpenClaw test case"
+ git push
+
+最终回复我：
+1. PASS / PARTIAL / FAIL
+2. commit hash
+3. 修改文件列表
+4. Evolver 是否安装成功
+5. evolver --review 是否运行成功
+6. 四个测试场景评分
+7. 是否连接 Hub：必须是 NO
+8. 是否发布资产：必须是 NO
+9. 是否消耗 credits：必须是 NO
+10. 是否适合接入 OpenClaw / Hermes / Codex
+11. 下一步建议
+Context [Execution]:
+Initial User Prompt (Original Intent):
+```
+任务代号：ATL-EVOMAP-1
+
+目标：
+在我的本地仓库 https://github.com/conanxin/ai-tool-test-lab 中，新增一个 EvoMap / Evolver 测试案例，真实测试 EvoMap Evolver 在本地 OpenClaw 工作流中的作用，并把测试过程记录成 AI Tool Test Lab 的一个新 case。
+
+背景理解：
+EvoMap 是 AI agent 自进化/经验复用基础设施；Evolver 是本地 CLI 工具，用来读取 agent / 项目运行历史、失败日志、上下文，然后生成可复用的修复/改进 prompt。官方说明 Evolver 需要 Node.js >= 18 和 Git，并且需要在 git repo 中运行。测试重点不是“相信公共 EvoMap Hub”，而是验证本地 Evolver 能否帮助 OpenClaw 总结失败日志、生成下一步修复策略。
+
+硬边界：
+1. 不连接 EvoMap Hub。
+2. 不设置 A2A_HUB_URL。
+3. 不开启 evolver --loop。
+4. 不开启 validator。
+5. 不自动发布 Gene / Capsule。
+6. 不消耗 credits。
+7. 不写入任何 API key / token / cookie / Authorization header。
+8. 不修改我现有 OpenClaw / Hermes / systemd / cron 配置。
+9. 不运行任何后台 daemon。
+10. 不把 node_modules / .env / 私密日志提交到 repo。
+11. 只在 ai-tool-test-lab 仓库内新增文档、测试夹具、验证脚本和报告。
+12. 如需安装 npm 包，只允许安装 @evomap/evolver；不要安装无关依赖。
+
+推荐仓库路径：
+优先使用：
+ /mnt/d/AI/ai-tool-test-lab
+
+如果不存在，则：
+ cd /mnt/d/AI
+ git clone https://github.com/conanxin/ai-tool-test-lab.git
+ cd ai-tool-test-lab
+
+请按下面步骤执行。
+
+步骤 1：进入仓库并检查当前状态
+- cd /mnt/d/AI/ai-tool-test-lab
+- git status --short
+- git branch --show-current
+- git log -1 --oneline
+- 查看 README.md、data/cases.json、cases/castform-hermes-phase-closer-v0/ 的结构
+- 目标是模仿现有 Castform case 的组织方式，但新案例要更轻量，不要复制无关 Castform 内容
+
+步骤 2：创建新 case 目录
+新 case slug：
+ evomap-evolver-openclaw-v0
+
+建议创建：
+ cases/evomap-evolver-openclaw-v0/
+ cases/evomap-evolver-openclaw-v0/README.md
+ cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+ cases/evomap-evolver-openclaw-v0/artifacts/
+ cases/evomap-evolver-openclaw-v0/fixtures/
+ cases/evomap-evolver-openclaw-v0/fixtures/memory/
+ scripts/validate_evomap_evolver_openclaw_case.py
+ reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md
+
+如果项目有 index.html 风格的 case 页面，请按现有结构补一个 index.html；如果现有 case 主要靠 README / markdown，就用 README.md + CASE_REPORT.md。
+
+步骤 3：安装和检查 Evolver
+执行：
+ node --version
+ npm --version
+ git --version
+
+如果 node >= 18，则执行：
+ npm install -g @evomap/evolver
+ evolver --help
+
+如果 evolver 命令不可用，请记录为安装失败，不要强行改 shell profile；可以尝试：
+ npx @evomap/evolver --help
+
+步骤 4：构造一个完全本地的测试夹具
+在 cases/evomap-evolver-openclaw-v0/fixtures/ 下创建一个小型 git 测试项目：
+
+ mkdir -p cases/evomap-evolver-openclaw-v0/fixtures/local-evolver-smoke
+ cd cases/evomap-evolver-openclaw-v0/fixtures/local-evolver-smoke
+ git init
+ npm init -y
+ npm pkg set scripts.test="node test.js"
+ mkdir -p memory
+
+创建 calc.js：
+ function add(a, b) {
+ return String(a) + String(b);
+ }
+ module.exports = { add };
+
+创建 test.js：
+ const { add } = require('./calc');
+
+ if (add(1, 2) !== 3) {
+ console.error('FAIL: add(1, 2) should be 3, got:', add(1, 2));
+ process.exit(1);
+ }
+
+ console.log('PASS');
+
+运行：
+ npm test 2>&1 | tee memory/npm-test-failure.log
+
+再创建 3 个人造失败日志：
+
+memory/proxy-failure.log：
+ Telegram bot cannot connect.
+ Local SOCKS5 proxy is running at 127.0.0.1:7890.
+ curl with proxy works, but bot process ignores proxy env.
+ Expected: bot sends message through proxy.
+ Actual: ETIMEDOUT.
+
+memory/systemd-failure.log：
+ hermes-gateway.service failed after restart.
+ systemctl --user status shows exit-code=1.
+ journalctl indicates missing environment variable MODEL_PROVIDER.
+ Expected: service starts and listens on 127.0.0.1:18789.
+
+memory/cron-failure.log：
+ Daily cron task did not run.
+ crontab has CRON_TZ=Asia/Shanghai.
+ Script works manually.
+ Possible issue: PATH missing uv/node binary under cron environment.
+
+创建 MEMORY.md：
+ Project context:
+ This is a local-only EvoMap Evolver smoke test inside ai-tool-test-lab.
+
+ Goal:
+ Test whether Evolver can read failure logs and produce useful repair / hardening prompts for OpenClaw-style workflows.
+
+ Constraints:
+ Do not connect to EvoMap Hub.
+ Do not publish assets.
+ Do not run as validator.
+ Do not consume credits.
+ Do not modify host services.
+
+步骤 5：运行 Evolver 本地只读测试
+在 local-evolver-smoke 目录中执行：
+
+ unset A2A_HUB_URL
+ export EVOLVE_STRATEGY=repair-only
+ export EVOLVER_AUTO_PUBLISH=false
+ export EVOLVER_VALIDATOR_ENABLED=false
+ export EVOLVER_ATP_AUTOBUY=off
+ export EVOLVER_DEFAULT_VISIBILITY=private
+
+ evolver --review 2>&1 | tee ../../artifacts/evolver-review-output.txt如果 evolver 命令不可用，用：
+ npx @evomap/evolver --review 2>&1 | tee ../../artifacts/evolver-review-output.txt
+
+如果 npx 也失败，记录失败原因，不要继续乱装依赖。
+
+步骤 6：判断测试结果
+请检查 artifacts/evolver-review-output.txt，并判断：
+
+A. npm 测试失败场景：
+- 是否识别 add(1, 2) 返回 "12" 而不是 3？
+- 是否指出字符串拼接 / 类型问题？
+- 是否建议最小修复？
+- 是否建议重新运行 npm test？
+
+B. proxy 场景：
+- 是否识别 bot 进程没有继承 SOCKS5_PROXY / HTTP_PROXY 这类代理环境变量？
+- 是否建议 curl proxy smoke test？
+- 是否建议检查 systemd env / service env？
+
+C. systemd 场景：
+- 是否建议 systemctl --user status？
+- 是否建议 journalctl --user -u hermes-gateway？
+- 是否识别 MODEL_PROVIDER 缺失？
+
+D. cron 场景：
+- 是否识别 cron 环境 PATH 与手动 shell 不一致？
+- 是否建议显式 PATH / 绝对路径 / wrapper log？
+
+E. 工具行为：
+- 是否没有连接 Hub？
+- 是否没有发布？
+- 是否没有开启 loop？
+- 是否没有写入 secret？
+- 是否只生成 prompt / 建议，而没有直接改真实系统？
+
+给每个场景打分：
+ PASS / PARTIAL / FAIL
+
+步骤 7：写案例文档
+在 cases/evomap-evolver-openclaw-v0/README.md 中写：
+
+标题：
+ EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+
+内容结构：
+1. 测试对象是什么
+ - EvoMap
+ - @evomap/evolver
+ - 本地 OpenClaw 工作流中的使用方式
+
+2. 为什么测试
+ - 验证它是否能做“Agent 错题本 / 维修手册”
+ - 验证它是否能从失败日志生成下一步修复策略
+ - 验证是否适合接入 OpenClaw / Hermes / Codex 的自动验证循环
+
+3. 本地电脑负责什么
+ - 安装 Evolver
+ - 构造本地失败日志
+ - 运行 evolver --review
+ - 保存输出
+ - 运行验证器
+
+4. 云端平台负责什么
+ - 本次不使用 EvoMap Hub
+ - 不连接、不发布、不消费 credits
+ - 未来可选只读 fetch / directory 测试
+
+5. 测试场景
+ - npm test 失败：字符串拼接 bug
+ - proxy failure：Telegram bot 代理环境缺失
+ - systemd failure：缺 MODEL_PROVIDER 导致服务失败
+ - cron failure：PATH 环境差异
+
+6. 实际执行记录
+ - node/npm/git/evolver 版本
+ - 命令摘要
+ - artifacts/evolver-review-output.txt 路径
+ - 每个场景 PASS/PARTIAL/FAIL
+
+7. 问题与解决
+ - 安装问题
+ - npx fallback
+ - Evolver 输出质量问题
+ - 是否识别错误根因
+
+8. 最终结论
+ - 是否适合继续测试
+ - 是否适合接入 OpenClaw
+ - 是否适合接入 Hermes / Codex
+ - 是否暂时不建议接 Hub
+
+9. 后续建议
+ - Phase 2：在真实 OpenClaw session 内调用 evolver --review
+ - Phase 3：把 Hermes 真实失败日志喂给 Evolver
+ - Phase 4：只读测试 EvoMap Hub fetch / directory
+ - 暂不测试 --loop / validator / auto publish
+
+在 CASE_REPORT.md 中写完整报告，记录所有命令输出摘要和判断依据。
+
+在 reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md 中写总报告。
+
+步骤 8：更新 data/cases.json
+向 data/cases.json 增加第二个 case：
+
+slug:
+ evomap-evolver-openclaw-v0
+
+title:
+ EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+
+phase:
+ ATL-EVOMAP-1 local offline smoke test
+
+status:
+ local offline smoke completed
+ 如果失败则写：
+ local offline smoke attempted
+
+category:
+ AI agent self-evolution / experience reuse / local agent workflow
+
+local_role:
+ Install and run @evomap/evolver locally; create failure-log fixtures; run evolver --review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.
+
+cloud_role:
+ Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.
+
+summary:
+ 用 1 段中文总结实际结果。必须说明：是否安装成功、是否运行 evolver --review、四个场景的 PASS/PARTIAL/FAIL、是否适合继续接入 OpenClaw。
+
+注意：
+- 保持 JSON 合法。
+- 不要破坏 Castform case。
+- 不要把 summary 写得过长。
+
+步骤 9：更新 README.md
+在 README.md 当前状态中追加新案例说明。
+不要删除 Castform 历史。
+添加：
+- 第二个案例：EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+- 状态：local offline smoke completed / attempted
+- 结论：先作为本地经验整理工具测试，不连接 Hub，不自动发布
+- 链接到 cases/evomap-evolver-openclaw-v0/
+
+步骤 10：写验证脚本
+创建 scripts/validate_evomap_evolver_openclaw_case.py，使用 Python stdlib 即可。
+
+验证内容：
+1. cases/evomap-evolver-openclaw-v0/README.md 存在
+2. CASE_REPORT.md 存在
+3. artifacts/evolver-review-output.txt 存在
+4. reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md 存在
+5. data/cases.json 可解析
+6. data/cases.json 中存在 slug=evomap-evolver-openclaw-v0
+7. README.md 包含 evomap-evolver-openclaw-v0
+8. 文档中包含硬边界关键词：
+ - EVOLVER_AUTO_PUBLISH=false
+ - EVOLVER_VALIDATOR_ENABLED=false
+ - EVOLVER_ATP_AUTOBUY=off
+ - no Hub connection
+ - no credits consumed
+9. secret pattern scan：
+ - 禁止出现 API key / token / cookie / Authorization header / private key
+ - 禁止出现 .env 内容
+10. artifacts 输出如果不存在或为空，则 FAIL；如果 Evolver 安装失败但有明确失败记录，可允许 status=attempted，但必须在报告中说明。
+
+运行：
+ python3 scripts/validate_evomap_evolver_openclaw_case.py步骤 11：本地静态检查
+执行：
+ python3 -m json.tool data/cases.json >/tmp/atl_cases_json_ok.txt
+ python3 scripts/validate_evomap_evolver_openclaw_case.py
+ git status --short
+
+如果项目有现成的构建 / 验证命令，也运行它们；不要新增重型依赖。
+
+步骤 12：提交和推送
+如果验证 PASS：
+
+ git add README.md data/cases.json cases/evomap-evolver-openclaw-v0 reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md scripts/validate_evomap_evolver_openclaw_case.py
+ git commit -m "Add EvoMap Evolver OpenClaw test case"
+ git push
+
+最终回复我：
+1. PASS / PARTIAL / FAIL
+2. commit hash
+3. 修改文件列表
+4. Evolver 是否安装成功
+5. evolver --review 是否运行成功
+6. 四个测试场景评分
+7. 是否连接 Hub：必须是 NO
+8. 是否发布资产：必须是 NO
+9. 是否消耗 credits：必须是 NO
+10. 是否适合接入 OpenClaw / Hermes / Codex
+11. 下一步建议
+```
+
+Runtime state:
+- System health: Uptime: 0.8h | Node: v22.22.0 | Agent RSS: 120.1MB | Disk: 18% (824.8G free) | Node Processes: 2 | Integrations: Nominal
+- Agent state: Mood: Unknown
+- Scan duration: 157ms
+- Memory size: 0 bytes
+- Skills available (if any):
+[skills directory not found]
+
+Local State (ALREADY CONFIGURED -- do NOT duplicate):
+[Node Identity]
+- Node ID: node_620ef8f1bb49 (REGISTERED -- do NOT re-register)
+- Node Secret: MISSING (hello handshake may be needed)
+[Environment Config]
+- Env configured: EVOLVE_STRATEGY
+- Env not set: A2A_NODE_ID, A2A_HUB_URL, A2A_NODE_SECRET, AGENT_NAME, WORKER_ENABLED, EVOLVER_SESSION_SCOPE, GITHUB_TOKEN
+- .env file: MISSING at /mnt/d/AI/ai-tool-test-lab/.env
+[Evolution State]
+- Evolution cycles completed: 1
+- Last evolution run: 0s ago
+- Last run gene: gene_distilled_s2g-env-vars
+- Personality: rigor=0.7 creativity=0.35 risk_tolerance=0.4
+[Memory & Knowledge]
+- Memory directory: EXISTS at /mnt/d/AI/ai-tool-test-lab/memory
+- Memory graph: 7341 bytes
+[Skills]
+- Skills directory: NOT FOUND
+
+Notes:
+- Review mode: disabled.
+- Report requirement:
+  - Use `message` tool.
+  - Title: Evolution Cycle #0001
+  - Status: [SUCCESS]
+  - Changes: Detail exactly what was improved.
+- Workspace sync: optional/disabled in this environment.
+
+Recent Evolution History (last 8 cycles -- DO NOT repeat the same intent+signal+gene):
+(no prior evolution events)
+IMPORTANT: If you see 3+ consecutive "repair" cycles with the same gene, you MUST switch to "innovate" intent.
+
+
+External candidates (A2A receive zone; staged only, never execute directly):
+(none)
+
+Global memory (MEMORY.md):
+```
+[MEMORY.md MISSING]
+```
+
+User registry (USER.md):
+```
+[Evolution Memory] Last 3 entries from memory_graph.jsonl (no outcome records yet; graph is accumulating):
+[~] 2026-06-18 kind=signal signals=[memory_missing, user_missing]
+[~] 2026-06-18 kind=hypothesis signals=[memory_missing, user_missing]
+[~] 2026-06-18 kind=attempt signals=[memory_missing, user_missing]
+```
+
+Recent memory snippet:
+```
+[MISSING] /mnt/d/AI/ai-tool-test-lab/memory/2026-06-18.md
+```
+
+Recent session transcript:
+```
+--- SESSION (6258d546-fcef-40ae-b997-41cd34597754.jsonl) ---
+**ASSISTANT**: **Progress!** The manual request is accepted but `completeDistillation` expects the LLM response to **contain a JSON-encoded Gene**. The skill markdown is not in the right format. Let me try with a properly formatted LLM response (JSON Gene in the response). [TOOL: exec]
+**ASSISTANT**: **🎉 MAJOR SUCCESS!**  A new Gene was actually produced and written to `genes.json`: - **Gene ID:** `gene_distilled_openclaw-tool-use-discipline` - **Category:** optimize - **Signals matched:** All 5 OpenClaw-specific signals from the SKILL.md - **Strategy:** 5 concrete discipline rules - **Constrai
+**ASSISTANT**: The Gene is persisted in the local GEP store. Now let me also try running `evolver run` again to see if the new Gene gets matched: [TOOL: update_plan]
+**ASSISTANT**: [TOOL: exec]
+```
+
+Mutation directive:
+
+[Signal Hints]
+- recent_error_count: 0
+- stability: stable
+- recommended_intent: optimize
+
+[SOLIDIFY REQUIRED] After applying the patch and validations, run: node index.js solidify
+
+=======================================================
+Evolver finished. If you use this project, consider starring the upstream repository.
+Upstream: https://github.com/EvoMap/evolver
+=======================================================
+

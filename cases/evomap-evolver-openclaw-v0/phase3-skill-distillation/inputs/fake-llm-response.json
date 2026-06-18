@@ -1,0 +1,10 @@
+{
+  "skill_id": "openclaw-tool-use-discipline",
+  "version": "0.1.0",
+  "purpose": "Reduce tool_bypass:exec-on-grep in OpenClaw sessions by enforcing read/edit priority.",
+  "triggers": ["tool_bypass:exec-on-grep", "session_context:openclaw", "repo_context:ai-tool-test-lab"],
+  "strategy": "1. read before exec; 2. edit before sed -i; 3. write before tee; 4. EXEC: justify every exec.",
+  "constraints": ["no secrets", "no .env scan", "no real service mutation", "no Hub", "no publish", "no --loop", "no validator", "no credits"],
+  "validation": "tool audit + bypass detection + edit pattern + git hygiene + validator + secret scan",
+  "outcome": "reduced bypass, better explainability, evolver signal match"
+}

@@ -1,0 +1,74 @@
+[evolver] Using host git repository at: /mnt/d/AI/ai-tool-test-lab
+Wrote manual request to: /mnt/d/AI/ai-tool-test-lab/memory/distill_request.json
+---
+{
+  "type": "skill_distillation",
+  "source": "manual_phase3a",
+  "created_at": "2026-06-18T13:45:51.101Z",
+  "hint": "openclaw-tool-use-discipline",
+  "data": {
+    "successCapsules": [],
+    "allCapsules": [],
+    "events": [],
+    "graphEntries": [],
+    "grouped": {
+      "by_gene": {},
+      "by_signal": {
+        "tool_bypass:exec-on-grep": 1,
+        "session_context:openclaw": 1
+      }
+    },
+    "dataHash": "manual_phase3a"
+  }
+}
+---
+Calling completeDistillation with manual request...
+[Distiller] Gene "gene_distilled_openclaw-tool-use-discipline" written to genes.json.
+[Distiller] Distillation complete. New gene: gene_distilled_openclaw-tool-use-discipline
+{
+  "ok": true,
+  "gene": {
+    "type": "Gene",
+    "id": "gene_distilled_openclaw-tool-use-discipline",
+    "category": "optimize",
+    "signals_match": [
+      "tool_bypass:exec-on-grep",
+      "repeated_tool_usage:exec",
+      "protocol_drift:wrong-tool-for-file-read",
+      "session_context:openclaw",
+      "repo_context:ai-tool-test-lab"
+    ],
+    "strategy": [
+      "Read files with the read tool before referencing their content in reasoning.",
+      "Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.",
+      "Use the search tool for repo-wide content search before falling back to rg via exec.",
+      "Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.",
+      "Re-run validators after each substantive change."
+    ],
+    "validation": [],
+    "constraints": {
+      "max_files": 12,
+      "forbidden_paths": [
+        ".git",
+        "node_modules",
+        ".evolver",
+        "memory"
+      ]
+    },
+    "preconditions": [
+      "session_context is openclaw",
+      "tool audit ratio exec/(read+search+edit+write) > 0.5 in last 20 calls"
+    ],
+    "summary": "Read files with the read tool before referencing their content in reasoning.",
+    "schema_version": "1.6.0",
+    "epigenetic_marks": [],
+    "learning_history": [],
+    "anti_patterns": [],
+    "routing_hint": null,
+    "tool_policy": null,
+    "_distilled_meta": {
+      "distilled_at": "2026-06-18T13:45:51.212Z"
+    },
+    "asset_id": "sha256:cf87028a22dd9933cd930b6e4089dc001d7cd96d7f6814c255c7951cc9a52de3"
+  }
+}

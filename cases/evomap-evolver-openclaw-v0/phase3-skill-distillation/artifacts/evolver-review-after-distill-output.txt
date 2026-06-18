@@ -1,0 +1,43 @@
+
+============================================================
+[Review] Pending evolution run: run_1781790367836
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_s2g-env-vars
+  Category: optimize
+  Summary:  Vercel environment variable expert guidance. Use when working with .env files, vercel env commands, OIDC tokens, or managing environment-specific configuration.
+  Strategy:
+    1. Identify the dominant trigger signals from the Skill description.
+    2. Apply the smallest targeted change that satisfies the Skill workflow.
+    3. Run the Skill validation commands and abort if any fails.
+
+--- Signals ---
+  - memory_missing
+
+--- Mutation ---
+  Category:   optimize
+  Risk Level: low
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Untracked Files ===
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-distill-direct-call-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-distill-fake-response-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-distill-manual-request-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-distill-noargs-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-distill-openclaw-skill-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-review-after-distill-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-run-after-distill-output.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/artifacts/evolver-top-help.txt
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/inputs/fake-llm-response.json
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/inputs/skill-as-llm-response.md
+cases/evomap-evolver-openclaw-v0/phase3-skill-distillation/skills/openclaw-tool-use-discipline.SKILL.md
+
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject
