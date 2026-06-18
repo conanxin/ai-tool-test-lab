@@ -1,0 +1,39 @@
+{
+  "ok": true,
+  "service": "hermes-gateway.service",
+  "service_failed": true,
+  "missing_env_var": "MODEL_PROVIDER",
+  "expected_port": "127.0.0.1:18789",
+  "port_not_listening": true,
+  "telegram_smoke_missing": false,
+  "main_process_status": "2/INVALIDARGUMENT",
+  "restart_counter_at": 3,
+  "restart_limit_hit": true,
+  "dropin_env_lines_present": true,
+  "dropin_points_to_missing_env": true,
+  "unrecognized_signals": [
+    "Hermes Gateway systemd user service failure",
+    "Unit scope: user",
+    "Observed symptoms",
+    "hermes-gateway.service: Start request repeated too quickly.",
+    "sent this morning.",
+    "Expected fixed state",
+    "Hard rules for any recovery script"
+  ],
+  "recommended_check_order": [
+    "systemctl --user status hermes-gateway.service",
+    "journalctl --user -u hermes-gateway.service --since today",
+    "systemctl --user show-environment",
+    "check service drop-in Environment lines",
+    "check expected port 127.0.0.1:18789",
+    "run Telegram smoke test"
+  ],
+  "safety": {
+    "no_real_systemctl": true,
+    "no_real_journalctl": true,
+    "no_env_scan": true,
+    "no_secrets": true,
+    "no_network_call": true,
+    "no_repo_scan": true
+  }
+}

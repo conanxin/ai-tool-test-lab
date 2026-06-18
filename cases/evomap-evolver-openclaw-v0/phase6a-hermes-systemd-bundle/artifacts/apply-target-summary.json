@@ -1,0 +1,22 @@
+{
+  "target_runtime": "/tmp/atl-evomap-phase6a-hermes-target",
+  "gene_count": 1,
+  "capsule_count": 1,
+  "memory_graph_lines": 5,
+  "gene_ids": [
+    "gene_distilled_hermes-systemd-service-recovery"
+  ],
+  "capsule_ids": [
+    "capsule_hermes_systemd_service_recovery_phase6a"
+  ],
+  "memory_graph_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "events_empty": true,
+  "failed_capsules_empty": true,
+  "candidates_empty": true
+}

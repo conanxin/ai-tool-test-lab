@@ -1,0 +1,19 @@
+{
+  "target_runtime": "/tmp/atl-evomap-phase6a-hermes-target",
+  "files_written": [
+    ".evolver/gep/genes.json",
+    ".evolver/gep/capsules.json",
+    "memory/evolution/memory_graph.jsonl",
+    ".evolver/gep/events.jsonl",
+    ".evolver/gep/failed_capsules.json",
+    ".evolver/gep/candidates.jsonl"
+  ],
+  "sizes_bytes": {
+    ".evolver/gep/genes.json": 2314,
+    ".evolver/gep/capsules.json": 2920,
+    "memory/evolution/memory_graph.jsonl": 1483,
+    ".evolver/gep/events.jsonl": 0,
+    ".evolver/gep/failed_capsules.json": 3,
+    ".evolver/gep/candidates.jsonl": 0
+  }
+}

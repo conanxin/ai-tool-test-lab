@@ -1,0 +1,38 @@
+{
+  "type": "Gene",
+  "id": "gene_distilled_hermes-systemd-service-recovery",
+  "category": "repair",
+  "signals_match": [
+    "systemd_failure",
+    "service_recovery",
+    "missing_env_var",
+    "port_not_listening",
+    "dropin_env_misconfigured",
+    "systemd_failure:user-service",
+    "service_recovery:start-limit-hit",
+    "missing_env_var:MODEL_PROVIDER",
+    "port_not_listening:18789",
+    "dropin_env_misconfigured:env-conf-missing",
+    "session_context:hermes",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "strategy": [
+    "Run offline parser scripts/hermes_systemd_recovery_fixture.py against the failure fixture to confirm the failure shape (no systemctl, no journalctl, no env scan).",
+    "Inspect parsed JSON: confirm service_failed=true, missing_env_var=MODEL_PROVIDER (or expected env), expected_port set, port_not_listening=true, dropin_env_misconfigured=true.",
+    "Recommend deterministic check order: systemctl --user status, journalctl --user -u, systemctl --user show-environment, drop-in Environment lines, expected port, Telegram smoke.",
+    "Never print or persist secrets, API keys, tokens, cookies, or Authorization headers in any recovery step.",
+    "Never restart the real hermes-gateway.service from a recipe script; always have a human run the recovery commands on the real host.",
+    "Re-run the parser + inspect/validate/apply tool chain after each fixture or Gene change; never bypass the validators."
+  ],
+  "constraints": {
+    "max_files": 8,
+    "forbidden_paths": [
+      ".git",
+      "node_modules",
+      ".evolver",
+      "memory",
+      "real_runtime_root"
+    ]
+  },
+  "summary": "Hermes systemd user-service recovery: offline fixture parser identifies service_failed / missing_env_var / expected_port / dropin_env_misconfigured shape; recommends deterministic systemctl + journalctl + show-environment + drop-in + port + Telegram smoke check order; never reads .env, never restarts the real service, never persists secrets. Includes both qualified (systemd_failure:user-service) and bare (systemd_failure) signal forms for evolver scanner normalization."
+}

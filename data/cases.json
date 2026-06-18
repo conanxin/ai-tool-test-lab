@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-5 Local Evolution Kit",
-      "status": "local evolution kit completed",
+      "phase": "ATL-EVOMAP-6A Hermes Systemd Bundle",
+      "status": "hermes systemd bundle completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-5 local evolution kit PASS: productized the local-only Gene+Capsule pathway from Phases 4A/4B/4C as a reusable stdlib-only toolset; delivered canonical bundle atl-evomap-portable-bundle-v0.1 (openclaw-tool-use-discipline, 5458 bytes, sourced from Phase 4C PASS at f7897da); 3 stdlib tools (evomap_inspect_bundle.py 2674B / evomap_validate_bundle.py 6817B with 12 checks + secret scan / evomap_apply_bundle.py 8869B with --dry-run default + --yes for real write, idempotent on gene/capsule by id, append-only on memory_graph); 3 templates (GENE / CAPSULE / MEMORY_GRAPH_SIGNAL) for new bundles; 4-step recipe (validate -> inspect -> dry-run -> apply --yes -> manual evolver); self-tests: inspect PASS, validate 12/12 PASS, apply dry-run PASS (0 files written), apply --yes PASS (6 files written to /tmp/atl-evomap-phase5-apply-target, 1 gene + 1 capsule + 5 clean bare memory signals); idempotency verified; all 16 hard boundaries preserved by tool design (no Hub / no publish / no credits / no validator / no --approve / no solidify / no real config mutation / no secrets / no source modification / no isolated runtime committed / stdlib only); ATL-EVOMAP exploration series complete (3C-V2 blocked -> 4A PASS -> 4B PASS -> 4C PASS -> 5 PASS); kit is durable asset for future OpenClaw/Hermes/Codex local evolution work.",
+      "summary": "ATL-EVOMAP-5 local evolution kit PASS: productized the local-only Gene+Capsule pathway from Phases 4A/4B/4C as a reusable stdlib-only toolset; delivered canonical bundle atl-evomap-portable-bundle-v0.1 (openclaw-tool-use-discipline, 5458 bytes, sourced from Phase 4C PASS at f7897da); 3 stdlib tools (evomap_inspect_bundle.py 2674B / evomap_validate_bundle.py 6817B with 12 checks + secret scan / evomap_apply_bundle.py 8869B with --dry-run default + --yes for real write, idempotent on gene/capsule by id, append-only on memory_graph); 3 templates (GENE / CAPSULE / MEMORY_GRAPH_SIGNAL) for new bundles; 4-step recipe (validate -> inspect -> dry-run -> apply --yes -> manual evolver); self-tests: inspect PASS, validate 12/12 PASS, apply dry-run PASS (0 files written), apply --yes PASS (6 files written to /tmp/atl-evomap-phase5-apply-target, 1 gene + 1 capsule + 5 clean bare memory signals); idempotency verified; all 16 hard boundaries preserved by tool design (no Hub / no publish / no credits / no validator / no --approve / no solidify / no real config mutation / no secrets / no source modification / no isolated runtime committed / stdlib only); ATL-EVOMAP exploration series complete (3C-V2 blocked -> 4A PASS -> 4B PASS -> 4C PASS -> 5 PASS); kit is durable asset for future OpenClaw/Hermes/Codex local evolution work.; ATL-EVOMAP-6A hermes systemd bundle PASS: second canonical local-only bundle using the Phase 5 kit, category=repair, complements Phase 5 optimize-category openclaw-tool-use-discipline bundle; delivered fixtures/hermes-systemd-failure-sample.txt (1803 B deterministic offline text describing service_failed + missing_env_var=MODEL_PROVIDER + port_not_listening + dropin_env_misconfigured + restart_limit_hit shape) + scripts/hermes_systemd_recovery_fixture.py (7472 B stdlib-only offline parser refusing .env-shape paths, no systemctl/journalctl/ss/curl exec, no recursive repo scan) + gene_distilled_hermes-systemd-service-recovery (12 signals: 5 bare + 5 qualified + session_context:hermes + repo_context:ai-tool-test-lab, repair-category, max_files=8) + capsule_hermes_systemd_service_recovery_phase6a (4-step execution_trace: build parser -> validate json -> assert failure-shape -> canary 8/8 safety) + bundle/hermes-systemd-service-recovery.bundle.json (8587 B atl-evomap-portable-bundle-v0.1, new field fixture_summary binds expected failure shape); self-tests: inspect PASS, validate 12/12 PASS, secret_hits=0, apply dry-run PASS (0 files written), apply --yes PASS (6 files written to /tmp/atl-evomap-phase6a-hermes-target, 1 gene + 1 capsule + 5 clean bare memory signals + 3 optional files reset empty), bundle survives in target runtime; optional evolver run+review smoke PASS: Selected Gene gene_distilled_hermes-systemd-service-recovery, Capsule visible, [SearchFirst] No hub match (reason: no_hub_url), no crash, no --approve, no solidify; all 16 hard boundaries preserved by tool design (no Hub / no publish / no credits / no validator / no --loop / no approve / no solidify / no real systemctl/journalctl/ss/curl exec / no secret persistence / no .env scan / no real OpenClaw-Hermes-systemd-cron config mutation / no Evolver source modification / no runtime .evolver/ or memory/ originals committed / only kit+bundle+tools+templates+reports+validators committed / stdlib only); kit now supports a 2nd canonical bundle + a 2nd intent category (repair); suitable for extension to Codex/browser-control/Telegram proxy bundles.",
       "updated_at": "2026-06-19",
-      "final_status": "LOCAL_EVOLUTION_KIT_PASS",
+      "final_status": "HERMES_SYSTEMD_BUNDLE_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -220,6 +220,25 @@
           "report_case": "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/ATL_EVOMAP_5_LOCAL_EVOLUTION_KIT_REPORT.md",
           "report_top": "reports/ATL_EVOMAP_5_LOCAL_EVOLUTION_KIT_REPORT.md",
           "notes": "PASS - ATL-EVOMAP exploration series complete; kit is durable asset"
+        },
+        {
+          "phase": "ATL-EVOMAP-6A",
+          "status": "hermes systemd bundle completed",
+          "result": "PASS",
+          "bundle_path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+          "gene_id": "gene_distilled_hermes-systemd-service-recovery",
+          "capsule_id": "capsule_hermes_systemd_service_recovery_phase6a",
+          "category": "repair",
+          "target_runtime": "/tmp/atl-evomap-phase6a-hermes-target",
+          "fixture_path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/fixtures/hermes-systemd-failure-sample.txt",
+          "parser_path": "scripts/hermes_systemd_recovery_fixture.py",
+          "evolver_smoke": {
+            "run": "PASS (selected Hermes Gene, no Hub, no crash)",
+            "review": "PASS (Capsule visible, no --approve, no solidify)"
+          },
+          "hard_boundaries_preserved": 16,
+          "phase_5_base_commit": "c1a6b9a",
+          "notes": "Second canonical local-only bundle (repair category) using the Phase 5 kit; bundle survives apply --yes + evolver run + review without approve/solidify/Hub; fixture_summary is the only new schema field; known limitation: apply tool injects 5 generic bare signals (Phase 5 baseline), not Hermes-specific signals -- future iteration should add --inject-signals-from <bundle> to evomap_apply_bundle.py."
         }
       ]
     }

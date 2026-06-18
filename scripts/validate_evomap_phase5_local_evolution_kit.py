@@ -221,18 +221,29 @@ def main() -> int:
                 _check("evomap case present in cases.json", False)
             else:
                 _check("evomap case present in cases.json", True)
-                _check(
-                    "cases.json phase contains ATL-EVOMAP-5",
-                    "ATL-EVOMAP-5" in case.get("phase", ""),
-                    case.get("phase", ""),
-                )
-                _check(
-                    "cases.json status contains 'local evolution kit completed'",
-                    "local evolution kit completed" in case.get("status", ""),
-                    case.get("status", ""),
-                )
+                # Forward-compat: case may have advanced past ATL-EVOMAP-5 in
+                # its top-level phase/status (e.g. ATL-EVOMAP-6A), but the
+                # ATL-EVOMAP-5 entry must still be in phase_history.
                 hist = case.get("phase_history", [])
                 has_5 = any(e.get("phase") == "ATL-EVOMAP-5" for e in hist)
+                phase_field = case.get("phase", "")
+                status_field = case.get("status", "")
+                phase_ok = ("ATL-EVOMAP-5" in phase_field) or has_5
+                status_ok = (
+                    "local evolution kit completed" in status_field
+                    or "local evolution kit completed" in phase_field
+                    or has_5  # if phase_history has 5, status migration to 6A is acceptable
+                )
+                _check(
+                    "cases.json phase references ATL-EVOMAP-5 (current or phase_history)",
+                    phase_ok,
+                    phase_field,
+                )
+                _check(
+                    "cases.json status references 'local evolution kit completed' (current or via history)",
+                    status_ok,
+                    status_field,
+                )
                 _check("cases.json phase_history has ATL-EVOMAP-5 entry", has_5)
         except Exception as e:
             _check("cases.json valid JSON", False, str(e))

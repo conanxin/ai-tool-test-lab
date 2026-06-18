@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "bundle_path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-6A",
+  "source_session": "/tmp/atl-evomap-phase6a-hermes-target",
+  "gene_id": "gene_distilled_hermes-systemd-service-recovery",
+  "gene_category": "repair",
+  "capsule_id": "capsule_hermes_systemd_service_recovery_phase6a",
+  "capsule_status": "success",
+  "capsule_confidence": 0.82,
+  "capsule_visibility": "private",
+  "capsule_source": "manual_capsule_seed_phase6a",
+  "execution_trace_steps": 4,
+  "execution_trace_stages": [
+    "build",
+    "validate",
+    "validate",
+    "canary"
+  ],
+  "top_level_execution_trace_ok": null,
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages": [
+      "build",
+      "validate",
+      "canary"
+    ]
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "no_real_system_mutation": true,
+    "approve": "not_executed",
+    "solidify": "not_executed",
+    "validator_enabled": false,
+    "atp_autobuy": "off",
+    "loop_used": false
+  },
+  "kit_provenance": {
+    "kit_name": "OpenClaw Local Evolution Kit",
+    "kit_version": "v1",
+    "phase_5_commit": "c1a6b9a",
+    "phase_6a_phase": "ATL-EVOMAP-6A",
+    "bundle_intent": "Hermes systemd user-service recovery (repair-category) — second canonical bundle after Phase 5 OpenClaw tool-use-discipline (optimize-category)."
+  }
+}

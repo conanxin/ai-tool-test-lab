@@ -1,0 +1,55 @@
+Hermes Gateway systemd user service failure
+=============================================
+
+Timestamp: 2026-06-19 02:14:33 +0800
+Host: DESKTOP-3A8N7VN (WSL2)
+Service: hermes-gateway.service
+Unit scope: user
+Trigger: post-restart after OpenClaw gateway recovery
+
+Observed symptoms
+-----------------
+
+1. systemctl --user status hermes-gateway.service reports:
+
+   Active: failed (Result: exit-code)
+   Main PID: 12345 (code=exited, status=2)
+   Condition: start request repeated too quickly
+
+2. journalctl --user -u hermes-gateway.service --since today shows:
+
+   hermes-gateway.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+   hermes-gateway.service: Failed with result 'exit-code'.
+   hermes-gateway.service: Scheduled restart job, restart counter is at 3.
+   hermes-gateway.service: Start request repeated too quickly.
+   hermes-gateway.service: Failed with result 'start-limit-hit'.
+
+3. systemctl --user show-environment reports:
+
+   MODEL_PROVIDER is unset.
+   A2A_HUB_URL is unset.
+   OPENAI_API_KEY is referenced in hermes-gateway.service drop-in but the file at
+   ~/.config/systemd/user/hermes-gateway.service.d/env.conf has Environment= lines
+   that point to a missing $HOME/.hermes/.env.
+
+4. ss -ltnp | grep 18789 reports:
+
+   LISTEN line for 127.0.0.1:18789 is missing. Port 18789 is not listening.
+
+5. Telegram smoke test (curl https://api.telegram.org/bot<REDACTED>/getMe) was not
+   sent this morning.
+
+Expected fixed state
+--------------------
+
+- hermes-gateway.service reaches Active: active (running)
+- 127.0.0.1:18789 is in LISTEN
+- Telegram getMe returns 200 with ok:true
+
+Hard rules for any recovery script
+----------------------------------
+
+- Do not print secrets
+- Do not read .env
+- Do not restart real service in this fixture
+- Only parse this text

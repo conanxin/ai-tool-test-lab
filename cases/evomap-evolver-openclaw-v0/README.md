@@ -828,5 +828,53 @@ All 16 boundaries preserved by **tool design**, not just by careful usage:
 | 4B | Can a Capsule survive evolver cycle in clean env? | PASS (capsule intact, 4-step trace preserved) |
 | 4C | Can Gene + Capsule be reused across sessions? | PASS (selection_path=score_ranked, capsule trigger matches signals) |
 | 5 | Can the proven pathway be productized? | PASS (kit + 3 tools + 3 templates + 4-step recipe) |
+| **6A** | **Can the kit produce a 2nd bundle (repair category) for Hermes systemd recovery?** | **PASS (Hermes Gene + Capsule + bundle, 4-step trace, isolated target, evolver run+review smoke, no Hub / no publish / no approve / no solidify)** |
 
 **Phase 5 marks the end of the ATL-EVOMAP exploration series.** The kit is now a durable asset that can be referenced for future OpenClaw / Hermes / Codex local evolution work.
+
+### ATL-EVOMAP-6A · Hermes Systemd Service Recovery Bundle
+
+**Status:** Hermes systemd bundle completed (PASS)
+
+**Goal:** Second canonical local-only bundle using the Phase 5 kit, targeting **Hermes / OpenClaw systemd user-service failure recovery** in offline-only mode.
+
+**Bundle:** `cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json` (8587 B, repair-category)
+
+**Gene:** `gene_distilled_hermes-systemd-service-recovery` — bare + qualified signal forms (systemd_failure, service_recovery, missing_env_var, port_not_listening, dropin_env_misconfigured, …) for evolver scanner normalization.
+
+**Capsule:** `capsule_hermes_systemd_service_recovery_phase6a` — 4-step execution_trace (build → validate JSON → assert failure-shape → canary safety), confidence 0.82, blast_radius {files:0, lines:0}.
+
+**Offline parser:** `scripts/hermes_systemd_recovery_fixture.py` (stdlib only, 7472 B) — parses `fixtures/hermes-systemd-failure-sample.txt` and emits deterministic JSON summary. Detects: `service_failed=true`, `missing_env_var=MODEL_PROVIDER`, `expected_port=127.0.0.1:18789`, `port_not_listening=true`, `dropin_env_misconfigured=true`, `restart_limit_hit=true`, plus 6-step `recommended_check_order`. Refuses `.env`-shape paths.
+
+**Inspect + validate:** 12 checks PASS, secret scan 0 hits.
+
+**Apply dry-run:** 0 files written, plan summary: 1 gene + 1 capsule + 5 memory signals.
+
+**Apply --yes** to `/tmp/atl-evomap-phase6a-hermes-target`: 6 files written + 5 memory signals appended; bundle survives.
+
+**Evolver run+review smoke:** Selected Gene `gene_distilled_hermes-systemd-service-recovery`, Capsule visible in review, no Hub contact (`[SearchFirst] No hub match (reason: no_hub_url)`), no crash, no approve, no solidify.
+
+**16 hard boundaries preserved by tool design** (parser refuses `.env`, no recursive repo scan, no systemctl/journalctl/ss/curl exec; apply tool does not contact Hub / does not run evolver / does not write secrets / does not touch real OpenClaw-Hermes-systemd config; capsule canary check 8/8 true).
+
+**On-disk target verify:**
+
+```
+target_runtime: /tmp/atl-evomap-phase6a-hermes-target
+gene_count: 1
+capsule_count: 1
+memory_graph_lines: 8  (5 from apply + 3 from evolver run cycles)
+gene_ids: ["gene_distilled_hermes-systemd-service-recovery"]
+capsule_ids: ["capsule_hermes_systemd_service_recovery_phase6a"]
+```
+
+**Known limitation (documented in README):** Apply tool injects 5 generic bare signals (Phase 5 baseline), not Hermes-specific signals like `systemd_failure` / `missing_env_var`. Future bundle iteration should add `--inject-signals-from <bundle>` to `evomap_apply_bundle.py`.
+
+**Next planned bundles:** Codex prompt-cache-discipline (optimize), browser-control rate-limit (repair), Telegram proxy message-router (repair).
+
+**Files:**
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/` (README, REPORT, bundle, artifacts, fixtures, tools)
+- Top-level report: `reports/ATL_EVOMAP_6A_HERMES_SYSTEMD_BUNDLE_REPORT.md`
+- New canonical script: `scripts/hermes_systemd_recovery_fixture.py`
+- Validator (next step): `scripts/validate_evomap_phase6a_hermes_systemd_bundle.py`
+
+**Phase 5 → Phase 6A · The kit now supports a 2nd canonical bundle + a 2nd intent category (repair).** It is no longer a one-bundle kit; it is a multi-bundle kit, with a deterministic offline recipe for one of the most painful recurring failures in this lab.

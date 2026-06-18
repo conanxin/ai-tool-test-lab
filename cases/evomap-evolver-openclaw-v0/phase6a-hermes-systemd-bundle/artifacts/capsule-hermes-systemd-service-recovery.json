@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.6.0",
+  "type": "Capsule",
+  "id": "capsule_hermes_systemd_service_recovery_phase6a",
+  "trigger": [
+    "systemd_failure",
+    "service_recovery",
+    "missing_env_var",
+    "port_not_listening",
+    "dropin_env_misconfigured",
+    "session_context:hermes"
+  ],
+  "gene": "gene_distilled_hermes-systemd-service-recovery",
+  "summary": "Hermes systemd user-service recovery applied to a fixture-shaped failure: parser confirms service_failed + missing_env_var=MODEL_PROVIDER + port_not_listening + dropin_env_misconfigured; recommends deterministic systemctl + journalctl + show-environment + drop-in + port + Telegram smoke check order. No real systemctl, no .env read, no secret persisted, no Hub, no publish.",
+  "confidence": 0.82,
+  "blast_radius": {
+    "files": 0,
+    "lines": 0
+  },
+  "status": "success",
+  "outcome": {
+    "status": "success",
+    "score": 0.82
+  },
+  "execution_trace": [
+    {
+      "step": 1,
+      "stage": "build",
+      "cmd": "python3 scripts/hermes_systemd_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/fixtures/hermes-systemd-failure-sample.txt",
+      "exit": 0,
+      "output_summary": {
+        "ok": true,
+        "service": "hermes-gateway.service",
+        "service_failed": true,
+        "missing_env_var": "MODEL_PROVIDER",
+        "expected_port": "127.0.0.1:18789",
+        "port_not_listening": true,
+        "dropin_env_misconfigured": true,
+        "restart_limit_hit": true,
+        "recommended_check_order_steps": 6,
+        "unrecognized_signals_count": 7
+      }
+    },
+    {
+      "step": 2,
+      "stage": "validate",
+      "cmd": "python3 -m json.tool artifacts/hermes-systemd-fixture-output.json",
+      "exit": 0,
+      "validation": "json_parse_pass"
+    },
+    {
+      "step": 3,
+      "stage": "validate",
+      "cmd": "assert missing_env_var == MODEL_PROVIDER and service_failed == true and expected_port == 127.0.0.1:18789 and port_not_listening == true",
+      "exit": 0,
+      "validation": "fixture_detected_expected_failure_shape"
+    },
+    {
+      "step": 4,
+      "stage": "canary",
+      "cmd": "safety_check",
+      "exit": 0,
+      "checks": {
+        "no_real_systemctl": true,
+        "no_real_journalctl": true,
+        "no_env_scan": true,
+        "no_secrets": true,
+        "no_hub": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ],
+  "source": "manual_capsule_seed_phase6a",
+  "visibility": "private",
+  "created_at": "2026-06-19T04:03:00Z"
+}
