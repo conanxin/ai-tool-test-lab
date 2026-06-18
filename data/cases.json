@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-3B2 Bare Signal Compatibility",
-      "status": "bare signal compatibility completed",
+      "phase": "ATL-EVOMAP-3C Solidify",
+      "status": "openclaw solidify partial",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-3B2 验证 bare-signal compatibility strategy：创建 gene_distilled_openclaw-tool-use-discipline-bare-compatible (10 signals_match = 5 bare + 5 qualified)并安装到 runtime .evolver/gep/genes.json (12 -> 13 genes)；注入 5 个 bare signal MemoryGraphEvent (tool_bypass/repeated_tool_usage/protocol_drift/session_context/repo_context) 到 memory/evolution/memory_graph.jsonl；evolver run 输出 [Signals] Multi-strategy: ... | score-only: tool_bypass (5 bare signals 合并为单个 bare)；Selector 选中 gene_distilled_openclaw-tool-use-discipline-bare-compatible (selected_gene_id)，是 ATL-EVOMAP 系列第一个 selector match 通过的 phase；Last-run gene 是 gene_tool_integrity 但新 bare-compatible Gene 赢 selection；selection_path: random (drift_intensity 0.277)；未执行 evolver review --approve / solidify (per 硬边界)；Phase 3C UNBLOCKED - 可以执行 --approve + solidify on pending run run_1781793744810；安全边界全部 PASS: no Hub / no auto-publish / no validator / no --loop / no credits / no source modification / no secrets。",
+      "summary": "ATL-EVOMAP-3C 验证本地 approve/solidify 流程：pre-approve review 确认 pending run run_1781793744810 + selected Gene gene_distilled_openclaw-tool-use-discipline-bare-compatible (正确);evolver review --approve 成功执行并 auto-triggered solidify;Evolver 自身 HOLLOW COMMIT detection 触发 (diff 只含 GEP assets/metadata，无真实代码变更)，auto-rollback via git stash (3 次，3 个 ref);3 个手动 solidify 尝试 (evolver solidify / node index.js solidify) 都触发 HOLLOW COMMIT detection;3 EvolutionEvents 生成 (evt_1781795571190 -> evt_1781795618207 -> evt_1781795639960 3-level parent chain);3 ValidationReports 也生成 (vr_1781795568895, vr_1781795617822, vr_1781795638599);0 Capsule 生成 (capsule_count=0) - HOLLOW COMMIT detection 阻止空 commit;all 15 hard boundaries respected (no Hub / no auto-publish / no validator / no --loop / no credits / no source modification);2 个 untracked files preserved via git stash pop (无数据丢失);Phase 3C-V2 (待用户指令) 可用真实代码变更触发 non-hollow solidify 验证 Capsule 创建路径;Phase 4 cross-session reuse test 待 Phase 3C-V2 完成;安全边界全部 PASS + evolver HOLLOW COMMIT safety net 自动触发 (这是 evolver v1.89.14 的内置安全机制)。",
       "updated_at": "2026-06-18",
-      "final_status": "BARE_SIGNAL_COMPATIBILITY_COMPLETED",
+      "final_status": "OPENCLAW_SOLIDIFY_PARTIAL",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -62,6 +62,19 @@
           "selected_gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
           "pending_run": "run_1781793744810",
           "notes": "First full PASS in ATL-EVOMAP series; bare-signal compat solves Phase 3B qualified-strip; Phase 3C unblocked"
+        },
+        {
+          "phase": "ATL-EVOMAP-3C",
+          "status": "openclaw solidify partial",
+          "result": "PARTIAL",
+          "pending_run": "run_1781793744810",
+          "selected_gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+          "approvals_attempted": 3,
+          "evolution_events_generated": 3,
+          "capsules_generated": 0,
+          "hollow_commit_detected": true,
+          "auto_rollback_count": 3,
+          "notes": "Approve path verified; HOLLOW COMMIT detection engaged; 3 EvolutionEvents generated; 0 Capsules (correct safety behavior)"
         }
       ]
     }

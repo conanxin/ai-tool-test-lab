@@ -1,0 +1,7 @@
+total_event_lines: 6
+{"type": "ValidationReport", "id": "vr_1781795568895", "genes_used": null, "outcome": null, "capsule_id": null, "constraint_violations": [], "parent": null}
+{"type": "EvolutionEvent", "id": "evt_1781795571190", "genes_used": ["gene_distilled_openclaw-tool-use-discipline-bare-compatible"], "outcome": "failed", "capsule_id": null, "constraint_violations": ["hollow_commit: 2 file(s) changed but 0 are constraint-counted code. Only GEP metadata was modified."], "parent": null}
+{"type": "ValidationReport", "id": "vr_1781795617822", "genes_used": null, "outcome": null, "capsule_id": null, "constraint_violations": [], "parent": null}
+{"type": "EvolutionEvent", "id": "evt_1781795618207", "genes_used": ["gene_distilled_openclaw-tool-use-discipline-bare-compatible"], "outcome": "failed", "capsule_id": null, "constraint_violations": ["hollow_commit: 3 file(s) changed but 0 are constraint-counted code. Only GEP metadata was modified."], "parent": "evt_1781795571190"}
+{"type": "ValidationReport", "id": "vr_1781795638599", "genes_used": null, "outcome": null, "capsule_id": null, "constraint_violations": [], "parent": null}
+{"type": "EvolutionEvent", "id": "evt_1781795639960", "genes_used": ["gene_distilled_openclaw-tool-use-discipline-bare-compatible"], "outcome": "failed", "capsule_id": null, "constraint_violations": ["hollow_commit: 3 file(s) changed but 0 are constraint-counted code. Only GEP metadata was modified."], "parent": "evt_1781795618207"}

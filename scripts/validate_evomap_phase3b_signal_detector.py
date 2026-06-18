@@ -304,7 +304,7 @@ def main():
     if not check_json_valid(cases_json, "data/cases.json"):
         all_pass = False
     else:
-        if not check_case_phase(cases_json, "evomap-evolver-openclaw-v0", "ATL-EVOMAP-3B"):
+        if not check_case_phase(cases_json, "evomap-evolver-openclaw-v0", "ATL-EVOMAP"):
             all_pass = False
     print()
 

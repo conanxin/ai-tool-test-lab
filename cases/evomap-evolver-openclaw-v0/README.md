@@ -331,6 +331,7 @@ phase3-skill-distillation/
 | **ATL-EVOMAP-3A** | openclaw skill distillation completed | PASS（带 caveat） — Skill 写好、Gene 真实落盘，selector 需 Phase 3b signal detector |
 | **ATL-EVOMAP-3B** | openclaw signal detector partial | PARTIAL — detector + injection work, selector 仍选 `gene_tool_integrity` (qualifed signals stripped) |
 | **ATL-EVOMAP-3B2** | bare signal compatibility completed | **PASS** — bare-compatible Gene 解决了 qualified-strip 问题，selector 选中 OpenClaw Gene |
+| **ATL-EVOMAP-3C** | openclaw solidify partial | **PARTIAL** — approve/solidify 流程验证完整，HOLLOW COMMIT detection 触发，3 EvolutionEvents 生成，0 Capsule |
 
 ---
 
@@ -422,6 +423,58 @@ phase3-skill-distillation/
 
 - **Phase 3C (UNBLOCKED):** 现在 selector 验证了 OpenClaw-specific Gene 选中路径，Phase 3C 可以执行 `evolver review --approve` + `solidify` 在 pending run `run_1781793744810` 上
 - **Phase 3C-V2:** 也可考虑把 Phase 3A 的 Gene 重新 distill 为 bare-compatible 版本
+- **Phase 3D (暂不动):** Hub fetch 永远不接
+
+**暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
+
+---
+
+## Phase 3c: OpenClaw Solidify (ATL-EVOMAP-3C)
+
+**Status:** openclaw solidify partial
+**报告:** [phase3c-solidify/ATL_EVOMAP_3C_SOLIDIFY_REPORT.md](phase3c-solidify/ATL_EVOMAP_3C_SOLIDIFY_REPORT.md)
+
+### Phase 3c 目标
+
+在 Phase 3B2 已 unblock 的 pending run `run_1781793744810` 上，验证 Evolver 能否本地 approve/solidify OpenClaw-specific Gene 并生成 Capsule + EvolutionEvent。
+
+### Phase 3c 关键发现
+
+- ✅ Pre-approve review 确认 pending run + selected Gene 正确 (`gene_distilled_openclaw-tool-use-discipline-bare-compatible`)
+- ✅ `evolver review --approve` 成功执行，auto-triggered solidify
+- ⚠️ **Evolver HOLLOW COMMIT detection 触发** — 系统检测到 diff 只含 GEP assets/metadata，无真实代码变更，自动 rollback via `git stash`
+- ⚠️ 3 次手动 solidify 尝试 (evolver solidify / node index.js solidify) 都触发 HOLLOW COMMIT detection
+- ✅ 3 EvolutionEvents 生成 (`evt_1781795571190` → `evt_1781795618207` → `evt_1781795639960` 3-level parent chain)
+- ✅ 3 ValidationReports 也生成 (`vr_1781795568895`, `vr_1781795617822`, `vr_1781795638599`)
+- ❌ 0 Capsule 生成 (capsule_count = 0) — HOLLOW COMMIT detection 阻止空 commit
+- ✅ All 15 hard boundaries respected (no Hub / no publish / no validator / no --loop / no credits / no source modification / no secrets)
+- ✅ Auto-rollback 触发 3 次 (3 git stash refs)，所有 untracked files preserved via `git stash pop`
+
+### Phase 3c 评分 (5-dimension)
+
+| 维度 | 状态 | 说明 |
+|------|------|------|
+| A. Pre-approve review | ✅ PASS | pending run + selected Gene 正确确认 |
+| B. Approve | ✅ PASS | `evolver review --approve` 成功执行 |
+| C. Solidify | ⚠️ PARTIAL | 3 events 生成, 0 capsule (HOLLOW COMMIT detection) |
+| D. GEP artifacts | ✅ PASS | evolution-events-openclaw.txt 提取 3 events + 3 reports |
+| E. Safety | ✅ PASS | All 15 hard boundaries + evolver HOLLOW COMMIT safety net |
+
+### Phase 3c 结论
+
+> **Evolver HOLLOW COMMIT detection 是 evolver 自身的安全网。** Phase 3C 是 **PARTIAL** 因为 Capsule 未生成，但这来自 evolver 的安全机制正确工作 — diff 只含 test output files，无真实代码变更，系统拒绝空 commit。
+>
+> Phase 3C 验证了：
+> 1. Evolver approve/solidify 流程完整工作
+> 2. HOLLOW COMMIT 安全网正确触发
+> 3. EvolutionEvent 完整生成 (3-level parent chain)
+> 4. Auto-rollback 机制正确恢复 working dir
+> 5. 所有 hard boundaries respected
+
+### Phase 3c 下一步
+
+- **Phase 3C-V2 (待用户指令):** 用真实代码变更触发 non-hollow solidify，验证 Capsule 创建路径
+- **Phase 4 (待用户指令):** cross-session reuse test — 在新 session 验证 Phase 3B2 的 OpenClaw Gene 仍能被选中
 - **Phase 3D (暂不动):** Hub fetch 永远不接
 
 **暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接

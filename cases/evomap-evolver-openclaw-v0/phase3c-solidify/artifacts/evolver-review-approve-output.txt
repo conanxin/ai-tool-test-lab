@@ -1,0 +1,39 @@
+
+============================================================
+[Review] Pending evolution run: run_1781793744810
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+  Category: optimize
+  Summary:  OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization.
+  Strategy:
+    1. Read files with the read tool before referencing their content in reasoning.
+    2. Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.
+    3. Use the search tool for repo-wide content search before falling back to rg via exec.
+    4. Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.
+    5. Re-run validators after each substantive change.
+
+--- Signals ---
+  - tool_bypass
+
+--- Mutation ---
+  Category:   innovate
+  Risk Level: medium
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Untracked Files ===
+cases/evomap-evolver-openclaw-v0/phase3c-solidify/artifacts/evolver-review-approve-output.txt
+cases/evomap-evolver-openclaw-v0/phase3c-solidify/artifacts/evolver-review-before-approve.txt
+
+============================================================
+
+[Review] Approved. Running solidify...
+
+[Solidify] WARNING: null
+[Solidify] HOLLOW COMMIT detected: changed files are all GEP assets/metadata. Files: cases/evomap-evolver-openclaw-v0/phase3c-solidify/artifacts/evolver-review-approve-output.txt, cases/evomap-evolver-openclaw-v0/phase3c-solidify/artifacts/evolver-review-before-approve.txt
+[Solidify] WARNING: null
