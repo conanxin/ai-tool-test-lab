@@ -1,0 +1,4 @@
+hermes-gateway.service failed after restart.
+systemctl --user status shows exit-code=1.
+journalctl indicates missing environment variable MODEL_PROVIDER.
+Expected: service starts and listens on 127.0.0.1:18789.

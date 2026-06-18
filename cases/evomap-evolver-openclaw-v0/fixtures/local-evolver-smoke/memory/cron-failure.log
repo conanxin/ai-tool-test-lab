@@ -1,0 +1,4 @@
+Daily cron task did not run.
+crontab has CRON_TZ=Asia/Shanghai.
+Script works manually.
+Possible issue: PATH missing uv/node binary under cron environment.

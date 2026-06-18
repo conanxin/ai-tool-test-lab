@@ -1,0 +1,5 @@
+
+> local-evolver-smoke@1.0.0 test
+> node test.js
+
+FAIL: add(1, 2) should be 3, got: 12

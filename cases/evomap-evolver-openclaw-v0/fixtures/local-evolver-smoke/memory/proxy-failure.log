@@ -1,0 +1,5 @@
+Telegram bot cannot connect.
+Local SOCKS5 proxy is running at 127.0.0.1:7890.
+curl with proxy works, but bot process ignores proxy env.
+Expected: bot sends message through proxy.
+Actual: ETIMEDOUT.

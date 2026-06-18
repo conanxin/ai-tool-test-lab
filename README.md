@@ -20,9 +20,10 @@
 
 ## 当前状态
 
-- **阶段**：ATL-RESUME-2C — Record Castform vendor fix confirmed by retest · final_status `VENDOR_FIX_CONFIRMED_BY_RETEST` · Castform vendor fix 已被真实 retest 确认
-- **目标**：transcribe 用户在 Castform UI 观察到的 retest run 成功结果到 case page / cases.json / README / 报告；on-disk verify result JSON 后再写入；agent 不调用 API、不访问 UI、不上传、不训练、不重复 launch、不读取 API key、不伪造 metrics
-- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — VENDOR_FIX_CONFIRMED_BY_RETEST; Castform case 状态机推进到 vendor fix confirmed；下一步可以开始下一个 AI Tool Test Lab 案例
+- **阶段**：ATL-EVOMAP-1 + ATL-RESUME-2C — Castform vendor fix confirmed + ATL-EVOMAP-1 EvoMap Evolver smoke test completed · Castform final_status `VENDOR_FIX_CONFIRMED_BY_RETEST`; EvoMap Evolver final_status `LOCAL_OFFLINE_SMOKE_COMPLETED`
+- **目标**：ATL-EVOMAP-1 收口 — ATL-EVOMAP-1 EvoMap Evolver smoke test 已完成（local offline smoke completed）；Evolver v1.89.14 安装成功，evolver run 本地执行成功（GEP Cycle #0001 SUCCESS），无 Hub 连接（no_hub_url），四个测试场景全部 FAIL（工具设计不匹配）；Phase 2 建议：在真实 OpenClaw session 内注入 evolver，而非 memory/*.log；Castform ATL-RESUME-2C 已完成，无需进一步操作
+- **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — VENDOR_FIX_CONFIRMED_BY_RETEST; ATL-RESUME-2C 完成
+- **第二个案例**：[EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0](cases/evomap-evolver-openclaw-v0/) — LOCAL_OFFLINE_SMOKE_COMPLETED; evolver v1.89.14 local run SUCCESS · 无 Hub · 零 credits · 四场景 FAIL（设计不匹配，非工具 bug）; Phase 2 建议在真实 OpenClaw session 内测试 evolver 自进化能力
 - **AI Tool Test Lab published**: `https://conanxin.github.io/ai-tool-test-lab/` (HTTP/2 200)
 - **Castform case published**: `https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/` (HTTP/2 200)
 - **AI Tool Test Lab 已成功发布；Castform case 已成功发布** — 详见 [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) + [reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md](reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md)

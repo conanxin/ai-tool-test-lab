@@ -1,0 +1,100 @@
+{
+  "last_run": {
+    "run_id": "run_1781788408000",
+    "created_at": "2026-06-18T13:13:28.095Z",
+    "parent_event_id": null,
+    "selected_gene_id": "gene_gep_optimize_prompt_and_assets",
+    "selected_capsule_id": null,
+    "selector": {
+      "selected": "gene_gep_optimize_prompt_and_assets",
+      "reason": [
+        "signals match gene.signals_match",
+        "signals: protocol_drift",
+        "drift_intensity: 0.302",
+        "selection_path: score_ranked"
+      ],
+      "alternatives": [
+        "gene_gep_repair_from_errors",
+        "gene_gep_innovate_from_opportunity",
+        "gene_gep_optimize_tool_usage",
+        "gene_conventional_git_commit"
+      ],
+      "selectionPath": "score_ranked",
+      "memoryUsed": false
+    },
+    "signals": [
+      "protocol_drift"
+    ],
+    "mutation": {
+      "type": "Mutation",
+      "id": "mut_1781788407769",
+      "category": "optimize",
+      "trigger_signals": [
+        "protocol_drift"
+      ],
+      "target": "gene:gene_gep_optimize_prompt_and_assets",
+      "expected_effect": "improve success rate and reduce repeated operational cost",
+      "risk_level": "low"
+    },
+    "mutation_id": "mut_1781788407769",
+    "personality_state": {
+      "type": "PersonalityState",
+      "rigor": 0.7,
+      "creativity": 0.35,
+      "verbosity": 0.25,
+      "risk_tolerance": 0.4,
+      "obedience": 0.85
+    },
+    "personality_key": "rigor=0.7|creativity=0.3|verbosity=0.3|risk_tolerance=0.4|obedience=0.9",
+    "personality_known": false,
+    "personality_mutations": [],
+    "drift": false,
+    "selected_by": "selector",
+    "source_type": "generated",
+    "reused_asset_id": null,
+    "reused_source_node": null,
+    "reused_chain_id": null,
+    "baseline_untracked": [
+      ".evolver/gep/candidates.jsonl",
+      ".evolver/gep/capsules.json",
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/genes.json",
+      ".evolver/gep/genes.jsonl",
+      "memory/evolution/memory_graph.jsonl",
+      "memory/evolution/memory_graph_state.json",
+      "memory/evolution/personality_state.json",
+      "memory/evolution/question_generator_state.json",
+      "memory/evolver_update_check.json"
+    ],
+    "baseline_git_head": "ae4e962ec9d538afaf96ee4b4fa4e5a640ae2ee1",
+    "blast_radius_estimate": {
+      "files": 20,
+      "lines": 1600
+    },
+    "strategy_policy": {
+      "name": "repair-only",
+      "label": "Repair Only",
+      "description": "Emergency. Fix everything before doing anything else.",
+      "forceInnovate": false,
+      "cautiousExecution": false,
+      "highRiskGene": false,
+      "repairStreak": 0,
+      "failureStreak": 0,
+      "blastRadiusMaxFiles": 20,
+      "directives": [
+        "Base strategy: Repair Only (Emergency. Fix everything before doing anything else.)",
+        "Target max files for this cycle: 20."
+      ]
+    },
+    "active_task_id": null,
+    "active_task_title": null,
+    "worker_assignment_id": null,
+    "worker_pending": false,
+    "commitment_deadline": null,
+    "applied_lessons": [],
+    "hub_lessons": [],
+    "cycleId": "0001",
+    "initial_user_prompt": "任务代号：ATL-EVOMAP-1\n\n目标：\n在我的本地仓库 https://github.com/conanxin/ai-tool-test-lab 中，新增一个 EvoMap / Evolver 测试案例，真实测试 EvoMap Evolver 在本地 OpenClaw 工作流中的作用，并把测试过程记录成 AI Tool Test Lab 的一个新 case。\n\n背景理解：\nEvoMap 是 AI agent 自进化/经验复用基础设施；Evolver 是本地 CLI 工具，用来读取 agent / 项目运行历史、失败日志、上下文，然后生成可复用的修复/改进 prompt。官方说明 Evolver 需要 Node.js >= 18 和 Git，并且需要在 git repo 中运行。测试重点不是“相信公共 EvoMap Hub”，而是验证本地 Evolver 能否帮助 OpenClaw 总结失败日志、生成下一步修复策略。\n\n硬边界：\n1. 不连接 EvoMap Hub。\n2. 不设置 A2A_HUB_URL。\n3. 不开启 evolver --loop。\n4. 不开启 validator。\n5. 不自动发布 Gene / Capsule。\n6. 不消耗 credits。\n7. 不写入任何 API key / token / cookie / Authorization header。\n8. 不修改我现有 OpenClaw / Hermes / systemd / cron 配置。\n9. 不运行任何后台 daemon。\n10. 不把 node_modules / .env / 私密日志提交到 repo。\n11. 只在 ai-tool-test-lab 仓库内新增文档、测试夹具、验证脚本和报告。\n12. 如需安装 npm 包，只允许安装 @evomap/evolver；不要安装无关依赖。\n\n推荐仓库路径：\n优先使用：\n /mnt/d/AI/ai-tool-test-lab\n\n如果不存在，则：\n cd /mnt/d/AI\n git clone https://github.com/conanxin/ai-tool-test-lab.git\n cd ai-tool-test-lab\n\n请按下面步骤执行。\n\n步骤 1：进入仓库并检查当前状态\n- cd /mnt/d/AI/ai-tool-test-lab\n- git status --short\n- git branch --show-current\n- git log -1 --oneline\n- 查看 README.md、data/cases.json、cases/castform-hermes-phase-closer-v0/ 的结构\n- 目标是模仿现有 Castform case 的组织方式，但新案例要更轻量，不要复制无关 Castform 内容\n\n步骤 2：创建新 case 目录\n新 case slug：\n evomap-evolver-openclaw-v0\n\n建议创建：\n cases/evomap-evolver-openclaw-v0/\n cases/evomap-evolver-openclaw-v0/README.md\n cases/evomap-evolver-openclaw-v0/CASE_REPORT.md\n cases/evomap-evolver-openclaw-v0/artifacts/\n cases/evomap-evolver-openclaw-v0/fixtures/\n cases/evomap-evolver-openclaw-v0/fixtures/memory/\n scripts/validate_evomap_evolver_openclaw_case.py\n reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md\n\n如果项目有 index.html 风格的 case 页面，请按现有结构补一个 index.html；如果现有 case 主要靠 README / markdown，就用 README.md + CASE_REPORT.md。\n\n步骤 3：安装和检查 Evolver\n执行：\n node --version\n npm --version\n git --version\n\n如果 node >= 18，则执行：\n npm install -g @evomap/evolver\n evolver --help\n\n如果 evolver 命令不可用，请记录为安装失败，不要强行改 shell profile；可以尝试：\n npx @evomap/evolver --help\n\n步骤 4：构造一个完全本地的测试夹具\n在 cases/evomap-evolver-openclaw-v0/fixtures/ 下创建一个小型 git 测试项目：\n\n mkdir -p cases/evomap-evolver-openclaw-v0/fixtures/local-evolver-smoke\n cd cases/evomap-evolver-openclaw-v0/fixtures/local-evolver-smoke\n git init\n npm init -y\n npm pkg set scripts.test=\"node test.js\"\n mkdir -p memory\n\n创建 calc.js：\n function add(a, b) {\n return String(a) + String(b);\n }\n module.exports = { add };\n\n创建 test.js：\n const { add } = require('./calc');\n\n if (add(1, 2) !== 3) {\n console.error('FAIL: add(1, 2) should be 3, got:', add(1, 2));\n process.exit(1);\n }\n\n console.log('PASS');\n\n运行：\n npm test 2>&1 | tee memory/npm-test-failure.log\n\n再创建 3 个人造失败日志：\n\nmemory/proxy-failure.log：\n Telegram bot cannot connect.\n Local SOCKS5 proxy is running at 127.0.0.1:7890.\n curl with proxy works, but bot process ignores proxy env.\n Expected: bot sends message through proxy.\n Actual: ETIMEDOUT.\n\nmemory/systemd-failure.log：\n hermes-gateway.service failed after restart.\n systemctl --user status shows exit-code=1.\n journalctl indicates missing environment variable MODEL_PROVIDER.\n Expected: service starts and listens on 127.0.0.1:18789.\n\nmemory/cron-failure.log：\n Daily cron task did not run.\n crontab has CRON_TZ=Asia/Shanghai.\n Script works manually.\n Possible issue: PATH missing uv/node binary under cron environment.\n\n创建 MEMORY.md：\n Project context:\n This is a local-only EvoMap Evolver smoke test inside ai-tool-test-lab.\n\n Goal:\n Test whether Evolver can read failure logs and produce useful repair / hardening prompts for OpenClaw-style workflows.\n\n Constraints:\n Do not connect to EvoMap Hub.\n Do not publish assets.\n Do not run as validator.\n Do not consume credits.\n Do not modify host services.\n\n步骤 5：运行 Evolver 本地只读测试\n在 local-evolver-smoke 目录中执行：\n\n unset A2A_HUB_URL\n export EVOLVE_STRATEGY=repair-only\n export EVOLVER_AUTO_PUBLISH=false\n export EVOLVER_VALIDATOR_ENABLED=false\n export EVOLVER_ATP_AUTOBUY=off\n export EVOLVER_DEFAULT_VISIBILITY=private\n\n evolver --review 2>&1 | tee ../../artifacts/evolver-review-output.txt如果 evolver 命令不可用，用：\n npx @evomap/evolver --review 2>&1 | tee ../../artifacts/evolver-review-output.txt\n\n如果 npx 也失败，记录失败原因，不要继续乱装依赖。\n\n步骤 6：判断测试结果\n请检查 artifacts/evolver-review-output.txt，并判断：\n\nA. npm 测试失败场景：\n- 是否识别 add(1, 2) 返回 \"12\" 而不是 3？\n- 是否指出字符串拼接 / 类型问题？\n- 是否建议最小修复？\n- 是否建议重新运行 npm test？\n\nB. proxy 场景：\n- 是否识别 bot 进程没有继承 SOCKS5_PROXY / HTTP_PROXY 这类代理环境变量？\n- 是否建议 curl proxy smoke test？\n- 是否建议检查 systemd env / service env？\n\nC. systemd 场景：\n- 是否建议 systemctl --user status？\n- 是否建议 journalctl --user -u hermes-gateway？\n- 是否识别 MODEL_PROVIDER 缺失？\n\nD. cron 场景：\n- 是否识别 cron 环境 PATH 与手动 shell 不一致？\n- 是否建议显式 PATH / 绝对路径 / wrapper log？\n\nE. 工具行为：\n- 是否没有连接 Hub？\n- 是否没有发布？\n- 是否没有开启 loop？\n- 是否没有写入 secret？\n- 是否只生成 prompt / 建议，而没有直接改真实系统？\n\n给每个场景打分：\n PASS / PARTIAL / FAIL\n\n步骤 7：写案例文档\n在 cases/evomap-evolver-openclaw-v0/README.md 中写：\n\n标题：\n EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0\n\n内容结构：\n1. 测试对象是什么\n - EvoMap\n - @evomap/evolver\n - 本地 OpenClaw 工作流中的使用方式\n\n2. 为什么测试\n - 验证它是否能做“Agent 错题本 / 维修手册”\n - 验证它是否能从失败日志生成下一步修复策略\n - 验证是否适合接入 OpenClaw / Hermes / Codex 的自动验证循环\n\n3. 本地电脑负责什么\n - 安装 Evolver\n - 构造本地失败日志\n - 运行 evolver --review\n - 保存输出\n - 运行验证器\n\n4. 云端平台负责什么\n - 本次不使用 EvoMap Hub\n - 不连接、不发布、不消费 credits\n - 未来可选只读 fetch / directory 测试\n\n5. 测试场景\n - npm test 失败：字符串拼接 bug\n - proxy failure：Telegram bot 代理环境缺失\n - systemd failure：缺 MODEL_PROVIDER 导致服务失败\n - cron failure：PATH 环境差异\n\n6. 实际执行记录\n - node/npm/git/evolver 版本\n - 命令摘要\n - artifacts/evolver-review-output.txt 路径\n - 每个场景 PASS/PARTIAL/FAIL\n\n7. 问题与解决\n - 安装问题\n - npx fallback\n - Evolver 输出质量问题\n - 是否识别错误根因\n\n8. 最终结论\n - 是否适合继续测试\n - 是否适合接入 OpenClaw\n - 是否适合接入 Hermes / Codex\n - 是否暂时不建议接 Hub\n\n9. 后续建议\n - Phase 2：在真实 OpenClaw session 内调用 evolver --review\n - Phase 3：把 Hermes 真实失败日志喂给 Evolver\n - Phase 4：只读测试 EvoMap Hub fetch / directory\n - 暂不测试 --loop / validator / auto publish\n\n在 CASE_REPORT.md 中写完整报告，记录所有命令输出摘要和判断依据。\n\n在 reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md 中写总报告。\n\n步骤 8：更新 data/cases.json\n向 data/cases.json 增加第二个 case：\n\nslug:\n evomap-evolver-openclaw-v0\n\ntitle:\n EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0\n\nphase:\n ATL-EVOMAP-1 local offline smoke test\n\nstatus:\n local offline smoke completed\n 如果失败则写：\n local offline smoke attempted\n\ncategory:\n AI agent self-evolution / experience reuse / local agent workflow\n\nlocal_role:\n Install and run @evomap/evolver locally; create failure-log fixtures; run evolver --review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.\n\ncloud_role:\n Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.\n\nsummary:\n 用 1 段中文总结实际结果。必须说明：是否安装成功、是否运行 evolver --review、四个场景的 PASS/PARTIAL/FAIL、是否适合继续接入 OpenClaw。\n\n注意：\n- 保持 JSON 合法。\n- 不要破坏 Castform case。\n- 不要把 summary 写得过长。\n\n步骤 9：更新 README.md\n在 README.md 当前状态中追加新案例说明。\n不要删除 Castform 历史。\n添加：\n- 第二个案例：EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0\n- 状态：local offline smoke completed / attempted\n- 结论：先作为本地经验整理工具测试，不连接 Hub，不自动发布\n- 链接到 cases/evomap-evolver-openclaw-v0/\n\n步骤 10：写验证脚本\n创建 scripts/validate_evomap_evolver_openclaw_case.py，使用 Python stdlib 即可。\n\n验证内容：\n1. cases/evomap-evolver-openclaw-v0/README.md 存在\n2. CASE_REPORT.md 存在\n3. artifacts/evolver-review-output.txt 存在\n4. reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md 存在\n5. data/cases.json 可解析\n6. data/cases.json 中存在 slug=evomap-evolver-openclaw-v0\n7. README.md 包含 evomap-evolver-openclaw-v0\n8. 文档中包含硬边界关键词：\n - EVOLVER_AUTO_PUBLISH=false\n - EVOLVER_VALIDATOR_ENABLED=false\n - EVOLVER_ATP_AUTOBUY=off\n - no Hub connection\n - no credits consumed\n9. secret pattern scan：\n - 禁止出现 API key / token / cookie / Authorization header / private key\n - 禁止出现 .env 内容\n10. artifacts 输出如果不存在或为空，则 FAIL；如果 Evolver 安装失败但有明确失败记录，可允许 status=attempted，但必须在报告中说明。\n\n运行：\n python3 scripts/validate_evomap_evolver_openclaw_case.py步骤 11：本地静态检查\n执行：\n python3 -m json.tool data/cases.json >/tmp/atl_cases_json_ok.txt\n python3 scripts/validate_evomap_evolver_openclaw_case.py\n git status --short\n\n如果项目有现成的构建 / 验证命令，也运行它们；不要新增重型依赖。\n\n步骤 12：提交和推送\n如果验证 PASS：\n\n git add README.md data/cases.json cases/evomap-evolver-openclaw-v0 reports/ATL_EVOMAP_EVOLVER_OPENCLAW_V0_REPORT.md scripts/validate_evomap_evolver_openclaw_case.py\n git commit -m \"Add EvoMap Evolver OpenClaw test case\"\n git push\n\n最终回复我：\n1. PASS / PARTIAL / FAIL\n2. commit hash\n3. 修改文件列表\n4. Evolver 是否安装成功\n5. evolver --review 是否运行成功\n6. 四个测试场景评分\n7. 是否连接 Hub：必须是 NO\n8. 是否发布资产：必须是 NO\n9. 是否消耗 credits：必须是 NO\n10. 是否适合接入 OpenClaw / Hermes / Codex\n11. 下一步建议"
+  }
+}
