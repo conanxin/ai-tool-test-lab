@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-3C Solidify",
-      "status": "openclaw solidify partial",
+      "phase": "ATL-EVOMAP-3C-V2 Non-Hollow Solidify",
+      "status": "non-hollow solidify blocked",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-3C 验证本地 approve/solidify 流程：pre-approve review 确认 pending run run_1781793744810 + selected Gene gene_distilled_openclaw-tool-use-discipline-bare-compatible (正确);evolver review --approve 成功执行并 auto-triggered solidify;Evolver 自身 HOLLOW COMMIT detection 触发 (diff 只含 GEP assets/metadata，无真实代码变更)，auto-rollback via git stash (3 次，3 个 ref);3 个手动 solidify 尝试 (evolver solidify / node index.js solidify) 都触发 HOLLOW COMMIT detection;3 EvolutionEvents 生成 (evt_1781795571190 -> evt_1781795618207 -> evt_1781795639960 3-level parent chain);3 ValidationReports 也生成 (vr_1781795568895, vr_1781795617822, vr_1781795638599);0 Capsule 生成 (capsule_count=0) - HOLLOW COMMIT detection 阻止空 commit;all 15 hard boundaries respected (no Hub / no auto-publish / no validator / no --loop / no credits / no source modification);2 个 untracked files preserved via git stash pop (无数据丢失);Phase 3C-V2 (待用户指令) 可用真实代码变更触发 non-hollow solidify 验证 Capsule 创建路径;Phase 4 cross-session reuse test 待 Phase 3C-V2 完成;安全边界全部 PASS + evolver HOLLOW COMMIT safety net 自动触发 (这是 evolver v1.89.14 的内置安全机制)。",
+      "summary": "ATL-EVOMAP-3C-V2 验证 non-hollow solidify: real code diff in place - scripts/openclaw_tool_use_fixture.py (3.4 KB, stdlib-only) + fixture (447 B); python3 scripts/openclaw_tool_use_fixture.py runs successfully, output valid JSON (exec_count=3, read_count=2, edit_count=2, exec_ratio=0.375, has_session_context=true, has_repo_context=true); evolver review 确认 untracked files 包含 real code (openclaw_tool_use_fixture.py); 13 evolver run cycles (4-16) - ALL picked GEP-internal Genes (gene_gep_repair_from_errors / gene_gep_innovate_from_opportunity), NEVER picked gene_distilled_openclaw-tool-use-discipline-bare-compatible; Per 硬边界 #12/#13 BLOCKED - selected Gene ≠ OpenClaw Gene, no approve executed; capsule_count = 0 (correct given no approve); Selector root cause analysis: evolver selector is history-and-session driven; consecutive_failure_streak_3 feedback loop from Phase 3C failed events biases selector toward gene_gep_repair_from_errors; LLM context pollution - evolver scan reads my own message text (make our gene have the highest priority) and interprets as user_feature_request, biases toward gene_gep_innovate_from_opportunity; memory graph injection cannot override GEP internal state; no run --gene= flag, only experiment --gene= supports gene override; Phase 3B2 PASS remains valid (verified in clean environment); Phase 3C-V2 BLOCKED is legitimate - surfaces selector reproducibility concern; Phase 4 recommended path: Phase 4A isolation test (copy .evolver to fresh dir, new session, verify selector); Phase 4B capsule creation test (in isolation env); Phase 4C cross-session reuse (two sessions share events.jsonl); all 15 hard boundaries respected (no Hub / no auto-publish / no validator / no --loop / no credits / no source modification / no secrets); Real code diff is legitimate ai-tool-test-lab artifact (per 硬边界 #12).",
       "updated_at": "2026-06-18",
-      "final_status": "OPENCLAW_SOLIDIFY_PARTIAL",
+      "final_status": "NON_HOLLOW_SOLIDIFY_BLOCKED",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -75,6 +75,27 @@
           "hollow_commit_detected": true,
           "auto_rollback_count": 3,
           "notes": "Approve path verified; HOLLOW COMMIT detection engaged; 3 EvolutionEvents generated; 0 Capsules (correct safety behavior)"
+        },
+        {
+          "phase": "ATL-EVOMAP-3C-V2",
+          "status": "non-hollow solidify blocked",
+          "result": "BLOCKED",
+          "real_code_diff_created": true,
+          "script_path": "scripts/openclaw_tool_use_fixture.py",
+          "fixture_path": "cases/evomap-evolver-openclaw-v0/phase3c-v2-non-hollow-solidify/fixtures/session-tool-use-sample.txt",
+          "selector_match_attempts": 13,
+          "selected_gene_observed": [
+            "gene_gep_repair_from_errors",
+            "gene_gep_innovate_from_opportunity"
+          ],
+          "selected_gene_expected": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+          "approve_executed": false,
+          "capsules_generated": 0,
+          "block_reason": "selected Gene != OpenClaw Gene (per 硬边界 #12/#13)",
+          "selector_root_cause": "history-and-session driven; consecutive_failure_streak_3 feedback loop + LLM context pollution",
+          "phase_3b2_validity": "PASS verified in clean environment; 3C-V2 BLOCKED does not invalidate 3B2",
+          "phase_4_recommendation": "Phase 4A isolation test (fresh .evolver dir + new session)",
+          "notes": "BLOCKED per 硬边界; surfaces evolver selector reproducibility concern; not a regression of Phase 3B2"
         }
       ]
     }

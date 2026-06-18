@@ -1,0 +1,13 @@
+[session]
+OpenClaw session context
+cwd=/mnt/d/AI/ai-tool-test-lab
+
+[history]
+[TOOL: exec] grep -R "Self-EEvolution" cases/
+[TOOL: read] cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+[TOOL: edit] cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+[TOOL: search] openclaw_tool_use_fixture
+[TOOL: exec] ls -la scripts/
+[TOOL: read] scripts/openclaw_tool_use_fixture.py
+[TOOL: edit] scripts/openclaw_tool_use_fixture.py
+[TOOL: exec] git status --short

@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "input": "cases/evomap-evolver-openclaw-v0/phase3c-v2-non-hollow-solidify/fixtures/session-tool-use-sample.txt",
+  "exec_count": 3,
+  "read_count": 2,
+  "edit_count": 2,
+  "search_count": 1,
+  "total_tool_uses": 8,
+  "exec_ratio": 0.375,
+  "has_session_context": true,
+  "has_repo_context": true,
+  "repo_context": "/mnt/d/AI/ai-tool-test-lab",
+  "has_tool_bypass_hint": false
+}

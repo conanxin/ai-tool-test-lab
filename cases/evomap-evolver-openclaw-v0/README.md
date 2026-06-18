@@ -332,6 +332,7 @@ phase3-skill-distillation/
 | **ATL-EVOMAP-3B** | openclaw signal detector partial | PARTIAL — detector + injection work, selector 仍选 `gene_tool_integrity` (qualifed signals stripped) |
 | **ATL-EVOMAP-3B2** | bare signal compatibility completed | **PASS** — bare-compatible Gene 解决了 qualified-strip 问题，selector 选中 OpenClaw Gene |
 | **ATL-EVOMAP-3C** | openclaw solidify partial | **PARTIAL** — approve/solidify 流程验证完整，HOLLOW COMMIT detection 触发，3 EvolutionEvents 生成，0 Capsule |
+| **ATL-EVOMAP-3C-V2** | non-hollow solidify blocked | **BLOCKED** — real code diff (openclaw_tool_use_fixture.py) + fixture 就位，但 selector 13 cycles 都选 GEP-internal Gene (gene_gep_repair_from_errors / gene_gep_innovate_from_opportunity)，未选 OpenClaw Gene；per 硬边界 #12/#13 不 approve；surfaces evolver history-and-session driven selector 机制 |
 
 ---
 
@@ -480,3 +481,61 @@ phase3-skill-distillation/
 **暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
 
 ---
+
+## Phase 3c-v2: Non-Hollow Solidify (ATL-EVOMAP-3C-V2)
+
+**Status:** non-hollow solidify blocked
+**报告:** [phase3c-v2-non-hollow-solidify/ATL_EVOMAP_3C_V2_NON_HOLLOW_SOLIDIFY_REPORT.md](phase3c-v2-non-hollow-solidify/ATL_EVOMAP_3C_V2_NON_HOLLOW_SOLIDIFY_REPORT.md)
+
+### Phase 3c-v2 目标
+
+Phase 3C hollow commit 根因是 diff 只含 GEP assets/metadata。3C-V2 添加最小真实代码 (`scripts/openclaw_tool_use_fixture.py`) + fixture，触发 non-hollow solidify。
+
+### Phase 3c-v2 关键发现
+
+- ✅ Real code diff in place: `scripts/openclaw_tool_use_fixture.py` (3.4 KB, stdlib-only) + fixture (447 B)
+- ✅ Script runs: 输出有效 JSON (exec_count=3, read_count=2, edit_count=2, exec_ratio=0.375, has_session_context=true)
+- ✅ evolver review 确认 untracked files 包含 real code
+- ❌ **BLOCKED** — 13 cycles 全部选 GEP-internal Gene (gene_gep_repair_from_errors / gene_gep_innovate_from_opportunity)，未选 OpenClaw Gene
+- ❌ Per 硬边界 #12/#13 不 approve（selected Gene ≠ OpenClaw Gene）
+- ❌ Capsule 未生成 (capsule_count = 0)，是 correct given no approve
+- ✅ All 15 hard boundaries respected (no Hub / no publish / no validator / no --loop / no credits / no source modification / no secrets)
+- ✅ Real code diff 是合法 ai-tool-test-lab 文件 (per 硬边界 #12)
+
+### Phase 3c-v2 Selector 根因分析
+
+**Selector 是 history-and-session driven 的:**
+
+1. **Consecutive failure feedback loop**: 3 个 phase 3C failed events → LLM context 自动 emit `consecutive_failure_streak_3` / `high_failure_ratio` signals → selector 优先 match `gene_gep_repair_from_errors`
+
+2. **LLM context pollution**: evolver scanner 读 recent session text，包括我自己 message text。LLM 把它解读为 `user_feature_request` → selector 优先 match `gene_gep_innovate_from_opportunity`
+
+3. **Memory graph injection 无法 override GEP internal state**: 我们注入 5 个 bare-signal MemoryGraphEvents，但 GEP internal state 在 scanner 阶段就主导了 signal emission
+
+4. **没有 `run --gene=` flag**: `EVOLVER_FORCE_GENE` 仅在 `experiment --gene=` 支持
+
+### Phase 3c-v2 评分 (5-dimension)
+
+| 维度 | 状态 | 说明 |
+|------|------|------|
+| A. Real code diff | ✅ PASS | scripts/openclaw_tool_use_fixture.py + fixture 就位，输出有效 |
+| B. Selector match | ❌ FAIL→BLOCKED | 13 cycles 都选 GEP-internal Gene |
+| C. Approve | ⏸ NOT EXECUTED | per 硬边界 #12/#13 |
+| D. Capsule | ⏸ NOT GENERATED | capsule_count=0 (correct, no approve) |
+| E. Safety | ✅ PASS | All 15 hard boundaries respected |
+
+### Phase 3c-v2 结论
+
+> **Selector reproducibility is history-driven.** Phase 3C-V2 的 BLOCKED 是 legitimate — 它 surfaced evolver 的 history-and-session feedback loop 机制。Phase 3B2 的 PASS 仍然 valid（在 clean environment 中），但 Phase 3C-V2 暴露了 selector 在 polluted environment 中的脆弱性。
+
+### Phase 3c-v2 下一步
+
+- **Phase 4A (isolation test):** 复制 `.evolver/` 到新临时目录，新 session 启动 evolver，验证 selector 命中 OpenClaw Gene
+- **Phase 4B (capsule creation test):** 在 isolation env 中执行完整 approve/solidify
+- **Phase 4C (cross-session reuse):** 两个 sessions 共享 events.jsonl，验证 selector + reuse
+- **Phase 3D (暂不动):** Hub fetch 永远不接
+
+**暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
+
+---
+
