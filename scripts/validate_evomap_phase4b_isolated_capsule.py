@@ -212,21 +212,29 @@ def main() -> int:
                 _check("evomap case present in cases.json", False)
             else:
                 _check("evomap case present in cases.json", True)
-                _check(
-                    "cases.json phase contains ATL-EVOMAP-4B",
-                    "ATL-EVOMAP-4B" in case.get("phase", ""),
-                    case.get("phase", ""),
+                # Phase 4B may have been superseded (e.g. by 4C), so accept
+                # either current phase == 4B, or phase_history having 4B entry.
+                current_phase = case.get("phase", "")
+                hist = case.get("phase_history", [])
+                phase_4b_hist = next(
+                    (e for e in hist if e.get("phase") == "ATL-EVOMAP-4B"),
+                    None,
                 )
                 _check(
-                    "cases.json status contains 'isolated capsule completed'",
-                    "isolated capsule completed" in case.get("status", ""),
+                    "cases.json phase is ATL-EVOMAP-4B (current or historical)",
+                    "ATL-EVOMAP-4B" in current_phase or phase_4b_hist is not None,
+                    f"current={current_phase!r}, hist_entry={phase_4b_hist is not None}",
+                )
+                _check(
+                    "cases.json status records 4B 'isolated capsule completed' (current or historical)",
+                    "isolated capsule completed" in case.get("status", "")
+                    or (phase_4b_hist is not None
+                        and "isolated capsule completed" in phase_4b_hist.get("status", "")),
                     case.get("status", ""),
                 )
-                hist = case.get("phase_history", [])
-                has_4b = any(e.get("phase") == "ATL-EVOMAP-4B" for e in hist)
                 _check(
                     "cases.json phase_history has ATL-EVOMAP-4B entry",
-                    has_4b,
+                    phase_4b_hist is not None,
                 )
         except Exception as e:
             _check("cases.json valid JSON", False, str(e))

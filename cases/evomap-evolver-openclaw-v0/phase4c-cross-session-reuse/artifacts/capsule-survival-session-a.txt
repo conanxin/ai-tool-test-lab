@@ -1,0 +1,8 @@
+capsule_count 1
+found_target True
+gene gene_distilled_openclaw-tool-use-discipline-bare-compatible
+status success
+confidence 0.84
+execution_trace_non_empty True
+execution_trace_steps 4
+execution_trace_stages ['build', 'validate', 'validate', 'canary']

@@ -1,0 +1,52 @@
+
+============================================================
+[Review] Pending evolution run: run_1781800031258
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+  Category: optimize
+  Summary:  OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization.
+  Strategy:
+    1. Read files with the read tool before referencing their content in reasoning.
+    2. Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.
+    3. Use the search tool for repo-wide content search before falling back to rg via exec.
+    4. Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.
+    5. Re-run validators after each substantive change.
+
+--- Signals ---
+  - repeated_tool_usage:exec
+  - tool_bypass
+
+--- Mutation ---
+  Category:   innovate
+  Risk Level: medium
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Unstaged Changes ===
+diff --git a/.evolver/gep/candidates.jsonl b/.evolver/gep/candidates.jsonl
+index 8b13789..5d18014 100644
+--- a/.evolver/gep/candidates.jsonl
++++ b/.evolver/gep/candidates.jsonl
+@@ -1 +1,2 @@
+ 
++{"type":"CapabilityCandidate","id":"cand_5afdf7f3","title":"Repeated tool usage: exec","source":"transcript","created_at":"2026-06-18T16:27:11.079Z","signals":["repeated_tool_usage:exec","tool_bypass"],"tags":["repeated_tool_usage:exec","repeated_tool_usage","tool_bypass"],"shape":{"title":"Repeated tool usage: exec","input":"Recent session transcript + memory snippets + user instructions","output":"A safe, auditable evolution patch guided by GEP assets","invariants":"Protocol order, small reversible patches, validation, append-only events","params":"Signals: repeated_tool_usage:exec, tool_bypass","failure_points":"Missing signals, over-broad changes, skipped validation, missing knowledge solidification","evidence":"Observed 6 occurrences of tool call marker for exec."}}
+
+=== Untracked Files ===
+.evolver/gep/genes.jsonl
+memory/evolution/evolution_solidify_state.json
+memory/evolution/evolution_state.json
+memory/evolution/memory_graph.jsonl
+memory/evolution/memory_graph_state.json
+memory/evolution/personality_state.json
+memory/evolution/question_generator_state.json
+memory/evolver_update_check.json
+
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

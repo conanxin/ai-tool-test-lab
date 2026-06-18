@@ -659,3 +659,98 @@ Cross-session reuse test. Copy `capsules.json` to a second isolated runtime, run
 - `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/isolation-capsule-setup-summary.json`
 - `reports/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md` (top-level)
 
+
+## ATL-EVOMAP-4C · Cross-Session Reuse Test (2026-06-19)
+
+**Status: PASS** — Portable bundle valid; Session A and Session B both recognize the same OpenClaw Gene + Capsule; capsule survives run/review in both; "capsule trigger matches signals" observed in both selectors.
+
+### What Phase 4C tested
+
+After Phase 4B proved a Capsule can be created and survive in a single isolated runtime, the next question was: can a **portable bundle** (Gene + Capsule + execution_trace) be **reused across two independent sessions** without re-distilling or re-seeding?
+
+### Approach
+
+- Created a portable bundle artifact: `portable-openclaw-gene-capsule-bundle.json` (4841 bytes)
+  - Contains: gene, capsule, execution_trace, safety, import_contract
+  - Schema: `atl-evomap-portable-bundle-v0.1`
+  - Required files: `genes.json`, `capsules.json`, `memory_graph.jsonl` (3)
+  - Optional files: `events.jsonl`, `failed_capsules.json`, `candidates.jsonl` (3)
+- Created **two independent isolated runtimes** (different paths, different git histories):
+  - Session A: `/tmp/atl-evomap-4c-session-a` (commit `bf7bae1`)
+  - Session B: `/tmp/atl-evomap-4c-session-b` (commit `7450847`)
+- Imported the **same** bundle into both (verified `.evolver/` identical via `diff -q` before evolver run)
+- Injected 5 clean bare signals into both
+- Ran `evolver run` + `evolver review` in both (no --approve, no solidify)
+- Verified capsule survival in both via Python check
+
+### Result
+
+**Selector behavior (identical in A and B):**
+```
+2. Selection: Selected Gene "gene_distilled_openclaw-tool-use-discipline-bare-compatible".
+   Reason: signals match gene.signals_match; capsule trigger matches signals; ...
+           selection_path: score_ranked
+```
+
+**Capsule survival (identical in A and B):**
+```
+capsule_count 1
+found_target True
+gene gene_distilled_openclaw-tool-use-discipline-bare-compatible
+status success
+confidence 0.84
+execution_trace_non_empty True
+execution_trace_steps 4
+execution_trace_stages ['build', 'validate', 'validate', 'canary']
+```
+
+**Key observation:** selection path is `score_ranked` (NOT `distilled_fallback` like 4A/4B). This is because both A and B have the Capsule pre-imported, so the evolver's `capsule trigger matches signals` reason kicks in — a richer signal than bare-distilled fallback.
+
+### Cross-session reuse evidence
+
+The selector reason field in **both** sessions contains:
+> `capsule trigger matches signals`
+
+This is the evolver's way of saying "I'm using the imported Capsule's trigger array as evidence for selecting this Gene". The **same reason appeared in both sessions** — confirming the same Capsule identity is recognized in both.
+
+### Scoring (5 dimensions)
+
+| Dimension | Status |
+|---|---|
+| A. Portable bundle | PASS (all 3 core assets, valid JSON, schema defined) |
+| B. Session A | PASS (selector hit OpenClaw Gene, score_ranked, Capsule survived) |
+| C. Session B | PASS (selector hit OpenClaw Gene, score_ranked, Capsule survived) |
+| D. Cross-session portability | PASS (same capsule id in A/B; identical survival; same reason) |
+| E. Safety | PASS (all 16 hard boundaries preserved) |
+
+### Three-step local-only pathway: COMPLETE
+
+- **Step 1 (Phase 4A):** distilled Gene can be **selected** in clean env ✅
+- **Step 2 (Phase 4B):** a Capsule referencing that Gene can be **created and survive** in clean env ✅
+- **Step 3 (Phase 4C):** the Gene + Capsule can be **reused across sessions** with the same identity preserved ✅
+
+### Phase 5 GO
+
+Local evolution kit. Goals (proposed):
+1. Curate a portable bundle repository — collect proven (Gene, Capsule) pairs verified in isolated env
+2. Document a `apply-bundle.sh` tool — copies a bundle to a target runtime's `.evolver/gep/` and `memory/evolution/` without running `evolver run` in the polluted main runtime
+3. Test the import path on a clean main-runtime snapshot — verify that importing a bundle does NOT trigger GEP-internal repair loop
+4. Document the safety contract — what makes a bundle "safe to apply"
+
+**Hard boundaries:**
+- No Hub, no publish, no credits
+- No `evolver review --approve` in real runtime
+- No `evolver solidify` in real runtime
+- Bundles only contain Gene + Capsule + execution_trace + 5 clean bare signals
+- Apply via `cp` + `git add` in a controlled branch, NOT via `evolver run`
+
+### Files
+
+- `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/ATL_EVOMAP_4C_CROSS_SESSION_REUSE_REPORT.md` (full report, 16.3 KB)
+- `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json` (portable bundle, 4841 bytes)
+- `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/cross-session-setup-summary.json`
+- `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-{run,review}-session-{a,b}-output.txt` (4 files)
+- `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/capsule-survival-session-{a,b}.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/cross-session-reuse-grep.txt`
+- `reports/ATL_EVOMAP_4C_CROSS_SESSION_REUSE_REPORT.md` (top-level, 7.3 KB)
+- `scripts/validate_evomap_phase4c_cross_session_reuse.py` (TBD)

@@ -1,0 +1,19 @@
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/capsule-survival-session-a.txt:gene gene_distilled_openclaw-tool-use-discipline-bare-compatible
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/capsule-survival-session-b.txt:gene gene_distilled_openclaw-tool-use-discipline-bare-compatible
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-review-session-a-output.txt:  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-review-session-b-output.txt:  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-a-output.txt:2. Selection: Selected Gene "gene_distilled_openclaw-tool-use-discipline-bare-compatible".
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-a-output.txt:ACTIVE STRATEGY (gene_distilled_openclaw-tool-use-discipline-bare-compatible):
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-a-output.txt:    "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-a-output.txt:    "id": "capsule_openclaw_tool_use_discipline_phase4b",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-a-output.txt:    "gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-b-output.txt:2. Selection: Selected Gene "gene_distilled_openclaw-tool-use-discipline-bare-compatible".
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-b-output.txt:ACTIVE STRATEGY (gene_distilled_openclaw-tool-use-discipline-bare-compatible):
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-b-output.txt:    "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-b-output.txt:    "id": "capsule_openclaw_tool_use_discipline_phase4b",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/evolver-run-session-b-output.txt:    "gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json:  "target_capsule_id": "capsule_openclaw_tool_use_discipline_phase4b",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json:  "target_gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json:    "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json:    "id": "capsule_openclaw_tool_use_discipline_phase4b",
+cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json:    "gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",

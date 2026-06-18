@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-4B Isolated Capsule",
-      "status": "isolated capsule completed",
+      "phase": "ATL-EVOMAP-4C Cross-Session Reuse",
+      "status": "cross-session reuse completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-4B isolated capsule test PASS: reused Phase 4A isolated runtime at /tmp/atl-evomap-4a-isolated (intact: 1 Gene, 0 events, 0 pollution); seeded a real Capsule (capsule_openclaw_tool_use_discipline_phase4b) referencing gene_distilled_openclaw-tool-use-discipline-bare-compatible with 4-step execution_trace (build + 2 validate + canary); ran python3 openclaw_tool_use_fixture.py to generate real execution_trace evidence; ran evolver run + review in isolated env; capsule survived the cycle intact (id, gene, status, confidence, execution_trace, source, visibility all preserved); selector still hit OpenClaw Gene (selection_path=distilled_fallback, alternatives=[]); 0 pollution events; all 16 hard boundaries preserved (no Hub / no publish / no credits / no validator / no --approve / no solidify / no real config mutation / no secrets / no source modification / no isolated runtime committed); local-only Capsule pathway 2/2 steps proven (Phase 4A selector hit + Phase 4B capsule survival); Phase 4C (cross-session reuse) is GO.",
+      "summary": "ATL-EVOMAP-4C cross-session reuse test PASS: created portable bundle atl-evomap-portable-bundle-v0.1 (Gene+Capsule+execution_trace, 4841 bytes) with 3 required + 3 optional files import contract; created 2 independent isolated runtimes (/tmp/atl-evomap-4c-session-a commit bf7bae1, /tmp/atl-evomap-4c-session-b commit 7450847) with identical .evolver/ trees (diff -q clean); injected 5 clean bare signals into both; ran evolver run + review in both sessions (no --approve, no solidify); both A and B selected gene_distilled_openclaw-tool-use-discipline-bare-compatible via score_ranked path with reason 'capsule trigger matches signals' (cross-session reuse evidence); both A and B preserved the Capsule with identical identity (id, gene, status=success, confidence=0.84, execution_trace=4 steps build/validate/validate/canary); 0 pollution events in both; all 16 hard boundaries preserved (no Hub / no publish / no credits / no --approve / no solidify / no real config mutation / no secrets / no source modification / no isolated runtime committed); local-only Capsule pathway 3/3 steps complete (Phase 4A selector hit + Phase 4B capsule survival + Phase 4C cross-session reuse); Phase 5 (local evolution kit) is GO.",
       "updated_at": "2026-06-19",
-      "final_status": "ISOLATED_CAPSULE_PASS",
+      "final_status": "CROSS_SESSION_REUSE_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -150,6 +150,39 @@
           "report_case": "cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md",
           "report_top": "reports/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md",
           "notes": "PASS - local-only Capsule pathway viable in isolated env; 2/2 steps proven"
+        },
+        {
+          "phase": "ATL-EVOMAP-4C",
+          "status": "cross-session reuse completed",
+          "result": "PASS",
+          "session_a": "/tmp/atl-evomap-4c-session-a",
+          "session_b": "/tmp/atl-evomap-4c-session-b",
+          "session_a_commit": "bf7bae1",
+          "session_b_commit": "7450847",
+          "portable_bundle": "cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/portable-openclaw-gene-capsule-bundle.json",
+          "portable_bundle_schema": "atl-evomap-portable-bundle-v0.1",
+          "portable_bundle_required_files": 3,
+          "portable_bundle_optional_files": 3,
+          "gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+          "capsule_id": "capsule_openclaw_tool_use_discipline_phase4b",
+          "selection_path_a": "score_ranked",
+          "selection_path_b": "score_ranked",
+          "capsule_trigger_match_a": true,
+          "capsule_trigger_match_b": true,
+          "capsule_survived_a": true,
+          "capsule_survived_b": true,
+          "execution_trace_steps_a": 4,
+          "execution_trace_steps_b": 4,
+          "hub_connected": false,
+          "credits_consumed": 0,
+          "approver_executed": false,
+          "solidify_executed": false,
+          "pollution_events": 0,
+          "phase_4b_dependencies": "PASS at e8451f3 / 0071523",
+          "phase_5_recommendation": "GO - local evolution kit",
+          "report_case": "cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/ATL_EVOMAP_4C_CROSS_SESSION_REUSE_REPORT.md",
+          "report_top": "reports/ATL_EVOMAP_4C_CROSS_SESSION_REUSE_REPORT.md",
+          "notes": "PASS - 3/3 steps complete; portable bundle reusable across sessions; Phase 5 GO"
         }
       ]
     }
