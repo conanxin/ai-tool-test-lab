@@ -1,0 +1,78 @@
+{
+  "ok": true,
+  "bundle_path": "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-4B",
+  "source_session": "/tmp/atl-evomap-4a-isolated",
+  "gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "gene_category": "optimize",
+  "capsule_id": "capsule_openclaw_tool_use_discipline_phase4b",
+  "capsule_status": "success",
+  "capsule_confidence": 0.84,
+  "capsule_visibility": "private",
+  "capsule_source": "manual_capsule_seed_phase4b",
+  "execution_trace_steps": 4,
+  "execution_trace_stages": [
+    "build",
+    "validate",
+    "validate",
+    "canary"
+  ],
+  "top_level_execution_trace_ok": true,
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages": [
+      "build OR validate OR canary"
+    ]
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "approve": "not_executed",
+    "solidify": "not_executed",
+    "validator_enabled": false,
+    "atp_autobuy": "off",
+    "loop_used": false
+  },
+  "kit_provenance": {
+    "kit_name": "OpenClaw Local Evolution Kit",
+    "kit_version": "v1",
+    "phase_5_commit": "pending",
+    "phase_4c_validation": {
+      "commit": "f7897da",
+      "session_a": "/tmp/atl-evomap-4c-session-a",
+      "session_b": "/tmp/atl-evomap-4c-session-b",
+      "result": "PASS",
+      "selector_paths": [
+        "score_ranked",
+        "score_ranked"
+      ],
+      "capsule_trigger_match": [
+        true,
+        true
+      ]
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "ok": true,
+  "mode": "dry-run",
+  "plan": {
+    "target": "/tmp/atl-evomap-phase5-apply-target",
+    "is_git_repo": true,
+    "gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+    "capsule_id": "capsule_openclaw_tool_use_discipline_phase4b",
+    "writes": {
+      "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/genes.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "genes": [
+          {
+            "type": "Gene",
+            "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+            "category": "optimize",
+            "signals_match": [
+              "tool_bypass",
+              "repeated_tool_usage",
+              "protocol_drift",
+              "session_context",
+              "repo_context",
+              "tool_bypass:exec-on-grep",
+              "repeated_tool_usage:exec",
+              "protocol_drift:wrong-tool-for-file-read",
+              "session_context:openclaw",
+              "repo_context:ai-tool-test-lab"
+            ],
+            "strategy": [
+              "Read files with the read tool before referencing their content in reasoning.",
+              "Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.",
+              "Use the search tool for repo-wide content search before falling back to rg via exec.",
+              "Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.",
+              "Re-run validators after each substantive change."
+            ],
+            "constraints": {
+              "max_files": 12,
+              "forbidden_paths": [
+                ".git",
+                "node_modules",
+                ".evolver",
+                "memory"
+              ]
+            },
+            "summary": "OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization."
+          }
+        ]
+      },
+      "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/capsules.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "capsules": [
+          {
+            "type": "Capsule",
+            "schema_version": "1.6.0",
+            "id": "capsule_openclaw_tool_use_discipline_phase4b",
+            "trigger": [
+              "tool_bypass",
+              "repeated_tool_usage",
+              "protocol_drift",
+              "session_context",
+              "repo_context"
+            ],
+            "gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+            "summary": "OpenClaw tool discipline applied to a real session: prefers read/edit/search over exec grep; re-runs validators after substantive change. Validated against fixtures/session-tool-use-sample.txt.",
+            "confidence": 0.84,
+            "blast_radius": {
+              "files": 0,
+              "lines": 0
+            },
+            "status": "success",
+            "outcome": {
+              "status": "success",
+              "score": 0.84
+            },
+            "execution_trace": [
+              {
+                "step": 1,
+                "stage": "build",
+                "cmd": "python3 openclaw_tool_use_fixture.py --input fixtures/session-tool-use-sample.txt",
+                "exit": 0
+              },
+              {
+                "step": 2,
+                "stage": "validate",
+                "cmd": "python3 -m json.tool /tmp/openclaw_tool_use_execution_trace.json",
+                "exit": 0,
+                "output_summary": {
+                  "ok": true,
+                  "exec_count": 3,
+                  "read_count": 2,
+                  "edit_count": 2,
+                  "search_count": 1,
+                  "total_tool_uses": 8,
+                  "exec_ratio": 0.375,
+                  "has_session_context": true,
+                  "has_repo_context": true
+                }
+              },
+              {
+                "step": 3,
+                "stage": "validate",
+                "cmd": "json_parse_pass",
+                "exit": 0,
+                "validation": "json_parse_pass"
+              },
+              {
+                "step": 4,
+                "stage": "canary",
+                "cmd": "safety_check",
+                "exit": 0,
+                "checks": {
+                  "no_hub": true,
+                  "no_secret": true,
+                  "no_env_scan": true,
+                  "no_publish": true,
+                  "no_approve": true,
+                  "no_solidify": true
+                }
+              }
+            ],
+            "source": "manual_capsule_seed_phase4b",
+            "visibility": "private",
+            "created_at": "2026-06-19T00:09:00Z"
+          }
+        ]
+      },
+      "/tmp/atl-evomap-phase5-apply-target/memory/evolution/memory_graph.jsonl": {
+        "action": "append",
+        "lines": [
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700001.0, \"signal\": \"tool_bypass\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.85, \"context\": \"Detected exec invocation without prior read on .md file\", \"mutation\": {\"target\": \"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700002.0, \"signal\": \"repeated_tool_usage\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.7, \"context\": \"Same read+edit+search pattern repeated 3x\", \"mutation\": {\"target\": \"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700003.0, \"signal\": \"protocol_drift\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.9, \"context\": \"Detected sed -i usage forbidden by OpenClaw protocol\", \"mutation\": {\"target\": \"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700004.0, \"signal\": \"session_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.6, \"context\": \"Session has multiple file ops requiring tool discipline\", \"mutation\": {\"target\": \"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700005.0, \"signal\": \"repo_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.65, \"context\": \"Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case\", \"mutation\": {\"target\": \"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible\", \"action\": \"select\"}}"
+        ]
+      },
+      "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/events.jsonl": {
+        "action": "reset",
+        "content": ""
+      },
+      "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/failed_capsules.json": {
+        "action": "reset",
+        "content": "[]\n"
+      },
+      "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/candidates.jsonl": {
+        "action": "reset",
+        "content": ""
+      }
+    },
+    "summary": {
+      "existing_gene_count": 0,
+      "existing_capsule_count": 0,
+      "new_gene_count": 1,
+      "new_capsule_count": 1,
+      "memory_graph_signals_added": 5
+    }
+  }
+}

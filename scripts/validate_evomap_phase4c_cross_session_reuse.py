@@ -202,21 +202,29 @@ def main() -> int:
                 _check("evomap case present in cases.json", False)
             else:
                 _check("evomap case present in cases.json", True)
-                _check(
-                    "cases.json phase contains ATL-EVOMAP-4C",
-                    "ATL-EVOMAP-4C" in case.get("phase", ""),
-                    case.get("phase", ""),
+                # Phase 4C may have been superseded (e.g. by 5), so accept
+                # either current phase == 4C, or phase_history having 4C entry.
+                current_phase = case.get("phase", "")
+                hist = case.get("phase_history", [])
+                phase_4c_hist = next(
+                    (e for e in hist if e.get("phase") == "ATL-EVOMAP-4C"),
+                    None,
                 )
                 _check(
-                    "cases.json status contains 'cross-session reuse completed'",
-                    "cross-session reuse completed" in case.get("status", ""),
+                    "cases.json phase is ATL-EVOMAP-4C (current or historical)",
+                    "ATL-EVOMAP-4C" in current_phase or phase_4c_hist is not None,
+                    f"current={current_phase!r}, hist_entry={phase_4c_hist is not None}",
+                )
+                _check(
+                    "cases.json status records 4C 'cross-session reuse completed' (current or historical)",
+                    "cross-session reuse completed" in case.get("status", "")
+                    or (phase_4c_hist is not None
+                        and "cross-session reuse completed" in phase_4c_hist.get("status", "")),
                     case.get("status", ""),
                 )
-                hist = case.get("phase_history", [])
-                has_4c = any(e.get("phase") == "ATL-EVOMAP-4C" for e in hist)
                 _check(
                     "cases.json phase_history has ATL-EVOMAP-4C entry",
-                    has_4c,
+                    phase_4c_hist is not None,
                 )
         except Exception as e:
             _check("cases.json valid JSON", False, str(e))

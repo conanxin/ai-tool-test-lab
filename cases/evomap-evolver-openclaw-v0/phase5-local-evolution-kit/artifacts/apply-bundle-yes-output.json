@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "mode": "applied",
+  "plan_summary": {
+    "existing_gene_count": 0,
+    "existing_capsule_count": 0,
+    "new_gene_count": 1,
+    "new_capsule_count": 1,
+    "memory_graph_signals_added": 5
+  },
+  "log": {
+    "writes_executed": [
+      {
+        "path": "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/genes.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/capsules.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase5-apply-target/memory/evolution/memory_graph.jsonl",
+        "action": "append"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/events.jsonl",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/failed_capsules.json",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase5-apply-target/.evolver/gep/candidates.jsonl",
+        "action": "reset"
+      }
+    ],
+    "errors": []
+  }
+}

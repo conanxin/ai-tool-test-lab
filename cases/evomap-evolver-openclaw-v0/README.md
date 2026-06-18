@@ -754,3 +754,79 @@ Local evolution kit. Goals (proposed):
 - `cases/evomap-evolver-openclaw-v0/phase4c-cross-session-reuse/artifacts/cross-session-reuse-grep.txt`
 - `reports/ATL_EVOMAP_4C_CROSS_SESSION_REUSE_REPORT.md` (top-level, 7.3 KB)
 - `scripts/validate_evomap_phase4c_cross_session_reuse.py` (TBD)
+
+## ATL-EVOMAP-5 · Local Evolution Kit (2026-06-19)
+
+**Status: PASS** — Canonical bundle, 3 stdlib-only tools (inspect/validate/apply), 3 templates, 4-step recipe, self-tests all delivered.
+
+### What Phase 5 produced
+
+Productized the local-only Gene + Capsule pathway proven in Phases 4A/4B/4C as a **reusable, stdlib-only toolset**:
+
+- **Canonical bundle:** `bundle/openclaw-tool-use-discipline.bundle.json` (5458 bytes, schema `atl-evomap-portable-bundle-v0.1`, sourced from Phase 4C PASS)
+- **3 tools:**
+  - `evomap_inspect_bundle.py` (2674 bytes, read-only inspector)
+  - `evomap_validate_bundle.py` (6817 bytes, 12 checks including secret scan)
+  - `evomap_apply_bundle.py` (8869 bytes, defaults to --dry-run, requires --yes for real write)
+- **3 templates:** GENE_TEMPLATE.json / CAPSULE_TEMPLATE.json / MEMORY_GRAPH_SIGNAL_TEMPLATE.jsonl
+- **4-step recipe:** validate → inspect → dry-run → apply --yes → manual evolver
+
+### Self-test results
+
+| Test | Result |
+|---|---|
+| inspect canonical bundle | `ok: true`, gene + capsule + 4-step trace + safety returned |
+| validate canonical bundle | `ok: true`, **12/12 checks PASS** (including secret scan) |
+| apply --dry-run to clean target | 6 writes planned, **0 files written** (truly non-destructive) |
+| apply --yes to clean target | 6 writes executed, 0 errors |
+| idempotency re-apply | gene/capsule dedup by id (1→1), signals append (5→10 if applied) |
+
+### Target after apply --yes (`/tmp/atl-evomap-phase5-apply-target`)
+
+```
+gene_count: 1
+capsule_count: 1
+memory_graph_lines: 5
+gene_ids: ["gene_distilled_openclaw-tool-use-discipline-bare-compatible"]
+capsule_ids: ["capsule_openclaw_tool_use_discipline_phase4b"]
+memory_graph_signals: ["tool_bypass", "repeated_tool_usage", "protocol_drift", "session_context", "repo_context"]
+```
+
+### Hard boundaries preserved (16)
+
+All 16 boundaries preserved by **tool design**, not just by careful usage:
+- apply tool does NOT contact Hub, does NOT publish, does NOT run `evolver`, does NOT write secrets
+- validate tool runs secret scan; apply refuses to write if bundle has secrets
+- apply defaults to --dry-run; --yes required for real write
+- apply only writes the target's `.evolver/` + `memory/evolution/`, never touches real main repo or Evolver package source
+- apply refuses to write if target doesn't exist as a directory; warns (but allows) if target is not a git repo
+- All 3 tools use **Python stdlib only** (argparse, json, re, sys, pathlib)
+
+### Files
+
+**Case directory:** `cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/`
+- `README.md` (10.4 KB, full kit doc with 4-step recipe)
+- `bundle/openclaw-tool-use-discipline.bundle.json` (canonical bundle)
+- `tools/` (3 stdlib tools, copies)
+- `templates/` (3 templates for new bundles)
+- `artifacts/` (6 self-test outputs)
+- `ATL_EVOMAP_5_LOCAL_EVOLUTION_KIT_REPORT.md` (14.5 KB, full report)
+
+**Top-level:**
+- `reports/ATL_EVOMAP_5_LOCAL_EVOLUTION_KIT_REPORT.md` (6.4 KB, top-level report)
+- `scripts/evomap_inspect_bundle.py` (canonical install)
+- `scripts/evomap_validate_bundle.py`
+- `scripts/evomap_apply_bundle.py`
+- `scripts/validate_evomap_phase5_local_evolution_kit.py` (TBD)
+
+### ATL-EVOMAP exploration series: COMPLETE
+
+| Phase | Question | Result |
+|---|---|---|
+| 3C-V2 | Can we get a real non-hollow patch to evolve? | BLOCKED (selector stuck on gep_repair) |
+| 4A | Can selector hit the right Gene in clean env? | PASS (selection_path=distilled_fallback) |
+| 4B | Can a Capsule survive evolver cycle in clean env? | PASS (capsule intact, 4-step trace preserved) |
+| 4C | Can Gene + Capsule be reused across sessions? | PASS (selection_path=score_ranked, capsule trigger matches signals) |
+| 5 | Can the proven pathway be productized? | PASS (kit + 3 tools + 3 templates + 4-step recipe) |
+
+**Phase 5 marks the end of the ATL-EVOMAP exploration series.** The kit is now a durable asset that can be referenced for future OpenClaw / Hermes / Codex local evolution work.

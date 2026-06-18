@@ -1,0 +1,18 @@
+{
+  "gene_count": 1,
+  "capsule_count": 1,
+  "memory_graph_lines": 5,
+  "gene_ids": [
+    "gene_distilled_openclaw-tool-use-discipline-bare-compatible"
+  ],
+  "capsule_ids": [
+    "capsule_openclaw_tool_use_discipline_phase4b"
+  ],
+  "memory_graph_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ]
+}

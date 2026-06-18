@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.6.0",
+  "type": "Capsule",
+  "id": "capsule_<name>_phase<N>",
+  "trigger": [
+    "<signal_1>",
+    "<signal_2>",
+    "<signal_3>"
+  ],
+  "gene": "gene_distilled_<name>-bare-compatible",
+  "summary": "<one-line description of when this capsule applies>",
+  "confidence": 0.8,
+  "blast_radius": {"files": 0, "lines": 0},
+  "status": "success",
+  "outcome": {"status": "success", "score": 0.8},
+  "execution_trace": [
+    {"step": 1, "stage": "build", "cmd": "<build command>", "exit": 0},
+    {"step": 2, "stage": "validate", "cmd": "python3 -m json.tool <output.json>", "exit": 0},
+    {"step": 3, "stage": "validate", "cmd": "json_parse_pass", "exit": 0, "validation": "json_parse_pass"},
+    {"step": 4, "stage": "canary", "cmd": "safety_check", "exit": 0, "checks": {"no_hub": true, "no_secret": true, "no_env_scan": true, "no_publish": true, "no_approve": true, "no_solidify": true}}
+  ],
+  "source": "manual_capsule_seed_phase<N>",
+  "visibility": "private",
+  "created_at": "<ISO-8601 timestamp>"
+}

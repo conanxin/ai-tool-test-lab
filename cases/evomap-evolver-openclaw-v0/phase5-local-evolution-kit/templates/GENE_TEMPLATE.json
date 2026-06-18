@@ -1,0 +1,20 @@
+{
+  "type": "Gene",
+  "id": "gene_distilled_<name>-bare-compatible",
+  "category": "optimize",
+  "signals_match": [
+    "<signal_1>",
+    "<signal_2>",
+    "<signal_3>"
+  ],
+  "strategy": [
+    "<strategy_step_1>",
+    "<strategy_step_2>",
+    "<strategy_step_3>"
+  ],
+  "constraints": [
+    "<constraint_1>",
+    "<constraint_2>"
+  ],
+  "summary": "<one-line description of what this gene does>"
+}
