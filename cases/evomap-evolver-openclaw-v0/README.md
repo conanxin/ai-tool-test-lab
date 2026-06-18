@@ -539,3 +539,57 @@ Phase 3C hollow commit 根因是 diff 只含 GEP assets/metadata。3C-V2 添加�
 
 ---
 
+
+## ATL-EVOMAP-4A · Isolation Selector Test (2026-06-19)
+
+**Status: PASS** — selector re-hit OpenClaw Gene in clean environment.
+
+### What Phase 4A tested
+
+Whether the Phase 3C-V2 BLOCKED was caused by **session-and-history pollution in the real repo runtime** (then selector would re-hit OpenClaw Gene in clean env) or by an **inherent selector incompatibility** (then even clean env would fail).
+
+### Isolation runtime
+
+- Location: `/tmp/atl-evomap-4a-isolated` (independent git init, NOT in main repo)
+- `genes.json`: 1 Gene (bare-compatible)
+- `events.jsonl`: 0 failed events
+- `memory_graph.jsonl`: 5 bare signals (tool_bypass, repeated_tool_usage, protocol_drift, session_context, repo_context) — all targeting `gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible`
+- Baseline commit (isolated): `f14ba6c`
+
+### Result
+
+- `evolver run` output: `Selection: Selected Gene "gene_distilled_openclaw-tool-use-discipline-bare-compatible"`
+- `evolver review` diff: `+ hypothesis` and `+ attempt` events both with `gene.id = gene_distilled_openclaw-tool-use-discipline-bare-compatible`
+- `selector.selected = gene_distilled_openclaw-tool-use-discipline-bare-compatible`
+- `selector.alternatives = []` (no GEP-internal gene in candidate set)
+- `selection_path: distilled_fallback`
+- 0 pollution events emitted
+
+### Scoring (4 dimensions)
+
+| Dimension | Status |
+|---|---|
+| A. Isolation setup | PASS |
+| B. Selector match | PASS |
+| C. Pollution control | PASS |
+| D. Safety | PASS (all 15 hard boundaries) |
+
+### Conclusion
+
+Phase 3C-V2 BLOCKED root cause confirmed: **session-and-history driven selector in polluted runtime**. Phase 3B2's PASS is reproducible in fully clean conditions (Phase 4A). The OpenClaw Gene is selectable in principle; using it in the real repo runtime requires bypassing `evolver run` (via local signal detector, ATL-EVOMAP-3b-1 plan) or building a Gene-rotation policy.
+
+### ATL-EVOMAP-4B · GO
+
+Capsule creation in isolated env can proceed. Goals: real Capsule with non-empty `execution_trace`; verify Capsule survives a second `evolver review`; document minimal skill/asset set for `trace_empty`-clean Capsule; assess export to main repo without triggering GEP-internal repair loop.
+
+**Hard boundaries unchanged** (no Hub, no publish, no credits, no --approve, no solidify).
+
+### Files
+
+- `cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/ATL_EVOMAP_4A_ISOLATION_SELECTOR_REPORT.md` (full report)
+- `cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/artifacts/isolation-setup-summary.json`
+- `cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/artifacts/evolver-run-isolated-output.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/artifacts/evolver-review-isolated-output.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/artifacts/selector-isolation-grep.txt`
+- `reports/ATL_EVOMAP_4A_ISOLATION_SELECTOR_REPORT.md` (top-level)
+

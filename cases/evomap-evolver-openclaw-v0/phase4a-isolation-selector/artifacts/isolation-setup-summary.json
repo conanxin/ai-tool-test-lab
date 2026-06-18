@@ -1,0 +1,44 @@
+{
+  "isolated_runtime": "/tmp/atl-evomap-4a-isolated",
+  "gene_count": 1,
+  "capsule_count_initial": 0,
+  "events_initial": 0,
+  "failed_events_initial": 0,
+  "signals_injected": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "target_gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "mutation_target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "pollution_signals_excluded": [
+    "consecutive_failure_streak_3",
+    "user_feature_request",
+    "consecutive_failure"
+  ],
+  "hub": "disabled",
+  "publish": "disabled",
+  "credits_consumed": 0,
+  "validator_enabled": false,
+  "approver_executed": false,
+  "solidify_executed": false,
+  "loop_used": false,
+  "atp_autobuy": "off",
+  "selection_path": "distilled_fallback",
+  "selected_gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "selector_signals_observed": [
+    "memory_missing"
+  ],
+  "selector_reason": [
+    "signals match gene.signals_match",
+    "signals: memory_missing",
+    "drift_intensity: 1.000",
+    "selection_path: distilled_fallback"
+  ],
+  "evolution_cycles_completed_in_isolation": 1,
+  "memory_size_bytes_after_run": 1583,
+  "git_tracked_in_isolation": true,
+  "isolation_commit": "f14ba6c"
+}
