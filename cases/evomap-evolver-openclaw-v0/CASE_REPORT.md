@@ -1,5 +1,5 @@
 # CASE_REPORT.md — ATL-EVOMAP-1
-# EvoMap Evolver — OpenClaw Local Self-EEvolution Smoke Test v0
+# EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
 
 **Case:** evomap-evolver-openclaw-v0
 **Phase:** ATL-EVOMAP-1 local offline smoke test

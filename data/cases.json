@@ -17,14 +17,29 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-1 local offline smoke test",
-      "status": "local offline smoke completed",
+      "phase": "ATL-EVOMAP-2 OpenClaw session-context test",
+      "status": "openclaw session-context test partial",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "Evolver v1.89.14 安装成功；evolver run 本地执行成功（GEP Cycle #0001 SUCCESS）；无 Hub 连接确认（no_hub_url）；ATP-AutoDeliver 后台进程存在但无 Hub 时不消耗资源；四个测试场景（A.npm test/B.proxy/C.systemd/D.cron）全部 FAIL — 根因：Evolver 是自进化引擎（非通用失败日志分析器），不会直接读取 arbitrary memory/*.log 文件生成修复建议；Phase 2 建议：在真实 OpenClaw session 内注入 evolver，而非用 memory/*.log。",
+      "summary": "ATL-EVOMAP-2 在真实 OpenClaw session 内执行 evolver run+review。evolver 成功扫描了 OpenClaw session context（cwd, transcript, system_health, recent tool calls）并在 evolver review 中看到我刚做的 typo 修正（Self-EEvolution → Self-Evolution）；MemoryGraphEvent 记录了 hypothesis+attempt，pending run run_1781789328191 未执行 solidify；但提取的 signals 过于泛化（memory_missing|user_missing），选中的 Gene 是 Vercel env-vars（gene_distilled_s2g-env-vars）与 OpenClaw session 零关系，没有正式 Capsule/EvolutionEvent 生成。安全边界全部 PASS：no Hub / no publish / no validator / no --loop / no credits / no secrets。结论：Evolver 看得见 session 但 signal 泛化，需 Phase 3 skill distillation 建立 OpenClaw-specific Gene 库。",
       "updated_at": "2026-06-18",
-      "final_status": "LOCAL_OFFLINE_SMOKE_COMPLETED"
+      "final_status": "SESSION_CONTEXT_TEST_PARTIAL",
+      "phase_history": [
+        {
+          "phase": "ATL-EVOMAP-1",
+          "status": "local offline smoke completed",
+          "result": "PARTIAL",
+          "commit": "d8fc23d"
+        },
+        {
+          "phase": "ATL-EVOMAP-2",
+          "status": "openclaw session-context test partial",
+          "result": "PARTIAL",
+          "pending_run": "run_1781789328191",
+          "notes": "evolver scanned session context; signals generic; Gene=Vercel env-vars"
+        }
+      ]
     }
   ]
 }

@@ -39,3 +39,9 @@ build/
 
 # Reports may contain local paths — review before committing
 reports/*.local.md
+
+# Evolver runtime state (do NOT commit GEP store / memory graph at repo root)
+# These are generated when `evolver run` is invoked from repo root.
+# Fixture copies in cases/*/fixtures/*/.evolver/ ARE intentionally committed as test artifacts.
+.evolver/
+memory/

@@ -1,0 +1,60 @@
+
+============================================================
+[Review] Pending evolution run: run_1781789328191
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_s2g-env-vars
+  Category: optimize
+  Summary:  Vercel environment variable expert guidance. Use when working with .env files, vercel env commands, OIDC tokens, or managing environment-specific configuration.
+  Strategy:
+    1. Identify the dominant trigger signals from the Skill description.
+    2. Apply the smallest targeted change that satisfies the Skill workflow.
+    3. Run the Skill validation commands and abort if any fails.
+
+--- Signals ---
+  - memory_missing
+  - user_missing
+
+--- Mutation ---
+  Category:   optimize
+  Risk Level: low
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Unstaged Changes ===
+diff --git a/cases/evomap-evolver-openclaw-v0/CASE_REPORT.md b/cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+index 9f7008f..bcd0c10 100644
+--- a/cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
++++ b/cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+@@ -1,5 +1,5 @@
+ # CASE_REPORT.md — ATL-EVOMAP-1
+-# EvoMap Evolver — OpenClaw Local Self-EEvolution Smoke Test v0
++# EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0
+ 
+ **Case:** evomap-evolver-openclaw-v0
+ **Phase:** ATL-EVOMAP-1 local offline smoke test
+
+=== Untracked Files ===
+.evolver/gep/candidates.jsonl
+.evolver/gep/capsules.json
+.evolver/gep/events.jsonl
+.evolver/gep/failed_capsules.json
+.evolver/gep/genes.json
+.evolver/gep/genes.jsonl
+cases/evomap-evolver-openclaw-v0/phase2-openclaw-session/artifacts/evolver-review-openclaw-session-output.txt
+cases/evomap-evolver-openclaw-v0/phase2-openclaw-session/artifacts/evolver-run-openclaw-session-output.txt
+memory/evolution/evolution_solidify_state.json
+memory/evolution/memory_graph.jsonl
+memory/evolution/memory_graph_state.json
+memory/evolution/personality_state.json
+memory/evolution/question_generator_state.json
+memory/evolver_update_check.json
+
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

@@ -20,10 +20,10 @@
 
 ## 当前状态
 
-- **阶段**：ATL-EVOMAP-1 + ATL-RESUME-2C — Castform vendor fix confirmed + ATL-EVOMAP-1 EvoMap Evolver smoke test completed · Castform final_status `VENDOR_FIX_CONFIRMED_BY_RETEST`; EvoMap Evolver final_status `LOCAL_OFFLINE_SMOKE_COMPLETED`
-- **目标**：ATL-EVOMAP-1 收口 — ATL-EVOMAP-1 EvoMap Evolver smoke test 已完成（local offline smoke completed）；Evolver v1.89.14 安装成功，evolver run 本地执行成功（GEP Cycle #0001 SUCCESS），无 Hub 连接（no_hub_url），四个测试场景全部 FAIL（工具设计不匹配）；Phase 2 建议：在真实 OpenClaw session 内注入 evolver，而非 memory/*.log；Castform ATL-RESUME-2C 已完成，无需进一步操作
+- **阶段**：ATL-EVOMAP-2 + ATL-EVOMAP-1 + ATL-RESUME-2C — Castform vendor fix confirmed + EvoMap Phase 1 smoke + Phase 2 session-context test · Castform final_status `VENDOR_FIX_CONFIRMED_BY_RETEST`; EvoMap Phase 1 `LOCAL_OFFLINE_SMOKE_COMPLETED`; EvoMap Phase 2 `SESSION_CONTEXT_TEST_PARTIAL`
+- **目标**：ATL-EVOMAP-2 收口 — ATL-EVOMAP-2 EvoMap Evolver OpenClaw session-context test 已完成（partial）；Evolver 真的扫描了 OpenClaw session context（cwd, transcript, system_health, recent tool calls）并在 review 中看到我 session 里的 typo 修正；但 signal 提取泛化（memory_missing|user_missing）、Gene 选中 Vercel env-vars（与 OpenClaw 零关系）、无 Capsule 生成；Phase 3 建议：`evolver distill` 建立 OpenClaw-specific Gene 库；Castform ATL-RESUME-2C 已完成；ATL-EVOMAP-1 已完成（Phase 1 local smoke 4 场景 FAIL 是设计不匹配）
 - **第一个案例**：[Castform — Hermes Phase Closer v0](cases/castform-hermes-phase-closer-v0/) — VENDOR_FIX_CONFIRMED_BY_RETEST; ATL-RESUME-2C 完成
-- **第二个案例**：[EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0](cases/evomap-evolver-openclaw-v0/) — LOCAL_OFFLINE_SMOKE_COMPLETED; evolver v1.89.14 local run SUCCESS · 无 Hub · 零 credits · 四场景 FAIL（设计不匹配，非工具 bug）; Phase 2 建议在真实 OpenClaw session 内测试 evolver 自进化能力
+- **第二个案例**：[EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0](cases/evomap-evolver-openclaw-v0/) — Phase 1 `LOCAL_OFFLINE_SMOKE_COMPLETED` + Phase 2 `SESSION_CONTEXT_TEST_PARTIAL`;  Phase 1 结论：evolver 不是通用 log analyzer；Phase 2 结论：evolver 能扫描 OpenClaw session 但 signal 泛化，需 Phase 3 skill distillation
 - **AI Tool Test Lab published**: `https://conanxin.github.io/ai-tool-test-lab/` (HTTP/2 200)
 - **Castform case published**: `https://conanxin.github.io/ai-tool-test-lab/cases/castform-hermes-phase-closer-v0/` (HTTP/2 200)
 - **AI Tool Test Lab 已成功发布；Castform case 已成功发布** — 详见 [cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md](cases/castform-hermes-phase-closer-v0/CASE_CLOSEOUT.md) + [reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md](reports/ATL_FINAL_CASTFORM_CASE_CLOSEOUT_REPORT.md)

@@ -191,3 +191,73 @@ cases/evomap-evolver-openclaw-v0/
         ├── evolution/               (evolver 生成)
         └── evolver_update_check.json  (仅时间戳)
 ```
+
+---
+
+## Phase 2: OpenClaw Session-Context Test (ATL-EVOMAP-2)
+
+**Status:** openclaw session-context test partial
+**报告:** [phase2-openclaw-session/ATL_EVOMAP_2_OPENCLAW_SESSION_REPORT.md](phase2-openclaw-session/ATL_EVOMAP_2_OPENCLAW_SESSION_REPORT.md)
+
+### Phase 2 目标
+
+不在“构造任意失败日志”期望 evolver 分析，而是让 evolver 扫描真实 OpenClaw session context（cwd、system_health、session_transcript、recent tool calls）。
+
+### Phase 2 关键发现
+
+- ✅ evolver run 成功 — 扫描了 OpenClaw 真实 session context
+- ✅ evolver review 出现 pending run（`run_1781789328191`）
+- ✅ MemoryGraphEvent 记录了我的 session transcript：my tool calls (exec/edit/read) + reasoning 文本
+- ✅ evolver review 看到了我的 typo 修正（Self-EEvolution → Self-Evolution）
+- ✅ 安全边界全部 PASS：no Hub / no publish / no auto-publish / no validator / no --loop / no credits / no secrets
+
+### Phase 2 关键限制
+
+- ⚠️ Signals 过于泛化：`memory_missing|user_missing`（来自 repo 缺 MEMORY.md/USER.md），与 ATL-EVOMAP-2 测试目标完全无关
+- ⚠️ 选中的 Gene 是 `gene_distilled_s2g-env-vars`（Vercel env-vars skill 蒸馏产物），与 OpenClaw session 零关系
+- ⚠️ 没有正式 Capsule / EvolutionEvent 生成
+- ⚠️ 未执行 `solidify`（遵循 hard boundary）
+
+### Phase 2 评分
+
+| 维度 | 评分 |
+|------|------|
+| A. Session context 可见性 | PARTIAL — 看见 session，但 signal 泛化 |
+| B. Gene/Capsule 生成 | PARTIAL — MemoryGraphEvent 有，Gene/Capsule 无 |
+| C. 本地安全边界 | PASS — 全部 hard boundary 遵守 |
+| D. 对 OpenClaw 实际价值 | PARTIAL — 可扫描但需 OpenClaw-specific Gene 库 |
+
+### Phase 2 结论
+
+> Evolver 能看 OpenClaw session（capture cwd, transcript, system_health, recent tool calls），
+> 但 signal 提取泛化，Gene 来自 Vercel env-vars 不相关。
+> 要在 OpenClaw 真正使用 evolver，需先建立 OpenClaw-specific Gene 库（Phase 3: skill distillation）。
+
+### Phase 2 Artifact 路径
+
+```
+phase2-openclaw-session/
+├── ATL_EVOMAP_2_OPENCLAW_SESSION_REPORT.md
+└── artifacts/
+    ├── evolver-run-openclaw-session-output.txt
+    ├── evolver-review-openclaw-session-output.txt
+    └── evolver-generated-files.txt
+```
+
+### Phase 2 下一步
+
+- **Phase 3a:** `evolver distill` 把 Hermes 真实失败固化成 OpenClaw-specific Gene
+- **Phase 3b:** 配置 OpenClaw-specific signal detector（识别 tool_bypass:exec-on-grep、protocol_drift:telegram-pending）
+- **Phase 3c:** `evolver review --approve` 真实固化（验证跨 session 复用）
+- **Phase 3d:** `evolver fetch --dry-run` 只读 Hub 测试
+
+**暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
+
+---
+
+## 阶段总览
+
+| 阶段 | 状态 | 结论 |
+|------|------|------|
+| **ATL-EVOMAP-1** | local offline smoke completed | PARTIAL — evolver 成功运行，4 个 arbitrary log 场景全部 FAIL（evolver 不是通用 log analyzer） |
+| **ATL-EVOMAP-2** | openclaw session-context test partial | PARTIAL — evolver 能扫描 session context，但 signal 提取泛化，需 Phase 3 建立 OpenClaw-specific Gene 库 |

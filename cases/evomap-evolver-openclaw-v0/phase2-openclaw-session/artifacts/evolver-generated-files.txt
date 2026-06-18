@@ -1,0 +1,11 @@
+.evolver/gep/candidates.jsonl
+.evolver/gep/capsules.json
+.evolver/gep/events.jsonl
+.evolver/gep/failed_capsules.json
+.evolver/gep/genes.json
+.evolver/gep/genes.jsonl
+memory/evolution/evolution_solidify_state.json
+memory/evolution/memory_graph.jsonl
+memory/evolution/memory_graph_state.json
+memory/evolution/personality_state.json
+memory/evolution/question_generator_state.json
