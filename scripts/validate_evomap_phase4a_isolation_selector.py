@@ -150,22 +150,29 @@ def main() -> int:
                 _check("evomap case present in cases.json", False)
             else:
                 _check("evomap case present in cases.json", True)
-                _check(
-                    "cases.json phase contains ATL-EVOMAP-4A",
-                    "ATL-EVOMAP-4A" in case.get("phase", ""),
-                    case.get("phase", ""),
+                # Phase 4A may have been superseded (e.g. by 4B), so accept
+                # either current phase == 4A, or phase_history having 4A entry.
+                current_phase = case.get("phase", "")
+                hist = case.get("phase_history", [])
+                phase_4a_hist = next(
+                    (e for e in hist if e.get("phase") == "ATL-EVOMAP-4A"),
+                    None,
                 )
                 _check(
-                    "cases.json status contains 'isolation selector completed'",
-                    "isolation selector completed" in case.get("status", ""),
+                    "cases.json phase is ATL-EVOMAP-4A (current or historical)",
+                    "ATL-EVOMAP-4A" in current_phase or phase_4a_hist is not None,
+                    f"current={current_phase!r}, hist_entry={phase_4a_hist is not None}",
+                )
+                _check(
+                    "cases.json status records 4A 'isolation selector completed' (current or historical)",
+                    "isolation selector completed" in case.get("status", "")
+                    or (phase_4a_hist is not None
+                        and "isolation selector completed" in phase_4a_hist.get("status", "")),
                     case.get("status", ""),
                 )
-                # phase_history should have ATL-EVOMAP-4A entry
-                hist = case.get("phase_history", [])
-                has_4a = any(e.get("phase") == "ATL-EVOMAP-4A" for e in hist)
                 _check(
                     "cases.json phase_history has ATL-EVOMAP-4A entry",
-                    has_4a,
+                    phase_4a_hist is not None,
                 )
         except Exception as e:
             _check("cases.json valid JSON", False, str(e))

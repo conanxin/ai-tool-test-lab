@@ -117,6 +117,7 @@ def check_json_valid(path: Path, label: str) -> bool:
 
 
 def check_case_phase(path: Path, slug: str, expected_phase_substring: str) -> bool:
+    """Pass if case has been at this phase, either as current phase or in phase_history."""
     try:
         with open(path, "r", encoding="utf-8", errors="replace") as f:
             data = json.load(f)
@@ -126,7 +127,13 @@ def check_case_phase(path: Path, slug: str, expected_phase_substring: str) -> bo
                 if expected_phase_substring.lower() in phase.lower():
                     print(green(f"Case '{slug}' phase contains '{expected_phase_substring}': {phase}"))
                     return True
-                print(red(f"Case '{slug}' phase does NOT contain '{expected_phase_substring}': {phase}"))
+                # Also accept a phase_history entry (case may have moved on)
+                hist = case.get("phase_history", [])
+                for h in hist:
+                    if h.get("phase", "").lower() == expected_phase_substring.lower():
+                        print(green(f"Case '{slug}' phase_history has '{expected_phase_substring}' (current={phase!r})"))
+                        return True
+                print(red(f"Case '{slug}' phase (or history) does NOT contain '{expected_phase_substring}': current={phase!r}"))
                 return False
         print(red(f"Slug '{slug}' not found in cases.json"))
         return False
