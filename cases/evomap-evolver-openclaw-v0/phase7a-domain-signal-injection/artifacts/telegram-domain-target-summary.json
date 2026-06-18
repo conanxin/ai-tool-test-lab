@@ -1,0 +1,47 @@
+{
+  "target_runtime": "/tmp/atl-evomap-7a-telegram-domain-target",
+  "is_git_repo": true,
+  "signal_injection_mode": "generic_plus_domain_from_bundle",
+  "memory_graph_lines": 27,
+  "memory_graph_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context",
+    "telegram_failure",
+    "message_router_failure",
+    "proxy_mismatch",
+    "proxy_missing",
+    "delivery_terminal_missing",
+    "sendmessage_timeout",
+    "sendvoice_unconfirmed",
+    "retry_consumed",
+    "smoke_not_confirmed",
+    "session_context",
+    "repo_context",
+    "telegram_failure:delivery-timeout",
+    "message_router_failure:no-terminal-result",
+    "proxy_mismatch:sendmessage-sendvoice",
+    "proxy_missing:sendmessage",
+    "delivery_terminal_missing:telegram",
+    "sendmessage_timeout:telegram-response",
+    "sendvoice_unconfirmed:delivery",
+    "retry_consumed:no-terminal-event",
+    "smoke_not_confirmed:telegram",
+    "session_context:hermes",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "memory_graph_origins": [
+    "evomap_apply_bundle:domain_from_bundle",
+    "openclaw_signal_detector"
+  ],
+  "gene_count": 1,
+  "capsule_count": 1,
+  "gene_ids": [
+    "gene_distilled_telegram-message-router-failure"
+  ],
+  "capsule_ids": [
+    "capsule_telegram_message_router_failure_phase6b"
+  ]
+}

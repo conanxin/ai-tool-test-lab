@@ -1,0 +1,34 @@
+
+============================================================
+[Review] Pending evolution run: run_1781816170344
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_hermes-systemd-service-recovery
+  Category: repair
+  Summary:  Hermes systemd user-service recovery: offline fixture parser identifies service_failed / missing_env_var / expected_port / dropin_env_misconfigured shape; recommends deterministic systemctl + journalctl + show-environment + drop-in + port + Telegram smoke check order; never reads .env, never restarts the real service, never persists secrets. Includes both qualified (systemd_failure:user-service) and bare (systemd_failure) signal forms for evolver scanner normalization.
+  Strategy:
+    1. Run offline parser scripts/hermes_systemd_recovery_fixture.py against the failure fixture to confirm the failure shape (no systemctl, no journalctl, no env scan).
+    2. Inspect parsed JSON: confirm service_failed=true, missing_env_var=MODEL_PROVIDER (or expected env), expected_port set, port_not_listening=true, dropin_env_misconfigured=true.
+    3. Recommend deterministic check order: systemctl --user status, journalctl --user -u, systemctl --user show-environment, drop-in Environment lines, expected port, Telegram smoke.
+    4. Never print or persist secrets, API keys, tokens, cookies, or Authorization headers in any recovery step.
+    5. Never restart the real hermes-gateway.service from a recipe script; always have a human run the recovery commands on the real host.
+    6. Re-run the parser + inspect/validate/apply tool chain after each fixture or Gene change; never bypass the validators.
+
+--- Signals ---
+  - tool_bypass
+
+--- Mutation ---
+  Category:   innovate
+  Risk Level: medium
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+  (no changes detected)
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

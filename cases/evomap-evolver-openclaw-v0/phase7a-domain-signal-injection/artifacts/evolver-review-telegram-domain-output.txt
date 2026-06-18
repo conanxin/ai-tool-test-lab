@@ -1,0 +1,34 @@
+
+============================================================
+[Review] Pending evolution run: run_1781816178461
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_telegram-message-router-failure
+  Category: repair
+  Summary:  Hermes Telegram message router recovery discipline for proxy mismatch, sendMessage timeout, sendVoice delivery uncertainty, and missing terminal delivery state.
+  Strategy:
+    1. Start by confirming gateway health and router load state without printing credentials.
+    2. Separate sendMessage and sendVoice delivery paths before changing shared proxy code.
+    3. Verify that both delivery paths inherit the same proxy configuration.
+    4. Treat consumed retry without terminal delivery event as a router failure, not as success.
+    5. Run only redacted fixture-mode smoke checks unless the user explicitly authorizes a real message.
+    6. Record evidence as delivery states and error categories, never as credentials or recipient identifiers.
+
+--- Signals ---
+  - tool_bypass
+
+--- Mutation ---
+  Category:   innovate
+  Risk Level: medium
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+  (no changes detected)
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

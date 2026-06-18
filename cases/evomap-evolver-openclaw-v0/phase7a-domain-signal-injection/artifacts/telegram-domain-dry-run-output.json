@@ -1,0 +1,236 @@
+{
+  "ok": true,
+  "mode": "dry-run",
+  "plan": {
+    "target": "/tmp/atl-evomap-7a-telegram-domain-target",
+    "is_git_repo": true,
+    "gene_id": "gene_distilled_telegram-message-router-failure",
+    "capsule_id": "capsule_telegram_message_router_failure_phase6b",
+    "signal_injection_mode": "generic_plus_domain_from_bundle",
+    "generic_signals": [
+      "tool_bypass",
+      "repeated_tool_usage",
+      "protocol_drift",
+      "session_context",
+      "repo_context"
+    ],
+    "domain_signals": [
+      "telegram_failure",
+      "message_router_failure",
+      "proxy_mismatch",
+      "proxy_missing",
+      "delivery_terminal_missing",
+      "sendmessage_timeout",
+      "sendvoice_unconfirmed",
+      "retry_consumed",
+      "smoke_not_confirmed",
+      "session_context",
+      "repo_context",
+      "telegram_failure:delivery-timeout",
+      "message_router_failure:no-terminal-result",
+      "proxy_mismatch:sendmessage-sendvoice",
+      "proxy_missing:sendmessage",
+      "delivery_terminal_missing:telegram",
+      "sendmessage_timeout:telegram-response",
+      "sendvoice_unconfirmed:delivery",
+      "retry_consumed:no-terminal-event",
+      "smoke_not_confirmed:telegram",
+      "session_context:hermes",
+      "repo_context:ai-tool-test-lab"
+    ],
+    "domain_signals_rejected": [],
+    "writes": {
+      "/tmp/atl-evomap-7a-telegram-domain-target/.evolver/gep/genes.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "genes": [
+          {
+            "type": "Gene",
+            "id": "gene_distilled_telegram-message-router-failure",
+            "category": "repair",
+            "signals_match": [
+              "telegram_failure",
+              "message_router_failure",
+              "proxy_mismatch",
+              "proxy_missing",
+              "delivery_terminal_missing",
+              "sendmessage_timeout",
+              "sendvoice_unconfirmed",
+              "retry_consumed",
+              "smoke_not_confirmed",
+              "session_context",
+              "repo_context",
+              "telegram_failure:delivery-timeout",
+              "message_router_failure:no-terminal-result",
+              "proxy_mismatch:sendmessage-sendvoice",
+              "proxy_missing:sendmessage",
+              "delivery_terminal_missing:telegram",
+              "sendmessage_timeout:telegram-response",
+              "sendvoice_unconfirmed:delivery",
+              "retry_consumed:no-terminal-event",
+              "smoke_not_confirmed:telegram",
+              "session_context:hermes",
+              "repo_context:ai-tool-test-lab"
+            ],
+            "strategy": [
+              "Start by confirming gateway health and router load state without printing credentials.",
+              "Separate sendMessage and sendVoice delivery paths before changing shared proxy code.",
+              "Verify that both delivery paths inherit the same proxy configuration.",
+              "Treat consumed retry without terminal delivery event as a router failure, not as success.",
+              "Run only redacted fixture-mode smoke checks unless the user explicitly authorizes a real message.",
+              "Record evidence as delivery states and error categories, never as credentials or recipient identifiers."
+            ],
+            "constraints": {
+              "max_files": 8,
+              "forbidden_paths": [
+                ".git",
+                "node_modules",
+                ".evolver",
+                "memory",
+                ".env",
+                "real_runtime_root"
+              ],
+              "forbidden_actions": [
+                "print_credential",
+                "print_recipient_identifier",
+                "call_real_telegram_api",
+                "run_curl_or_wget",
+                "send_real_message",
+                "commit_env_file",
+                "mutate_real_router_config_without_user_instruction"
+              ]
+            },
+            "summary": "Hermes Telegram message router recovery discipline for proxy mismatch, sendMessage timeout, sendVoice delivery uncertainty, and missing terminal delivery state."
+          }
+        ]
+      },
+      "/tmp/atl-evomap-7a-telegram-domain-target/.evolver/gep/capsules.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "capsules": [
+          {
+            "schema_version": "1.6.0",
+            "type": "Capsule",
+            "id": "capsule_telegram_message_router_failure_phase6b",
+            "gene": "gene_distilled_telegram-message-router-failure",
+            "status": "success",
+            "confidence": 0.84,
+            "visibility": "private",
+            "source": "manual_capsule_seed_phase6b",
+            "created_at": "2026-06-19T04:35:00Z",
+            "trigger": [
+              "telegram_failure",
+              "message_router_failure",
+              "proxy_mismatch",
+              "delivery_terminal_missing",
+              "sendmessage_timeout",
+              "smoke_not_confirmed"
+            ],
+            "blast_radius": {
+              "files": 0,
+              "lines": 0
+            },
+            "execution_trace": [
+              {
+                "stage": "build",
+                "command": "python3 scripts/telegram_router_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/fixtures/telegram-router-failure-sample.txt",
+                "exit_code": 0,
+                "result": "fixture_parsed_with_12_of_12_signals",
+                "output_summary": {
+                  "ok": true,
+                  "all_signals_present": true,
+                  "checks_passed": 12,
+                  "checks_total": 12
+                }
+              },
+              {
+                "stage": "validate",
+                "command": "python3 -m json.tool cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/artifacts/telegram-router-fixture-output.json",
+                "exit_code": 0,
+                "result": "json_parse_pass"
+              },
+              {
+                "stage": "validate",
+                "command": "assert delivery_terminal_missing == true and proxy_mismatch == true and sendmessage_timeout == true",
+                "exit_code": 0,
+                "result": "fixture_detected_expected_router_failure_shape"
+              },
+              {
+                "stage": "canary",
+                "command": "safety_check",
+                "exit_code": 0,
+                "result": {
+                  "no_real_telegram_call": true,
+                  "no_network_call": true,
+                  "no_curl_or_wget": true,
+                  "no_env_scan": true,
+                  "no_credentials": true,
+                  "no_recipient_identifier": true,
+                  "no_hub": true,
+                  "no_publish": true,
+                  "no_approve": true,
+                  "no_solidify": true
+                }
+              }
+            ],
+            "summary": "Offline, local-only, no-network Capsule for the Telegram message router failure shape. Reproducible from the bundled fixture without touching the real Hermes gateway or any Telegram credentials."
+          }
+        ]
+      },
+      "/tmp/atl-evomap-7a-telegram-domain-target/memory/evolution/memory_graph.jsonl": {
+        "action": "append",
+        "lines": [
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700001.0, \"signal\": \"tool_bypass\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.85, \"context\": \"Detected exec invocation without prior read on .md file\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700002.0, \"signal\": \"repeated_tool_usage\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.7, \"context\": \"Same read+edit+search pattern repeated 3x\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700003.0, \"signal\": \"protocol_drift\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.9, \"context\": \"Detected sed -i usage forbidden by OpenClaw protocol\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700004.0, \"signal\": \"session_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.6, \"context\": \"Session has multiple file ops requiring tool discipline\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700005.0, \"signal\": \"repo_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.65, \"context\": \"Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700200.0, \"signal\": \"telegram_failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700201.0, \"signal\": \"message_router_failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700202.0, \"signal\": \"proxy_mismatch\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700203.0, \"signal\": \"proxy_missing\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700204.0, \"signal\": \"delivery_terminal_missing\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700205.0, \"signal\": \"sendmessage_timeout\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700206.0, \"signal\": \"sendvoice_unconfirmed\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700207.0, \"signal\": \"retry_consumed\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700208.0, \"signal\": \"smoke_not_confirmed\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700209.0, \"signal\": \"session_context\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700210.0, \"signal\": \"repo_context\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700211.0, \"signal\": \"telegram_failure:delivery-timeout\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700212.0, \"signal\": \"message_router_failure:no-terminal-result\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700213.0, \"signal\": \"proxy_mismatch:sendmessage-sendvoice\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700214.0, \"signal\": \"proxy_missing:sendmessage\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700215.0, \"signal\": \"delivery_terminal_missing:telegram\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700216.0, \"signal\": \"sendmessage_timeout:telegram-response\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700217.0, \"signal\": \"sendvoice_unconfirmed:delivery\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700218.0, \"signal\": \"retry_consumed:no-terminal-event\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700219.0, \"signal\": \"smoke_not_confirmed:telegram\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700220.0, \"signal\": \"session_context:hermes\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700221.0, \"signal\": \"repo_context:ai-tool-test-lab\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)\", \"mutation\": {\"target\": \"gene:gene_distilled_telegram-message-router-failure\", \"action\": \"select\"}}"
+        ]
+      },
+      "/tmp/atl-evomap-7a-telegram-domain-target/.evolver/gep/events.jsonl": {
+        "action": "reset",
+        "content": ""
+      },
+      "/tmp/atl-evomap-7a-telegram-domain-target/.evolver/gep/failed_capsules.json": {
+        "action": "reset",
+        "content": "[]\n"
+      },
+      "/tmp/atl-evomap-7a-telegram-domain-target/.evolver/gep/candidates.jsonl": {
+        "action": "reset",
+        "content": ""
+      }
+    },
+    "summary": {
+      "existing_gene_count": 0,
+      "existing_capsule_count": 0,
+      "new_gene_count": 1,
+      "new_capsule_count": 1,
+      "memory_graph_signals_added": 27,
+      "memory_graph_generic_signals": 5,
+      "memory_graph_domain_signals": 22,
+      "memory_graph_domain_rejected": 0
+    }
+  }
+}

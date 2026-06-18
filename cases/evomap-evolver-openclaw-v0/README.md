@@ -830,6 +830,7 @@ All 16 boundaries preserved by **tool design**, not just by careful usage:
 | 5 | Can the proven pathway be productized? | PASS (kit + 3 tools + 3 templates + 4-step recipe) |
 | **6A** | **Can the kit produce a 2nd bundle (repair category) for Hermes systemd recovery?** | **PASS (Hermes Gene + Capsule + bundle, 4-step trace, isolated target, evolver run+review smoke, no Hub / no publish / no approve / no solidify)** |
 | **6B** | **Can the kit produce a 3rd bundle (repair category) for Telegram message router failure?** | **PASS (Telegram Gene + Capsule + bundle, 4-step trace, isolated target, evolver run+review smoke, no Hub / no publish / no approve / no solidify, 12/12 fixture signals detected, 10/10 canary booleans true)** |
+| **7A** | **Can the kit's apply tool inject domain-specific signals from any bundle (without breaking the Phase 5 generic baseline)?** | **PASS (--inject-signals-from added; default generic-only preserved 5/5; Hermes 5+12=17, Telegram 5+22=27; 0 dangerous signals; evolver smoke confirms domain signals reach selector without approve/solidify)** |
 
 **Phase 5 marks the end of the ATL-EVOMAP exploration series.** The kit is now a durable asset that can be referenced for future OpenClaw / Hermes / Codex local evolution work.
 
@@ -924,3 +925,61 @@ capsule_ids: ["capsule_telegram_message_router_failure_phase6b"]
 - Validator: `scripts/validate_evomap_phase6b_telegram_router_bundle.py`
 
 **Phase 6A → Phase 6B · The kit now supports 3rd canonical bundle + 2nd repair-category bundle (still no Hub, no publish, no credits, no approve, no solidify).** The 5-tool kit has not changed; only the bundle domain changed (systemd → telegram router). The kit is now domain-agnostic for offline repair work.
+
+### ATL-EVOMAP-7A · Domain-Specific Signal Injection
+
+**Status:** Domain signal injection completed (PASS)
+
+**Goal:** Enhance the Phase 5 apply tool so it can extract domain-specific signals from any bundle (Hermes systemd, Telegram router, future Codex / browser-control bundles) and write them into `memory/evolution/memory_graph.jsonl`, without breaking the Phase 5 generic baseline. After this phase the selector has more than `distilled_fallback` to work with on real bundles.
+
+**New CLI flag:** `--inject-signals-from <bundle-or-summary.json>`
+
+- **Without it:** tool behaves exactly as before — 5 generic bare signals only (`signal_injection_mode: generic_only`).
+- **With it:** tool reads `bundle.gene.signals_match` + `bundle.capsule.trigger`, filters them through a strict validator, and writes 5 generic + N domain signals (`signal_injection_mode: generic_plus_domain_from_bundle`).
+
+**Filter engine (enforced inside `plan_apply`):**
+
+1. **Allowed chars:** `^[A-Za-z0-9_:\-\.]{1,120}$` (namespaced names like `missing_env_var:MODEL_PROVIDER` and `proxy_mismatch:sendmessage-sendvoice` are allowed).
+2. **Dangerous signals denylist (21 entries):** `user_feature_request`, `consecutive_failure`, `consecutive_failure_streak`, `high_failure_ratio`, `stable_success_plateau`, `evolution_saturation`, `explore_opportunity`, `memory_missing`, `hub_search_miss_with_problem`, `hub_search_miss`, `hub_unavailable`, `no_hub_url`, `no_hub_match`, `validation_skipped`, `approval_skipped`, `publish_skipped`, `credits_zero`, `atp_autobuy_off`, `loop_disabled`, `validator_disabled`, `dry_run_default`. Rejected.
+3. **Dangerous substrings (13 entries):** `token`, `secret`, `cookie`, `authorization`, `auth`, `private_key`, `api_key`, `apikey`, `bearer`, `password`, `passwd`, `ssh-rsa`, `ssh-ed25519`. Rejected.
+4. **Credential regex (6 patterns, case-insensitive):** Telegram bot token shape (`\d{6,12}:[A-Za-z0-9_-]{20,}`), HTTP `Authorization: …`, `sk-… / sk_live_… / ghp_… / github_pat_…`, JWT, `-----BEGIN …PRIVATE KEY-----`, 12+ digit pure-digit recipient-like IDs. Rejected.
+
+Domain signal `origin` is set to `evomap_apply_bundle:domain_from_bundle` so consumers can distinguish them from the legacy `openclaw_signal_detector` origin.
+
+**Self-tests (regression on all 3 Phase 5/6A/6B canonical bundles + 2 fresh targets):**
+
+| Target bundle | Mode | Generic | Domain | Total | Required domain present? | Rejected |
+|--|--|--|--|--|--|--|
+| Phase 5 OpenClaw tool-use discipline (no flag) | `generic_only` | 5 | 0 | 5 | n/a | 0 |
+| Phase 6A Hermes systemd | `generic_plus_domain_from_bundle` | 5 | 12 | 17 | `systemd_failure`, `service_recovery`, `missing_env_var`, `missing_env_var:MODEL_PROVIDER`, `port_not_listening`, `dropin_env_misconfigured` ✓ | 0 |
+| Phase 6B Telegram router | `generic_plus_domain_from_bundle` | 5 | 22 | 27 | `telegram_failure`, `message_router_failure`, `proxy_mismatch`, `delivery_terminal_missing`, `sendmessage_timeout`, `retry_consumed`, `smoke_not_confirmed`, `proxy_mismatch:sendmessage-sendvoice` ✓ | 0 |
+
+All Phase 5/6A/6B validators still ALL CHECKS PASSED (no regression in default mode).
+
+**Evolver smoke (Hermes + Telegram domain targets):**
+
+- Hermes target: `Selected Gene "gene_distilled_hermes-systemd-service-recovery"`, `[SearchFirst] No hub match (reason: no_hub_url)`, no `--approve`, no `solidify`. memory_graph 17 → 20 lines after evolver run cycles.
+- Telegram target: `Selected Gene "gene_distilled_telegram-message-router-failure"`, `[SearchFirst] No hub match (reason: no_hub_url)`, no `--approve`, no `solidify`. memory_graph 27 → 30 lines after evolver run cycles. Domain signals `telegram_failure`, `telegram_failure:delivery-timeout`, `delivery_terminal_missing:telegram`, `sendmessage_timeout:telegram-response` were **actually visible in the evolver run's signal-matching output** — proving the new domain signals reach the selector, not just sit in the file.
+
+**On-disk target verify:**
+
+```
+default: /tmp/atl-evomap-7a-default-apply-target  → 1 gene, 1 capsule, memory_graph_lines=5
+hermes:  /tmp/atl-evomap-7a-hermes-domain-target  → 1 gene, 1 capsule, memory_graph_lines=17 (5+12)
+telegram:/tmp/atl-evomap-7a-telegram-domain-target→ 1 gene, 1 capsule, memory_graph_lines=27 (5+22)
+```
+
+**Files:**
+
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase7a-domain-signal-injection/` (README, REPORT, 13 artifacts)
+- Top-level report: `reports/ATL_EVOMAP_7A_DOMAIN_SIGNAL_INJECTION_REPORT.md`
+- Modified tool: `scripts/evomap_apply_bundle.py` (now 17.5 KB; CLI gained `--inject-signals-from`; plan output gained `signal_injection_mode` + `generic_signals` + `domain_signals` + `domain_signals_rejected`)
+- New validator: `scripts/validate_evomap_phase7a_domain_signal_injection.py`
+
+**Phase 6B → Phase 7A · The kit's apply tool now supports domain-specific signal injection while staying 100% backward-compatible with the Phase 5/6A/6B generic-only baseline.** Default mode is unchanged. Opt-in mode unlocks 22+ domain signals per bundle with strict filtering, so the evolver selector can match on `telegram_failure` / `systemd_failure` / `proxy_mismatch` directly instead of always falling back to `distilled_fallback`.
+
+**Next steps:**
+
+1. **Cross-bundle regression test** — apply all 3 bundles to a single fresh isolated target, verify no signal/gene/capsule id collision, count distinct signals.
+2. **`bundle-curator` skill** — auto-generate portable bundles from evolver run outputs.
+3. **Codex `prompt-cache-discipline` bundle** (optimize) and **browser-control `rate-limit-recovery` bundle** (repair).

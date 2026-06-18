@@ -1,0 +1,24 @@
+{
+  "target_runtime": "/tmp/atl-evomap-7a-default-apply-target",
+  "is_git_repo": true,
+  "signal_injection_mode": "generic_only",
+  "memory_graph_lines": 5,
+  "memory_graph_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "memory_graph_origins": [
+    "openclaw_signal_detector"
+  ],
+  "gene_count": 1,
+  "capsule_count": 1,
+  "gene_ids": [
+    "gene_distilled_openclaw-tool-use-discipline-bare-compatible"
+  ],
+  "capsule_ids": [
+    "capsule_openclaw_tool_use_discipline_phase4b"
+  ]
+}

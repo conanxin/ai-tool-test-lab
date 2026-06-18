@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "bundle file exists",
+      "ok": true,
+      "detail": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json"
+    },
+    {
+      "name": "bundle is valid JSON",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "bundle has schema_version",
+      "ok": true,
+      "detail": "atl-evomap-portable-bundle-v0.1"
+    },
+    {
+      "name": "bundle has 'gene' field",
+      "ok": true,
+      "detail": "dict"
+    },
+    {
+      "name": "bundle has 'capsule' field",
+      "ok": true,
+      "detail": "dict"
+    },
+    {
+      "name": "bundle has 'execution_trace' field",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "gene.id present and non-empty",
+      "ok": true,
+      "detail": "gene_distilled_hermes-systemd-service-recovery"
+    },
+    {
+      "name": "capsule.id present and non-empty",
+      "ok": true,
+      "detail": "capsule_hermes_systemd_service_recovery_phase6a"
+    },
+    {
+      "name": "capsule.gene (or gene_id) == gene.id",
+      "ok": true,
+      "detail": "capsule_gene_ref='gene_distilled_hermes-systemd-service-recovery', gene_id='gene_distilled_hermes-systemd-service-recovery'"
+    },
+    {
+      "name": "capsule.execution_trace is non-empty list",
+      "ok": true,
+      "detail": "type=list, len=4"
+    },
+    {
+      "name": "import_contract.required_files contains 3 required paths",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "no secret patterns in bundle",
+      "ok": true,
+      "detail": "clean"
+    }
+  ],
+  "failures": [],
+  "summary": {
+    "schema_version": "atl-evomap-portable-bundle-v0.1",
+    "gene_id": "gene_distilled_hermes-systemd-service-recovery",
+    "capsule_id": "capsule_hermes_systemd_service_recovery_phase6a",
+    "capsule_gene_match": true,
+    "capsule_execution_trace_steps": 4,
+    "required_import_files_count": 3,
+    "secret_hits": 0
+  }
+}

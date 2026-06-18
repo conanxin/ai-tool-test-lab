@@ -1,0 +1,37 @@
+{
+  "target_runtime": "/tmp/atl-evomap-7a-hermes-domain-target",
+  "is_git_repo": true,
+  "signal_injection_mode": "generic_plus_domain_from_bundle",
+  "memory_graph_lines": 17,
+  "memory_graph_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context",
+    "systemd_failure",
+    "service_recovery",
+    "missing_env_var",
+    "port_not_listening",
+    "dropin_env_misconfigured",
+    "systemd_failure:user-service",
+    "service_recovery:start-limit-hit",
+    "missing_env_var:MODEL_PROVIDER",
+    "port_not_listening:18789",
+    "dropin_env_misconfigured:env-conf-missing",
+    "session_context:hermes",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "memory_graph_origins": [
+    "evomap_apply_bundle:domain_from_bundle",
+    "openclaw_signal_detector"
+  ],
+  "gene_count": 1,
+  "capsule_count": 1,
+  "gene_ids": [
+    "gene_distilled_hermes-systemd-service-recovery"
+  ],
+  "capsule_ids": [
+    "capsule_hermes_systemd_service_recovery_phase6a"
+  ]
+}
