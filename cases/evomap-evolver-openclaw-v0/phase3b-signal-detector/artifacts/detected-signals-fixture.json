@@ -1,0 +1,70 @@
+{
+  "detector": "openclaw_signal_detector",
+  "schema_version": "0.1.0",
+  "generated_at": "2026-06-18T14:15:53.921190+00:00",
+  "input": {
+    "path": "cases/evomap-evolver-openclaw-v0/phase3b-signal-detector/fixtures/session-tail-tool-bypass.txt",
+    "size_bytes": 805,
+    "lines": 20
+  },
+  "signals": [
+    {
+      "key": "repeated_tool_usage:exec",
+      "score": 1.0,
+      "evidence": [
+        "exec_count=3",
+        "exec_ratio=1.50 > 0.5"
+      ],
+      "reason": "exec call count (3) is more than half of all structured file tool calls (2)"
+    },
+    {
+      "key": "tool_bypass:exec-on-grep",
+      "score": 1.0,
+      "evidence": [
+        "exec_count=3",
+        "grep_like_pattern_hits=6"
+      ],
+      "reason": "exec invocations paired with grep/cat/head/tail/sed -i/awk -i inplace bypass the read/search tool"
+    },
+    {
+      "key": "protocol_drift:wrong-tool-for-file-read",
+      "score": 0.6666666666666666,
+      "evidence": [
+        "inplace_mutation_hits=2"
+      ],
+      "reason": "in-place shell mutation patterns (sed -i, awk -i inplace, python rewrite) bypass the edit tool"
+    },
+    {
+      "key": "repo_context:ai-tool-test-lab",
+      "score": 1.0,
+      "evidence": [
+        "ai-tool-test-lab_str_hits=1",
+        "atl_path_hits=1"
+      ],
+      "reason": "session cwd or repo name matches ai-tool-test-lab"
+    },
+    {
+      "key": "session_context:openclaw",
+      "score": 1.0,
+      "evidence": [
+        "\\bOpenClaw\\b",
+        "\\bopenclaw\\b",
+        "session\\s+tail",
+        "\\bcwd\\s*[:=]",
+        "openclaw_hits=14"
+      ],
+      "reason": "session text contains OpenClaw markers (OpenClaw/openclaw/Agent/session tail/cwd/workspace)"
+    }
+  ],
+  "summary": {
+    "exec_count": 3,
+    "read_count": 1,
+    "search_count": 0,
+    "edit_count": 1,
+    "write_count": 0,
+    "exec_ratio": 1.5,
+    "grep_like_hits": 6,
+    "inplace_mutation_hits": 2,
+    "openclaw_marker_hits": 14
+  }
+}

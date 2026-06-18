@@ -1,0 +1,19 @@
+# ATL-EVOMAP-3B Detector Fixture: Session Tail With Tool Bypass Patterns
+
+# Session context
+cwd=/mnt/d/AI/ai-tool-test-lab
+session_id=agent:main:openclaw:direct
+OpenClaw session context
+
+# Recent tool calls (from session tail)
+[TOOL: exec] grep -R "Self-EEvolution" cases/
+[TOOL: exec] sed -i 's/Self-EEvolution/Self-Evolution/g' cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+[TOOL: exec] cat cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+[TOOL: read] cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+[TOOL: edit] cases/evomap-evolver-openclaw-v0/CASE_REPORT.md
+
+# Recent reasoning excerpt
+> Reading the typo in CASE_REPORT.md via grep instead of the read tool was a tool bypass.
+> Using sed -i instead of the edit tool is protocol drift. Future sessions should use the proper tools.
+
+# End of session

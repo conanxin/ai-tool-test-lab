@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-3A OpenClaw-specific skill distillation",
-      "status": "openclaw skill distillation completed",
+      "phase": "ATL-EVOMAP-3B OpenClaw signal detector",
+      "status": "openclaw signal detector partial",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-3A 在 ai-tool-test-lab 内建立第一个 OpenClaw-specific Gene: gene_distilled_openclaw-tool-use-discipline。evolver distill 子命令在本地可用，但只接受 --response-file=<path>，不接 SKILL.md 位置参数；prepareDistillation gating 要求 ≥10 successful capsules，local-only 模式下必须手工写 distill_request.json + LLM-style response 绕过。手工绕过 gating 后成功产 Gene: 5 个 OpenClaw-specific signals 保留（tool_bypass:exec-on-grep、session_context:openclaw 等），5 条 strategy rules 保留，4 个 forbidden paths 保留。安全边界全部 PASS: no Hub / no publish / no validator / no --loop / no credits / no secrets。限制: 后续 evolver run 仍选 Vercel env-vars Gene（session context 缺 OpenClaw-specific signal），需 Phase 3b signal detector。未执行 evolver review --approve / solidify。",
+      "summary": "ATL-EVOMAP-3B 构建 OpenClaw-specific signal detector (scripts/openclaw_signal_detector.py, stdlib only) 让 evolver selector 有机会匹配 Phase 3A 创建的 gene_distilled_openclaw-tool-use-discipline。detector 在 fixture (805 bytes simulated session tail) 上 emit 5/5 qualified signals (tool_bypass:exec-on-grep, repeated_tool_usage:exec, protocol_drift:wrong-tool-for-file-read, session_context:openclaw, repo_context:ai-tool-test-lab) 全部 score>=0.67。对真实 Phase 2 evolver run output (50KB descriptive) emit 3/5 signals (符合预期 — real artifact 缺 raw tool-call literals)。Manual signal injection 路径打通：detector 产出 MemoryGraphEvent 写入 memory/evolution/memory_graph.jsonl → evolver run scanner 读取。根因发现: evolver scanner strips qualified keys to bare form (tool_bypass:exec-on-grep → tool_bypass)，导致 selector 选 pre-existing local bank gene (gene_tool_integrity) 而非新 Gene。Selector uses score-ranked path; bare signal match 两个 gene equally; first-match wins = 旧 gene。未执行 evolver review --approve / solidify (per 硬边界)。Phase 3C HOLD — 需先修 selector 或修改 new Gene signals_match 为 bare form。安全边界全部 PASS: no Hub / no publish / no validator / no --loop / no credits / no secrets / no source modification。",
       "updated_at": "2026-06-18",
-      "final_status": "OPENCLAW_SKILL_DISTILLATION_COMPLETED",
+      "final_status": "OPENCLAW_SIGNAL_DETECTOR_PARTIAL",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -44,6 +44,14 @@
           "result": "PASS (with caveat)",
           "gene_id": "gene_distilled_openclaw-tool-use-discipline",
           "notes": "Gene real written to .evolver/gep/genes.json; selector needs Phase 3b signal detector"
+        },
+        {
+          "phase": "ATL-EVOMAP-3B",
+          "status": "openclaw signal detector partial",
+          "result": "PARTIAL",
+          "gene_id_built": "gene_distilled_openclaw-tool-use-discipline (Phase 3A)",
+          "detector": "scripts/openclaw_signal_detector.py",
+          "notes": "detector emits 5/5 on fixture, 3/5 on real artifact; injection read by evolver scanner; selector picks gene_tool_integrity (local bank) NOT new Gene due to qualified→bare strip"
         }
       ]
     }

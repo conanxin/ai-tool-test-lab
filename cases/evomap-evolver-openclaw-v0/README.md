@@ -328,4 +328,56 @@ phase3-skill-distillation/
 |------|------|------|
 | **ATL-EVOMAP-1** | local offline smoke completed | PARTIAL — evolver 成功运行，4 个 arbitrary log 场景全部 FAIL（evolver 不是通用 log analyzer） |
 | **ATL-EVOMAP-2** | openclaw session-context test partial | PARTIAL — evolver 能扫描 session context，但 signal 提取泛化，需 Phase 3 建立 OpenClaw-specific Gene 库 |
-| **ATL-EVOMAP-3A** | openclaw skill distillation completed | PASS（带 caveat） — Skill 写好、Gene 真实落盘、selector 需 Phase 3b signal detector |
+| **ATL-EVOMAP-3A** | openclaw skill distillation completed | PASS（带 caveat） — Skill 写好、Gene 真实落盘，selector 需 Phase 3b signal detector |
+| **ATL-EVOMAP-3B** | openclaw signal detector partial | PARTIAL — detector + injection work, selector 仍选 `gene_tool_integrity` (qualifed signals stripped) |
+
+---
+
+## Phase 3b: OpenClaw-Specific Signal Detector (ATL-EVOMAP-3B)
+
+**Status:** openclaw signal detector partial
+**报告:** [phase3b-signal-detector/ATL_EVOMAP_3B_SIGNAL_DETECTOR_REPORT.md](phase3b-signal-detector/ATL_EVOMAP_3B_SIGNAL_DETECTOR_REPORT.md)
+
+### Phase 3b 目标
+
+不再是创建 Gene（3A 已建），而是构建 OpenClaw-specific signal detector，让 selector 真正匹配新 Gene。
+
+### Phase 3b 关键发现
+
+- ✅ Detector (`scripts/openclaw_signal_detector.py`, stdlib only) 真实 emit 5/5 qualified signals 在 fixture 上
+- ✅ Detector 对真实 Phase 2 artifact 输出 3/5 signals (符合预期 — evolver output 是描述性)
+- ✅ Manual signal injection 路径打通：detector → jsonl → evolver run scanner
+- ⚠️ **Evolver scanner strips qualified keys to bare form**: `tool_bypass:exec-on-grep` → `tool_bypass`
+- ❌ **Selector 选 `gene_tool_integrity` (local bank 旧 gene) 而非 `gene_distilled_openclaw-tool-use-discipline`**
+- ❌ Selector uses score-ranked path，bare signal match 两个 gene equally，first-match wins = 旧 gene
+- ✅ 全程安全边界 PASS (no Hub / no publish / no validator / no --loop / no credits / no secrets / no source modification)
+
+### Phase 3b 评分 (5-dimension)
+
+| 维度 | 状态 | 说明 |
+|------|------|------|
+| A. Detector fixture test | ✅ PASS | 5/5 signals emitted |
+| B. Real artifact detector test | ⚠️ PARTIAL | 3/5 signals (expected) |
+| C. Signal injection | ⚠️ PARTIAL | Scanner strips qualified → bare |
+| D. Selector match | ⚠️ PARTIAL | 选 `gene_tool_integrity` 非新 Gene |
+| E. Safety | ✅ PASS | All 15 hard boundaries respected |
+
+### Phase 3b 结论
+
+> Evolver signal scanner **归一化** qualified signals 为 bare form，导致 detector 注入的 `tool_bypass:exec-on-grep` 在 selector 看来等价于 `tool_bypass`。Selector 因此选已存在的 `gene_tool_integrity` 而非新 Gene。
+>
+> **修复路径（Phase 3C 备选）**：
+> 1. 修改 detector 让 emit 只用 bare signals（避免 strip）
+> 2. 或修改 new Gene 的 `signals_match` 用 bare form (e.g. `tool_bypass`) 匹配 scanner
+> 3. 或修改 evolver scanner 保留 qualified prefix
+> 4. 或注入更多 MemoryGraphEvent 累积 score
+
+### Phase 3b 下一步
+
+- **Phase 3C (HOLD):** `evolver review --approve` + `evolver solidify` — 等待 selector match 修好再做
+- **Phase 3C-V2:** 重 distill Gene 让其 `signals_match` 用 bare form
+- **Phase 3D (暂不动):** Hub fetch 永远不接
+
+**暂不测：** --loop / validator / auto-publish / ATP autobuy / Hub 连接
+
+---

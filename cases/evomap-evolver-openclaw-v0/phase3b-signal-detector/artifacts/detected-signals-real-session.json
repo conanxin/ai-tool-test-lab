@@ -1,0 +1,54 @@
+{
+  "detector": "openclaw_signal_detector",
+  "schema_version": "0.1.0",
+  "generated_at": "2026-06-18T14:15:59.363027+00:00",
+  "input": {
+    "path": "cases/evomap-evolver-openclaw-v0/phase2-openclaw-session/artifacts/evolver-run-openclaw-session-output.txt",
+    "size_bytes": 44033,
+    "lines": 1329
+  },
+  "signals": [
+    {
+      "key": "repeated_tool_usage:exec",
+      "score": 0.6666666666666666,
+      "evidence": [
+        "exec_count=2",
+        "exec_ratio=0.67 > 0.5"
+      ],
+      "reason": "exec call count (2) is more than half of all structured file tool calls (3)"
+    },
+    {
+      "key": "repo_context:ai-tool-test-lab",
+      "score": 1.0,
+      "evidence": [
+        "ai-tool-test-lab_str_hits=19",
+        "atl_path_hits=9"
+      ],
+      "reason": "session cwd or repo name matches ai-tool-test-lab"
+    },
+    {
+      "key": "session_context:openclaw",
+      "score": 1.0,
+      "evidence": [
+        "\\bOpenClaw\\b",
+        "\\bopenclaw\\b",
+        "\\bAgent\\b",
+        "recent\\s+session",
+        "workspace",
+        "openclaw_hits=109"
+      ],
+      "reason": "session text contains OpenClaw markers (OpenClaw/openclaw/Agent/session tail/cwd/workspace)"
+    }
+  ],
+  "summary": {
+    "exec_count": 2,
+    "read_count": 2,
+    "search_count": 0,
+    "edit_count": 1,
+    "write_count": 0,
+    "exec_ratio": 0.667,
+    "grep_like_hits": 0,
+    "inplace_mutation_hits": 0,
+    "openclaw_marker_hits": 109
+  }
+}
