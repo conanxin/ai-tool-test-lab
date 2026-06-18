@@ -1,0 +1,314 @@
+{
+  "ok": true,
+  "mode": "dry-run",
+  "plan": {
+    "target": "/tmp/atl-evomap-7b-cross-bundle-target",
+    "is_git_repo": true,
+    "gene_id": "gene_distilled_hermes-systemd-service-recovery",
+    "capsule_id": "capsule_hermes_systemd_service_recovery_phase6a",
+    "signal_injection_mode": "generic_plus_domain_from_bundle",
+    "generic_signals": [
+      "tool_bypass",
+      "repeated_tool_usage",
+      "protocol_drift",
+      "session_context",
+      "repo_context"
+    ],
+    "domain_signals": [
+      "systemd_failure",
+      "service_recovery",
+      "missing_env_var",
+      "port_not_listening",
+      "dropin_env_misconfigured",
+      "systemd_failure:user-service",
+      "service_recovery:start-limit-hit",
+      "missing_env_var:MODEL_PROVIDER",
+      "port_not_listening:18789",
+      "dropin_env_misconfigured:env-conf-missing",
+      "session_context:hermes",
+      "repo_context:ai-tool-test-lab"
+    ],
+    "domain_signals_rejected": [],
+    "writes": {
+      "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/genes.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "genes": [
+          {
+            "type": "Gene",
+            "id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+            "category": "optimize",
+            "signals_match": [
+              "tool_bypass",
+              "repeated_tool_usage",
+              "protocol_drift",
+              "session_context",
+              "repo_context",
+              "tool_bypass:exec-on-grep",
+              "repeated_tool_usage:exec",
+              "protocol_drift:wrong-tool-for-file-read",
+              "session_context:openclaw",
+              "repo_context:ai-tool-test-lab"
+            ],
+            "strategy": [
+              "Read files with the read tool before referencing their content in reasoning.",
+              "Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.",
+              "Use the search tool for repo-wide content search before falling back to rg via exec.",
+              "Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.",
+              "Re-run validators after each substantive change."
+            ],
+            "constraints": {
+              "max_files": 12,
+              "forbidden_paths": [
+                ".git",
+                "node_modules",
+                ".evolver",
+                "memory"
+              ]
+            },
+            "summary": "OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization."
+          },
+          {
+            "type": "Gene",
+            "id": "gene_distilled_hermes-systemd-service-recovery",
+            "category": "repair",
+            "signals_match": [
+              "systemd_failure",
+              "service_recovery",
+              "missing_env_var",
+              "port_not_listening",
+              "dropin_env_misconfigured",
+              "systemd_failure:user-service",
+              "service_recovery:start-limit-hit",
+              "missing_env_var:MODEL_PROVIDER",
+              "port_not_listening:18789",
+              "dropin_env_misconfigured:env-conf-missing",
+              "session_context:hermes",
+              "repo_context:ai-tool-test-lab"
+            ],
+            "strategy": [
+              "Run offline parser scripts/hermes_systemd_recovery_fixture.py against the failure fixture to confirm the failure shape (no systemctl, no journalctl, no env scan).",
+              "Inspect parsed JSON: confirm service_failed=true, missing_env_var=MODEL_PROVIDER (or expected env), expected_port set, port_not_listening=true, dropin_env_misconfigured=true.",
+              "Recommend deterministic check order: systemctl --user status, journalctl --user -u, systemctl --user show-environment, drop-in Environment lines, expected port, Telegram smoke.",
+              "Never print or persist secrets, API keys, tokens, cookies, or Authorization headers in any recovery step.",
+              "Never restart the real hermes-gateway.service from a recipe script; always have a human run the recovery commands on the real host.",
+              "Re-run the parser + inspect/validate/apply tool chain after each fixture or Gene change; never bypass the validators."
+            ],
+            "constraints": {
+              "max_files": 8,
+              "forbidden_paths": [
+                ".git",
+                "node_modules",
+                ".evolver",
+                "memory",
+                "real_runtime_root"
+              ]
+            },
+            "summary": "Hermes systemd user-service recovery: offline fixture parser identifies service_failed / missing_env_var / expected_port / dropin_env_misconfigured shape; recommends deterministic systemctl + journalctl + show-environment + drop-in + port + Telegram smoke check order; never reads .env, never restarts the real service, never persists secrets. Includes both qualified (systemd_failure:user-service) and bare (systemd_failure) signal forms for evolver scanner normalization."
+          }
+        ]
+      },
+      "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/capsules.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "capsules": [
+          {
+            "type": "Capsule",
+            "schema_version": "1.6.0",
+            "id": "capsule_openclaw_tool_use_discipline_phase4b",
+            "trigger": [
+              "tool_bypass",
+              "repeated_tool_usage",
+              "protocol_drift",
+              "session_context",
+              "repo_context"
+            ],
+            "gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+            "summary": "OpenClaw tool discipline applied to a real session: prefers read/edit/search over exec grep; re-runs validators after substantive change. Validated against fixtures/session-tool-use-sample.txt.",
+            "confidence": 0.84,
+            "blast_radius": {
+              "files": 0,
+              "lines": 0
+            },
+            "status": "success",
+            "outcome": {
+              "status": "success",
+              "score": 0.84
+            },
+            "execution_trace": [
+              {
+                "step": 1,
+                "stage": "build",
+                "cmd": "python3 openclaw_tool_use_fixture.py --input fixtures/session-tool-use-sample.txt",
+                "exit": 0
+              },
+              {
+                "step": 2,
+                "stage": "validate",
+                "cmd": "python3 -m json.tool /tmp/openclaw_tool_use_execution_trace.json",
+                "exit": 0,
+                "output_summary": {
+                  "ok": true,
+                  "exec_count": 3,
+                  "read_count": 2,
+                  "edit_count": 2,
+                  "search_count": 1,
+                  "total_tool_uses": 8,
+                  "exec_ratio": 0.375,
+                  "has_session_context": true,
+                  "has_repo_context": true
+                }
+              },
+              {
+                "step": 3,
+                "stage": "validate",
+                "cmd": "json_parse_pass",
+                "exit": 0,
+                "validation": "json_parse_pass"
+              },
+              {
+                "step": 4,
+                "stage": "canary",
+                "cmd": "safety_check",
+                "exit": 0,
+                "checks": {
+                  "no_hub": true,
+                  "no_secret": true,
+                  "no_env_scan": true,
+                  "no_publish": true,
+                  "no_approve": true,
+                  "no_solidify": true
+                }
+              }
+            ],
+            "source": "manual_capsule_seed_phase4b",
+            "visibility": "private",
+            "created_at": "2026-06-19T00:09:00Z"
+          },
+          {
+            "schema_version": "1.6.0",
+            "type": "Capsule",
+            "id": "capsule_hermes_systemd_service_recovery_phase6a",
+            "trigger": [
+              "systemd_failure",
+              "service_recovery",
+              "missing_env_var",
+              "port_not_listening",
+              "dropin_env_misconfigured",
+              "session_context:hermes"
+            ],
+            "gene": "gene_distilled_hermes-systemd-service-recovery",
+            "summary": "Hermes systemd user-service recovery applied to a fixture-shaped failure: parser confirms service_failed + missing_env_var=MODEL_PROVIDER + port_not_listening + dropin_env_misconfigured; recommends deterministic systemctl + journalctl + show-environment + drop-in + port + Telegram smoke check order. No real systemctl, no .env read, no secret persisted, no Hub, no publish.",
+            "confidence": 0.82,
+            "blast_radius": {
+              "files": 0,
+              "lines": 0
+            },
+            "status": "success",
+            "outcome": {
+              "status": "success",
+              "score": 0.82
+            },
+            "execution_trace": [
+              {
+                "step": 1,
+                "stage": "build",
+                "cmd": "python3 scripts/hermes_systemd_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/fixtures/hermes-systemd-failure-sample.txt",
+                "exit": 0,
+                "output_summary": {
+                  "ok": true,
+                  "service": "hermes-gateway.service",
+                  "service_failed": true,
+                  "missing_env_var": "MODEL_PROVIDER",
+                  "expected_port": "127.0.0.1:18789",
+                  "port_not_listening": true,
+                  "dropin_env_misconfigured": true,
+                  "restart_limit_hit": true,
+                  "recommended_check_order_steps": 6,
+                  "unrecognized_signals_count": 7
+                }
+              },
+              {
+                "step": 2,
+                "stage": "validate",
+                "cmd": "python3 -m json.tool artifacts/hermes-systemd-fixture-output.json",
+                "exit": 0,
+                "validation": "json_parse_pass"
+              },
+              {
+                "step": 3,
+                "stage": "validate",
+                "cmd": "assert missing_env_var == MODEL_PROVIDER and service_failed == true and expected_port == 127.0.0.1:18789 and port_not_listening == true",
+                "exit": 0,
+                "validation": "fixture_detected_expected_failure_shape"
+              },
+              {
+                "step": 4,
+                "stage": "canary",
+                "cmd": "safety_check",
+                "exit": 0,
+                "checks": {
+                  "no_real_systemctl": true,
+                  "no_real_journalctl": true,
+                  "no_env_scan": true,
+                  "no_secrets": true,
+                  "no_hub": true,
+                  "no_publish": true,
+                  "no_approve": true,
+                  "no_solidify": true
+                }
+              }
+            ],
+            "source": "manual_capsule_seed_phase6a",
+            "visibility": "private",
+            "created_at": "2026-06-19T04:03:00Z"
+          }
+        ]
+      },
+      "/tmp/atl-evomap-7b-cross-bundle-target/memory/evolution/memory_graph.jsonl": {
+        "action": "append",
+        "lines": [
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700001.0, \"signal\": \"tool_bypass\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.85, \"context\": \"Detected exec invocation without prior read on .md file\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700002.0, \"signal\": \"repeated_tool_usage\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.7, \"context\": \"Same read+edit+search pattern repeated 3x\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700003.0, \"signal\": \"protocol_drift\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.9, \"context\": \"Detected sed -i usage forbidden by OpenClaw protocol\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700004.0, \"signal\": \"session_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.6, \"context\": \"Session has multiple file ops requiring tool discipline\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700005.0, \"signal\": \"repo_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.65, \"context\": \"Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700200.0, \"signal\": \"systemd_failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700201.0, \"signal\": \"service_recovery\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700202.0, \"signal\": \"missing_env_var\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700203.0, \"signal\": \"port_not_listening\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700204.0, \"signal\": \"dropin_env_misconfigured\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700205.0, \"signal\": \"systemd_failure:user-service\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700206.0, \"signal\": \"service_recovery:start-limit-hit\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700207.0, \"signal\": \"missing_env_var:MODEL_PROVIDER\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700208.0, \"signal\": \"port_not_listening:18789\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700209.0, \"signal\": \"dropin_env_misconfigured:env-conf-missing\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700210.0, \"signal\": \"session_context:hermes\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700211.0, \"signal\": \"repo_context:ai-tool-test-lab\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_hermes-systemd-service-recovery)\", \"mutation\": {\"target\": \"gene:gene_distilled_hermes-systemd-service-recovery\", \"action\": \"select\"}}"
+        ]
+      },
+      "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/events.jsonl": {
+        "action": "reset",
+        "content": ""
+      },
+      "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/failed_capsules.json": {
+        "action": "reset",
+        "content": "[]\n"
+      },
+      "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/candidates.jsonl": {
+        "action": "reset",
+        "content": ""
+      }
+    },
+    "summary": {
+      "existing_gene_count": 1,
+      "existing_capsule_count": 1,
+      "new_gene_count": 2,
+      "new_capsule_count": 2,
+      "memory_graph_signals_added": 17,
+      "memory_graph_generic_signals": 5,
+      "memory_graph_domain_signals": 12,
+      "memory_graph_domain_rejected": 0
+    }
+  }
+}

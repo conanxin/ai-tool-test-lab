@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-7A Domain-Specific Signal Injection",
-      "status": "domain signal injection completed",
+      "phase": "ATL-EVOMAP-7B Cross-Bundle Regression Test",
+      "status": "cross-bundle regression completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-5 local evolution kit PASS: productized the local-only Gene+Capsule pathway from Phases 4A/4B/4C as a reusable stdlib-only toolset; delivered canonical bundle atl-evomap-portable-bundle-v0.1 (openclaw-tool-use-discipline, 5458 bytes, sourced from Phase 4C PASS at f7897da); 3 stdlib tools (evomap_inspect_bundle.py 2674B / evomap_validate_bundle.py 6817B with 12 checks + secret scan / evomap_apply_bundle.py 8869B with --dry-run default + --yes for real write, idempotent on gene/capsule by id, append-only on memory_graph); 3 templates (GENE / CAPSULE / MEMORY_GRAPH_SIGNAL) for new bundles; 4-step recipe (validate -> inspect -> dry-run -> apply --yes -> manual evolver); self-tests: inspect PASS, validate 12/12 PASS, apply dry-run PASS (0 files written), apply --yes PASS (6 files written to /tmp/atl-evomap-phase5-apply-target, 1 gene + 1 capsule + 5 clean bare memory signals); idempotency verified; all 16 hard boundaries preserved by tool design (no Hub / no publish / no credits / no validator / no --approve / no solidify / no real config mutation / no secrets / no source modification / no isolated runtime committed / stdlib only); ATL-EVOMAP exploration series complete (3C-V2 blocked -> 4A PASS -> 4B PASS -> 4C PASS -> 5 PASS); kit is durable asset for future OpenClaw/Hermes/Codex local evolution work.; ATL-EVOMAP-6A hermes systemd bundle PASS: second canonical local-only bundle using the Phase 5 kit, category=repair, complements Phase 5 optimize-category openclaw-tool-use-discipline bundle; delivered fixtures/hermes-systemd-failure-sample.txt (1803 B deterministic offline text describing service_failed + missing_env_var=MODEL_PROVIDER + port_not_listening + dropin_env_misconfigured + restart_limit_hit shape) + scripts/hermes_systemd_recovery_fixture.py (7472 B stdlib-only offline parser refusing .env-shape paths, no systemctl/journalctl/ss/curl exec, no recursive repo scan) + gene_distilled_hermes-systemd-service-recovery (12 signals: 5 bare + 5 qualified + session_context:hermes + repo_context:ai-tool-test-lab, repair-category, max_files=8) + capsule_hermes_systemd_service_recovery_phase6a (4-step execution_trace: build parser -> validate json -> assert failure-shape -> canary 8/8 safety) + bundle/hermes-systemd-service-recovery.bundle.json (8587 B atl-evomap-portable-bundle-v0.1, new field fixture_summary binds expected failure shape); self-tests: inspect PASS, validate 12/12 PASS, secret_hits=0, apply dry-run PASS (0 files written), apply --yes PASS (6 files written to /tmp/atl-evomap-phase6a-hermes-target, 1 gene + 1 capsule + 5 clean bare memory signals + 3 optional files reset empty), bundle survives in target runtime; optional evolver run+review smoke PASS: Selected Gene gene_distilled_hermes-systemd-service-recovery, Capsule visible, [SearchFirst] No hub match (reason: no_hub_url), no crash, no --approve, no solidify; all 16 hard boundaries preserved by tool design (no Hub / no publish / no credits / no validator / no --loop / no approve / no solidify / no real systemctl/journalctl/ss/curl exec / no secret persistence / no .env scan / no real OpenClaw-Hermes-systemd-cron config mutation / no Evolver source modification / no runtime .evolver/ or memory/ originals committed / only kit+bundle+tools+templates+reports+validators committed / stdlib only); kit now supports a 2nd canonical bundle + a 2nd intent category (repair); suitable for extension to Codex/browser-control/Telegram proxy bundles. Phase 6B adds the Telegram Message Router Failure Bundle (gene_distilled_telegram-message-router-failure, capsule_telegram_message_router_failure_phase6b, 8157 B bundle, 22 dual-form signals, 4-step execution_trace, 10/10 canary booleans, 12/12 parser signals, repair category). Same kit, same 3 tools, same schema, same 16 hard boundaries. The kit now supports 2 intent categories (optimize, repair) and 3 problem domains (tool discipline, systemd recovery, Telegram routing). Phase 7A adds --inject-signals-from to scripts/evomap_apply_bundle.py. Without the flag the tool still writes 5 generic bare signals only (Phase 5/6A/6B behavior preserved exactly). With the flag it extracts gene.signals_match + capsule.trigger from any bundle, filters them (21-entry dangerous denylist + 13-entry dangerous substrings + 6-category credential regex + alnum/underscore/colon/dot/hyphen charset) and writes 5 generic + N domain signals (Hermes 12, Telegram 22). Evolver smoke on both fresh targets confirms domain signals reach the selector with no Hub match, no --approve, no solidify. All 3 prior validators still ALL CHECKS PASSED.",
+      "summary": "Phase 7B proves that all 3 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure) can safely coexist in a single fresh isolated target runtime at /tmp/atl-evomap-7b-cross-bundle-target. After 3 sequential apply calls (each with --inject-signals-from), the runtime contains 3 genes, 3 capsules, 59 memory_graph lines (15+17+27), 39 distinct signals, 0 dangerous signals, 0 pollution signals, 0 duplicate gene_ids, 0 duplicate capsule_ids, 0 broken capsule-to-gene links. Combined evolver smoke is clean: no crash, no Hub, no --approve, no solidify, OpenClaw gene selected via score_ranked. All 5 score dimensions (Apply / ID / Signal / Smoke / Safety) PASS. 4 prior phase validators (5/6A/6B/7A) still ALL CHECKS PASSED.",
       "updated_at": "2026-06-19",
-      "final_status": "DOMAIN_SIGNAL_INJECTION_PASS",
+      "final_status": "CROSS_BUNDLE_REGRESSION_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -313,6 +313,122 @@
           "hard_boundaries_preserved": 16,
           "phase_6b_base_commit": "f72b0c1",
           "notes": "Phase 7A enhances the Phase 5 apply tool with --inject-signals-from <bundle.json>. When the flag is supplied, the tool extracts gene.signals_match + capsule.trigger from the source bundle, filters them through a strict validator (alnum+_:+-. regex, 21-entry dangerous signals denylist, 13-entry dangerous substrings, 6-category credential regex), and writes 5 generic + N domain signals to memory_graph.jsonl. Without the flag, behavior is identical to Phase 5/6A/6B (5 generic only). Both fresh targets (Hermes + Telegram) verified to receive the right domain signals and reach evolver's signal-match path with no Hub / no --approve / no solidify. All 3 prior validators still ALL CHECKS PASSED (no regression in default mode)."
+        },
+        {
+          "phase": "ATL-EVOMAP-7B",
+          "status": "cross-bundle regression completed",
+          "result": "PASS",
+          "target_runtime": "/tmp/atl-evomap-7b-cross-bundle-target",
+          "bundles_under_test": [
+            {
+              "name": "openclaw-tool-use-discipline",
+              "phase_origin": "ATL-EVOMAP-5",
+              "gene_id": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+              "capsule_id": "capsule_openclaw_tool_use_discipline_phase4b",
+              "category": "optimize"
+            },
+            {
+              "name": "hermes-systemd-service-recovery",
+              "phase_origin": "ATL-EVOMAP-6A",
+              "gene_id": "gene_distilled_hermes-systemd-service-recovery",
+              "capsule_id": "capsule_hermes_systemd_service_recovery_phase6a",
+              "category": "repair"
+            },
+            {
+              "name": "telegram-message-router-failure",
+              "phase_origin": "ATL-EVOMAP-6B",
+              "gene_id": "gene_distilled_telegram-message-router-failure",
+              "capsule_id": "capsule_telegram_message_router_failure_phase6b",
+              "category": "repair"
+            }
+          ],
+          "apply_order": [
+            {
+              "step": 1,
+              "bundle": "openclaw",
+              "inject_signals_from": true,
+              "mode": "generic_plus_domain_from_bundle",
+              "new_genes": 1,
+              "new_capsules": 1,
+              "memory_signals_added": 15
+            },
+            {
+              "step": 2,
+              "bundle": "hermes",
+              "inject_signals_from": true,
+              "mode": "generic_plus_domain_from_bundle",
+              "new_genes": 2,
+              "new_capsules": 2,
+              "memory_signals_added": 17
+            },
+            {
+              "step": 3,
+              "bundle": "telegram",
+              "inject_signals_from": true,
+              "mode": "generic_plus_domain_from_bundle",
+              "new_genes": 3,
+              "new_capsules": 3,
+              "memory_signals_added": 27
+            }
+          ],
+          "totals": {
+            "memory_graph_signals_added": 59,
+            "memory_graph_lines_after_smoke": 62,
+            "final_gene_count": 3,
+            "final_capsule_count": 3,
+            "final_distinct_signals": 39,
+            "duplicate_gene_ids": 0,
+            "duplicate_capsule_ids": 0,
+            "broken_capsule_to_gene_links": 0,
+            "dangerous_signals": 0,
+            "pollution_signals": 0,
+            "long_digit_signal_hits": 0
+          },
+          "scoring": {
+            "A_apply_compatibility": "PASS",
+            "B_id_compatibility": "PASS",
+            "C_signal_compatibility": "PASS",
+            "D_combined_evolver_smoke": "PASS",
+            "E_safety": "PASS",
+            "overall": "PASS"
+          },
+          "selector_probe_matrix": {
+            "openclaw_probe": {
+              "expected": "openclaw",
+              "selected": "openclaw",
+              "match": true
+            },
+            "hermes_probe": {
+              "expected": "hermes",
+              "selected": "openclaw",
+              "match": false,
+              "partial_acceptable": true,
+              "note": "selector used real session context which matched OpenClaw first"
+            },
+            "telegram_probe": {
+              "expected": "telegram",
+              "selected": "openclaw",
+              "match": false,
+              "partial_acceptable": true,
+              "note": "same as hermes probe"
+            }
+          },
+          "evolver_smoke": {
+            "combined_runtime": "PASS (Selected Gene gene_distilled_openclaw-tool-use-discipline-bare-compatible, selectionPath=score_ranked, no Hub, no --approve, no solidify, no crash, memory_graph 59 -> 62 lines after smoke)"
+          },
+          "new_tools": [
+            "scripts/evomap_cross_bundle_analyze.py"
+          ],
+          "new_validator": "scripts/validate_evomap_phase7b_cross_bundle_regression.py",
+          "backward_compat_validators_passing": [
+            "scripts/validate_evomap_phase5_local_evolution_kit.py",
+            "scripts/validate_evomap_phase6a_hermes_systemd_bundle.py",
+            "scripts/validate_evomap_phase6b_telegram_router_bundle.py",
+            "scripts/validate_evomap_phase7a_domain_signal_injection.py"
+          ],
+          "hard_boundaries_preserved": 20,
+          "phase_7a_base_commit": "3112f07",
+          "notes": "Phase 7B is a cross-bundle regression test that applies all 3 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure) sequentially to a single fresh isolated target runtime at /tmp/atl-evomap-7b-cross-bundle-target. All 3 are applied with --inject-signals-from, so the apply tool extracts gene.signals_match + capsule.trigger from each bundle and writes 5 generic + N domain signals. Cumulative: 59 apply-format memory_graph lines (15+17+27), 39 distinct signals, 0 dangerous, 0 pollution, 0 duplicate gene_ids, 0 duplicate capsule_ids, 0 broken capsule-to-gene links, all 19 spec-required signals present (5 OpenClaw + 6 Hermes + 8 Telegram). Combined evolver smoke in the runtime is clean: [SearchFirst] No hub match (reason: no_hub_url), selectionPath=score_ranked, no --approve, no solidify, no crash. 5/5 score dimensions PASS. All 4 prior phase validators still ALL CHECKS PASSED (no regression)."
         }
       ]
     }

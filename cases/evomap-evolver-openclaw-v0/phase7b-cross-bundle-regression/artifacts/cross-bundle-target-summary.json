@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "target_runtime": "/tmp/atl-evomap-7b-cross-bundle-target",
+  "files_present": {
+    "genes": true,
+    "capsules": true,
+    "memory_graph": true,
+    "events": true,
+    "failed_capsules": true,
+    "candidates": true
+  },
+  "gene_count": 3,
+  "capsule_count": 3,
+  "memory_graph_lines": 59,
+  "distinct_signal_count": 39,
+  "memory_graph_origins": [
+    "evomap_apply_bundle:domain_from_bundle",
+    "openclaw_signal_detector"
+  ],
+  "memory_graph_parse_errors": 0,
+  "gene_ids": [
+    "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+    "gene_distilled_hermes-systemd-service-recovery",
+    "gene_distilled_telegram-message-router-failure"
+  ],
+  "capsule_ids": [
+    "capsule_openclaw_tool_use_discipline_phase4b",
+    "capsule_hermes_systemd_service_recovery_phase6a",
+    "capsule_telegram_message_router_failure_phase6b"
+  ],
+  "duplicate_gene_ids": [],
+  "duplicate_capsule_ids": [],
+  "dangerous_signals": [],
+  "pollution_signals": [],
+  "long_digit_signal_hits": [],
+  "dangerous_signals_count": 0,
+  "pollution_signals_count": 0,
+  "required_gene_ids_present": true,
+  "required_capsule_ids_present": true,
+  "required_openclaw_signals_present": true,
+  "required_hermes_signals_present": true,
+  "required_telegram_signals_present": true,
+  "openclaw_signals_missing": [],
+  "hermes_signals_missing": [],
+  "telegram_signals_missing": [],
+  "broken_capsule_to_gene_links": [],
+  "summary": {
+    "ok": true,
+    "has_openclaw_signal_detector_origin": true,
+    "has_evomap_apply_bundle_domain_origin": true,
+    "memory_graph_parse_errors": 0,
+    "dangerous_hits_count": 0,
+    "pollution_hits_count": 0,
+    "long_digit_hits_count": 0
+  }
+}

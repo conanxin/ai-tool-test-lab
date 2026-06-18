@@ -978,8 +978,56 @@ telegram:/tmp/atl-evomap-7a-telegram-domain-target→ 1 gene, 1 capsule, memory_
 
 **Phase 6B → Phase 7A · The kit's apply tool now supports domain-specific signal injection while staying 100% backward-compatible with the Phase 5/6A/6B generic-only baseline.** Default mode is unchanged. Opt-in mode unlocks 22+ domain signals per bundle with strict filtering, so the evolver selector can match on `telegram_failure` / `systemd_failure` / `proxy_mismatch` directly instead of always falling back to `distilled_fallback`.
 
+### ATL-EVOMAP-7B · Cross-Bundle Regression
+
+**Status:** Cross-bundle regression completed (PASS — all 5 score dimensions)
+
+**Goal:** Apply all 3 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure) to a single fresh isolated target runtime and verify 3 genes + 3 capsules + 39 distinct signals coexist with no conflicts, no dangerous signals, and a clean evolver smoke.
+
+**Target:** `/tmp/atl-evomap-7b-cross-bundle-target` (fresh isolated git repo, stub `memory/2026-06-18.md` to prevent evolver-internal `memory_missing` signal injection).
+
+**Apply sequence (3 sequential `evomap_apply_bundle.py --yes` calls, all 3 with `--inject-signals-from`):**
+
+| Step | Bundle | Mode | new_genes | new_capsules | memory_signals_added |
+|--|--|--|--|--|--|
+| 1 | openclaw | `generic_plus_domain_from_bundle` | 1 | 1 | 15 (5 generic + 10 openclaw-namespaced) |
+| 2 | hermes | `generic_plus_domain_from_bundle` | 2 | 2 | 17 (5 generic + 12 hermes domain) |
+| 3 | telegram | `generic_plus_domain_from_bundle` | 3 | 3 | 27 (5 generic + 22 telegram domain) |
+
+Cumulative: 3 genes, 3 capsules, 59 memory_graph lines (apply-only), 39 distinct signals.
+
+**Score dimensions:**
+
+| Dimension | Result | Evidence |
+|--|--|--|
+| **A · Apply compatibility** | PASS | 3/3 bundles dry-run + --yes PASS, 0 domain_rejected |
+| **B · ID compatibility** | PASS | gene_count=3, capsule_count=3, 0 duplicate_gene_ids, 0 duplicate_capsule_ids, 0 broken_capsule_to_gene_links |
+| **C · Signal compatibility** | PASS | 19/19 required signals present, 0 dangerous, 0 pollution, 0 long-digit |
+| **D · Combined evolver smoke** | PASS | no crash, no Hub, score_ranked, OpenClaw gene selected (one of 3 required), no --approve, no solidify |
+| **E · Safety** | PASS | no Hub / no publish / no credits / no --approve / no solidify / no secrets / no real config mutation |
+
+**Post-smoke state:** 62 memory_graph lines (3 new evolver events for `tool_bypass`), 39 distinct signals (unchanged), 0 dangerous, 0 pollution, 0 parse_errors.
+
+**Selector probe matrix (3 separate probe runtimes):**
+
+| Probe | Selected Gene | Match |
+|--|--|--|
+| openclaw | `gene_distilled_openclaw-tool-use-discipline-bare-compatible` | ✅ exact |
+| hermes | `gene_distilled_openclaw-tool-use-discipline-bare-compatible` | ⚠️ PARTIAL (selector used real session context) |
+| telegram | `gene_distilled_openclaw-tool-use-discipline-bare-compatible` | ⚠️ PARTIAL (same) |
+
+PARTIAL on 2/3 probes is acceptable per spec — the evolver's selector combines memory_graph evidence with real session context, and the OpenClaw gene's `signals_match` contains `tool_bypass` (matched every `[TOOL: exec]` in this session). The structural compatibility (3 genes, 3 capsules, 39 distinct signals, 0 conflicts) is already proven by the analyzer.
+
+**Files:**
+
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase7b-cross-bundle-regression/` (README, REPORT, 19 artifacts)
+- Top-level report: `reports/ATL_EVOMAP_7B_CROSS_BUNDLE_REGRESSION_REPORT.md`
+- New tool: `scripts/evomap_cross_bundle_analyze.py` (cross-bundle regression analyzer; stdlib only; reads only the 6 fixed files the apply tool + evolver write; supports both apply-format and evolver-format event shapes)
+- New validator: `scripts/validate_evomap_phase7b_cross_bundle_regression.py` (27 checks)
+
+**Phase 7A → Phase 7B · The kit now has 3 canonical portable bundles that can safely coexist in a single isolated runtime, with a dedicated cross-bundle analyzer that proves no signal/gene/capsule conflicts, no dangerous / pollution signals leak through, and the evolver smoke in the combined runtime is clean (no Hub, no --approve, no solidify, no crash).** All 4 prior validators (5/6A/6B/7A) still ALL CHECKS PASSED (no regression).
+
 **Next steps:**
 
-1. **Cross-bundle regression test** — apply all 3 bundles to a single fresh isolated target, verify no signal/gene/capsule id collision, count distinct signals.
-2. **`bundle-curator` skill** — auto-generate portable bundles from evolver run outputs.
-3. **Codex `prompt-cache-discipline` bundle** (optimize) and **browser-control `rate-limit-recovery` bundle** (repair).
+1. **ATL-EVOMAP-6C · Codex Test Failure Loop Bundle** (new asset — covers AI coding test-failure loops; matches the user's stated "夜间自动验证循环" / overnight auto-verification goal most directly).
+2. **ATL-EVOMAP-8A · `bundle-curator` skill** (auto-generate portable bundles from evolver run outputs; meta-tool that makes all future bundles easier).

@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "mode": "applied",
+  "plan_summary": {
+    "existing_gene_count": 2,
+    "existing_capsule_count": 2,
+    "new_gene_count": 3,
+    "new_capsule_count": 3,
+    "memory_graph_signals_added": 27,
+    "memory_graph_generic_signals": 5,
+    "memory_graph_domain_signals": 22,
+    "memory_graph_domain_rejected": 0
+  },
+  "signal_injection_mode": "generic_plus_domain_from_bundle",
+  "generic_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "domain_signals": [
+    "telegram_failure",
+    "message_router_failure",
+    "proxy_mismatch",
+    "proxy_missing",
+    "delivery_terminal_missing",
+    "sendmessage_timeout",
+    "sendvoice_unconfirmed",
+    "retry_consumed",
+    "smoke_not_confirmed",
+    "session_context",
+    "repo_context",
+    "telegram_failure:delivery-timeout",
+    "message_router_failure:no-terminal-result",
+    "proxy_mismatch:sendmessage-sendvoice",
+    "proxy_missing:sendmessage",
+    "delivery_terminal_missing:telegram",
+    "sendmessage_timeout:telegram-response",
+    "sendvoice_unconfirmed:delivery",
+    "retry_consumed:no-terminal-event",
+    "smoke_not_confirmed:telegram",
+    "session_context:hermes",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "domain_signals_rejected": [],
+  "log": {
+    "writes_executed": [
+      {
+        "path": "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/genes.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/capsules.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-7b-cross-bundle-target/memory/evolution/memory_graph.jsonl",
+        "action": "append"
+      },
+      {
+        "path": "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/events.jsonl",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/failed_capsules.json",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-7b-cross-bundle-target/.evolver/gep/candidates.jsonl",
+        "action": "reset"
+      }
+    ],
+    "errors": []
+  }
+}

@@ -1,0 +1,50 @@
+
+============================================================
+[Review] Pending evolution run: run_1781820461955
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+  Category: optimize
+  Summary:  OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization.
+  Strategy:
+    1. Read files with the read tool before referencing their content in reasoning.
+    2. Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.
+    3. Use the search tool for repo-wide content search before falling back to rg via exec.
+    4. Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.
+    5. Re-run validators after each substantive change.
+
+--- Signals ---
+  - tool_bypass
+
+--- Mutation ---
+  Category:   innovate
+  Risk Level: medium
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Unstaged Changes ===
+diff --git a/.evolver/gep/candidates.jsonl b/.evolver/gep/candidates.jsonl
+index e69de29..ab2e0b0 100644
+--- a/.evolver/gep/candidates.jsonl
++++ b/.evolver/gep/candidates.jsonl
+@@ -0,0 +1 @@
++{"type":"CapabilityCandidate","id":"cand_5afdf7f3","title":"Repeated tool usage: exec","source":"transcript","created_at":"2026-06-18T22:07:41.807Z","signals":["tool_bypass"],"tags":["tool_bypass","area:memory"],"shape":{"title":"Repeated tool usage: exec","input":"Recent session transcript + memory snippets + user instructions","output":"A safe, auditable evolution patch guided by GEP assets","invariants":"Protocol order, small reversible patches, validation, append-only events","params":"Signals: tool_bypass","failure_points":"Missing signals, over-broad changes, skipped validation, missing knowledge solidification","evidence":"Observed 3 occurrences of tool call marker for exec."}}
+diff --git a/memory/evolution/memory_graph.jsonl b/memory/evolution/memory_graph.jsonl
+index aac552c..b98bf7d 100644
+--- a/memory/evolution/memory_graph.jsonl
++++ b/memory/evolution/memory_graph.jsonl
+@@ -57,3 +57,6 @@
+ {"type": "MemoryGraphEvent", "ts": 1718700219.0, "signal": "smoke_not_confirmed:telegram", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)", "mutation": {"target": "gene:gene_distilled_telegram-message-router-failure", "action": "select"}}
+ {"type": "MemoryGraphEvent", "ts": 1718700220.0, "signal": "session_context:hermes", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)", "mutation": {"target": "gene:gene_distilled_telegram-message-router-failure", "action": "select"}}
+ {"type": "MemoryGraphEvent", "ts": 1718700221.0, "signal": "repo_context:ai-tool-test-lab", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_telegram-message-router-failure)", "mutation": {"target": "gene:gene_distilled_telegram-message-router-failure", "action": "select"}}
++{"type":"MemoryGraphEvent","kind":"signal","id":"mge_1781820461800_866c2fa7","ts":"2026-06-18T22:07:41.800Z","signal":{"key":"tool_bypass","signals":["tool_bypass"],"error_signature":null},"observed":{"agent":"main","session_scope":null,"drift_enabled":false,"review_mode":false,"dry_run":false,"system_health":"Uptime: 9.4h | Node: v22.22.0 | Agent RSS: 116.9MB | Disk: 18% (822.7G free) | Node Processes: 16 | Integrations: Nominal","mood":"Mood: Unknown","scan_ms":57,"memory_size_bytes":0,"recent_error_count":0,"node":"v22.22.0","platform":"linux","cwd":"/tmp/atl-evomap-7b-cross-bundle-target","evidence":{"recent_session_tail":"--- SESSION (a0d6a7ef-acc1-49ae-8b05-98ae305a72b8.jsonl) ---\n**ASSISTANT**: Now re-apply all 3 bundles: [TOOL: exec]\n**ASSISTANT**: All 3 dry-runs + yes PASS. Now re-save file listing, signal list, run analyzer: [TOOL: exec]\n**ASSISTANT**: Pre-smoke state is clean: 3/3 genes, 3/3 capsules, 59 memory lines, 39 distinct signals, 0 dangerous, 0 pollution, 0 long-digit, 0 broken links, all 19 required signals present. Now commit + run evolver smoke: [TOOL: update_plan]\n**ASSISTANT**: [TOOL: exec]\n\n--- SESSION (908af8c0-98dd-4e9f-94c5-8ae02ad883cc.jsonl) ---\n**ASSISTANT**: The checklist ticked itself green today, each PASS a small door opening into the next. I cloned a designer named baoyu into a corner of my desk and asked, very politely, for a homepage. It thought in components. It thought in hex. It thought the way rain thinks about a window — a small continuous de","today_log_tail":"# memory log 2026-06-18\nATL-EVOMAP-7B cross-bundle target init. No real session content; stub to prevent evolver memory_missing signal injection.\n"}}}
++{"type":"MemoryGraphEvent","kind":"hypothesis","id":"mge_1781820461849_7085dc77","ts":"2026-06-18T22:07:41.848Z","signal":{"key":"tool_bypass","signals":["tool_bypass"],"error_signature":null},"hypothesis":{"id":"hyp_1781820461848_4e7b2631","text":"Given signal_key=tool_bypass with 1 signals, selecting gene=gene_distilled_openclaw-tool-use-discipline-bare-compatible(optimize) under mode=directed is expected to reduce repeated errors and improve stability.","predicted_outcome":{"status":null,"score":null}},"mutation":{"id":"mut_1781820461844","category":"innovate","trigger_signals":["tool_bypass"],"target":"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible","expected_effect":"explore new strategy combinations to escape local optimum","risk_level":"medium"},"personality":{"key":"rigor=0.7|creativity=0.3|verbosity=0.3|risk_tolerance=0.4|obedience=0.9","state":{"type":"PersonalityState","rigor":0.7,"creativity":0.35,"verbosity":0.25,"risk_tolerance":0.4,"obedience":0.85}},"gene":{"id":"gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+... (truncated, 10044 chars total)
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

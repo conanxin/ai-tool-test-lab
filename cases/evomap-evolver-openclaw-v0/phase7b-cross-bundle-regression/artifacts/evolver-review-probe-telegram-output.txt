@@ -1,0 +1,56 @@
+
+============================================================
+[Review] Pending evolution run: run_1781820552517
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+  Category: optimize
+  Summary:  OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization.
+  Strategy:
+    1. Read files with the read tool before referencing their content in reasoning.
+    2. Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.
+    3. Use the search tool for repo-wide content search before falling back to rg via exec.
+    4. Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.
+    5. Re-run validators after each substantive change.
+
+--- Signals ---
+  - tool_bypass
+
+--- Mutation ---
+  Category:   innovate
+  Risk Level: medium
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Unstaged Changes ===
+diff --git a/.evolver/gep/candidates.jsonl b/.evolver/gep/candidates.jsonl
+index e69de29..337b3e8 100644
+--- a/.evolver/gep/candidates.jsonl
++++ b/.evolver/gep/candidates.jsonl
+@@ -0,0 +1,2 @@
++{"type":"CapabilityCandidate","id":"cand_5afdf7f3","title":"Repeated tool usage: exec","source":"transcript","created_at":"2026-06-18T22:07:41.807Z","signals":["tool_bypass"],"tags":["tool_bypass","area:memory"],"shape":{"title":"Repeated tool usage: exec","input":"Recent session transcript + memory snippets + user instructions","output":"A safe, auditable evolution patch guided by GEP assets","invariants":"Protocol order, small reversible patches, validation, append-only events","params":"Signals: tool_bypass","failure_points":"Missing signals, over-broad changes, skipped validation, missing knowledge solidification","evidence":"Observed 3 occurrences of tool call marker for exec."}}
++{"type":"CapabilityCandidate","id":"cand_5afdf7f3","title":"Repeated tool usage: exec","source":"transcript","created_at":"2026-06-18T22:09:12.317Z","signals":["tool_bypass"],"tags":["tool_bypass","problem:reliability","action:repair","area:memory"],"shape":{"title":"Repeated tool usage: exec","input":"Recent session transcript + memory snippets + user instructions","output":"A safe, auditable evolution patch guided by GEP assets","invariants":"Protocol order, small reversible patches, validation, append-only events","params":"Signals: tool_bypass","failure_points":"Missing signals, over-broad changes, skipped validation, missing knowledge solidification","evidence":"Observed 3 occurrences of tool call marker for exec."}}
+diff --git a/memory/evolution/memory_graph.jsonl b/memory/evolution/memory_graph.jsonl
+index aac552c..fac7980 100644
+--- a/memory/evolution/memory_graph.jsonl
++++ b/memory/evolution/memory_graph.jsonl
+@@ -1,59 +1,16 @@
+-{"type": "MemoryGraphEvent", "ts": 1718700001.0, "signal": "tool_bypass", "origin": "openclaw_signal_detector", "weight": 0.85, "context": "Detected exec invocation without prior read on .md file", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700002.0, "signal": "repeated_tool_usage", "origin": "openclaw_signal_detector", "weight": 0.7, "context": "Same read+edit+search pattern repeated 3x", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700003.0, "signal": "protocol_drift", "origin": "openclaw_signal_detector", "weight": 0.9, "context": "Detected sed -i usage forbidden by OpenClaw protocol", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700004.0, "signal": "session_context", "origin": "openclaw_signal_detector", "weight": 0.6, "context": "Session has multiple file ops requiring tool discipline", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700005.0, "signal": "repo_context", "origin": "openclaw_signal_detector", "weight": 0.65, "context": "Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700200.0, "signal": "tool_bypass", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_openclaw-tool-use-discipline-bare-compatible)", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700201.0, "signal": "repeated_tool_usage", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_openclaw-tool-use-discipline-bare-compatible)", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700202.0, "signal": "protocol_drift", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_openclaw-tool-use-discipline-bare-compatible)", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700203.0, "signal": "session_context", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_openclaw-tool-use-discipline-bare-compatible)", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+-{"type": "MemoryGraphEvent", "ts": 1718700204.0, "
+... (truncated, 38419 chars total)
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject
