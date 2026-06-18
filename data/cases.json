@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-4A Isolation Selector",
-      "status": "isolation selector completed",
+      "phase": "ATL-EVOMAP-4B Isolated Capsule",
+      "status": "isolated capsule completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "ATL-EVOMAP-4A isolation selector test PASS: created fully isolated runtime at /tmp/atl-evomap-4a-isolated (1 Gene, 0 failed events, 0 pollution signals, 5 clean bare signals all targeting gene_distilled_openclaw-tool-use-discipline-bare-compatible); evolver run + review output shows 'Selection: Selected Gene gene_distilled_openclaw-tool-use-discipline-bare-compatible' with selection_path=distilled_fallback and alternatives=[]; selector_reason=['signals match gene.signals_match','signals: memory_missing','drift_intensity: 1.000','selection_path: distilled_fallback']; Phase 3C-V2 BLOCKED root cause confirmed: history-and-session driven selector in real repo runtime; isolated runtime reproduces Phase 3B2 result, proving the OpenClaw Gene is selectable in principle; no Hub / no publish / no credits / no validator / no --approve / no solidify / no real config mutation / no secrets (all 15 hard boundaries preserved); isolated runtime at /tmp NOT committed to main repo; Phase 4B (capsule creation in isolated env) is GO.",
+      "summary": "ATL-EVOMAP-4B isolated capsule test PASS: reused Phase 4A isolated runtime at /tmp/atl-evomap-4a-isolated (intact: 1 Gene, 0 events, 0 pollution); seeded a real Capsule (capsule_openclaw_tool_use_discipline_phase4b) referencing gene_distilled_openclaw-tool-use-discipline-bare-compatible with 4-step execution_trace (build + 2 validate + canary); ran python3 openclaw_tool_use_fixture.py to generate real execution_trace evidence; ran evolver run + review in isolated env; capsule survived the cycle intact (id, gene, status, confidence, execution_trace, source, visibility all preserved); selector still hit OpenClaw Gene (selection_path=distilled_fallback, alternatives=[]); 0 pollution events; all 16 hard boundaries preserved (no Hub / no publish / no credits / no validator / no --approve / no solidify / no real config mutation / no secrets / no source modification / no isolated runtime committed); local-only Capsule pathway 2/2 steps proven (Phase 4A selector hit + Phase 4B capsule survival); Phase 4C (cross-session reuse) is GO.",
       "updated_at": "2026-06-19",
-      "final_status": "ISOLATION_SELECTOR_PASS",
+      "final_status": "ISOLATED_CAPSULE_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -124,6 +124,32 @@
           "report_case": "cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/ATL_EVOMAP_4A_ISOLATION_SELECTOR_REPORT.md",
           "report_top": "reports/ATL_EVOMAP_4A_ISOLATION_SELECTOR_REPORT.md",
           "notes": "PASS - selector reproducibility concern resolved; isolated runtime at /tmp not committed"
+        },
+        {
+          "phase": "ATL-EVOMAP-4B",
+          "status": "isolated capsule completed",
+          "result": "PASS",
+          "isolated_runtime": "/tmp/atl-evomap-4a-isolated",
+          "isolated_runtime_reused": true,
+          "isolated_runtime_baseline_commit": "f14ba6c",
+          "isolated_runtime_seed_commit": "8c6853f",
+          "capsule_id": "capsule_openclaw_tool_use_discipline_phase4b",
+          "capsule_gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+          "capsule_status": "success",
+          "capsule_confidence": 0.84,
+          "capsule_execution_trace_steps": 4,
+          "capsule_survived": true,
+          "selector_still_hits_openclaw_gene": true,
+          "selection_path": "distilled_fallback",
+          "hub_connected": false,
+          "credits_consumed": 0,
+          "approver_executed": false,
+          "solidify_executed": false,
+          "phase_4a_validity": "PASS (selector hit, 1 Gene, 0 pollution)",
+          "phase_4c_recommendation": "GO - cross-session reuse test",
+          "report_case": "cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md",
+          "report_top": "reports/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md",
+          "notes": "PASS - local-only Capsule pathway viable in isolated env; 2/2 steps proven"
         }
       ]
     }

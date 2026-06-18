@@ -1,0 +1,13 @@
+capsule_count 1
+found_target True
+gene_id gene_distilled_openclaw-tool-use-discipline-bare-compatible
+status success
+confidence 0.84
+execution_trace_non_empty True
+execution_trace_type list
+execution_trace_steps 4
+  step_1 build python3 openclaw_tool_use_fixture.py --input fixtures/sessio exit=0
+  step_2 validate python3 -m json.tool /tmp/openclaw_tool_use_execution_trace. exit=0
+  step_3 validate json_parse_pass exit=0
+  step_4 canary safety_check exit=0
+target_survived True

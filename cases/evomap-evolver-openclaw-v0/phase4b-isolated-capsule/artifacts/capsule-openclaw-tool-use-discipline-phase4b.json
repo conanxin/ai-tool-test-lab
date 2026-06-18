@@ -1,0 +1,73 @@
+{
+  "type": "Capsule",
+  "schema_version": "1.6.0",
+  "id": "capsule_openclaw_tool_use_discipline_phase4b",
+  "trigger": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "summary": "OpenClaw tool discipline applied to a real session: prefers read/edit/search over exec grep; re-runs validators after substantive change. Validated against fixtures/session-tool-use-sample.txt.",
+  "confidence": 0.84,
+  "blast_radius": {
+    "files": 0,
+    "lines": 0
+  },
+  "status": "success",
+  "outcome": {
+    "status": "success",
+    "score": 0.84
+  },
+  "execution_trace": [
+    {
+      "step": 1,
+      "stage": "build",
+      "cmd": "python3 openclaw_tool_use_fixture.py --input fixtures/session-tool-use-sample.txt",
+      "exit": 0
+    },
+    {
+      "step": 2,
+      "stage": "validate",
+      "cmd": "python3 -m json.tool /tmp/openclaw_tool_use_execution_trace.json",
+      "exit": 0,
+      "output_summary": {
+        "ok": true,
+        "exec_count": 3,
+        "read_count": 2,
+        "edit_count": 2,
+        "search_count": 1,
+        "total_tool_uses": 8,
+        "exec_ratio": 0.375,
+        "has_session_context": true,
+        "has_repo_context": true
+      }
+    },
+    {
+      "step": 3,
+      "stage": "validate",
+      "cmd": "json_parse_pass",
+      "exit": 0,
+      "validation": "json_parse_pass"
+    },
+    {
+      "step": 4,
+      "stage": "canary",
+      "cmd": "safety_check",
+      "exit": 0,
+      "checks": {
+        "no_hub": true,
+        "no_secret": true,
+        "no_env_scan": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ],
+  "source": "manual_capsule_seed_phase4b",
+  "visibility": "private",
+  "created_at": "2026-06-19T00:09:00Z"
+}

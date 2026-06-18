@@ -1,0 +1,45 @@
+
+============================================================
+[Review] Pending evolution run: run_1781799026674
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_openclaw-tool-use-discipline-bare-compatible
+  Category: optimize
+  Summary:  OpenClaw-specific tool discipline with bare-signal compatibility for Evolver scanner normalization. Includes both qualified (tool_bypass:exec-on-grep) and bare (tool_bypass) signal forms to survive Evolver's qualified->bare normalization.
+  Strategy:
+    1. Read files with the read tool before referencing their content in reasoning.
+    2. Use the edit tool for in-place file changes; never use sed -i or awk -i inplace.
+    3. Use the search tool for repo-wide content search before falling back to rg via exec.
+    4. Prefix every non-validator exec invocation with a one-line EXEC: <reason> in reasoning.
+    5. Re-run validators after each substantive change.
+
+--- Signals ---
+  - memory_missing
+
+--- Mutation ---
+  Category:   optimize
+  Risk Level: low
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Unstaged Changes ===
+diff --git a/memory/evolution/memory_graph.jsonl b/memory/evolution/memory_graph.jsonl
+index 9bc0631..6ac7cba 100644
+--- a/memory/evolution/memory_graph.jsonl
++++ b/memory/evolution/memory_graph.jsonl
+@@ -3,3 +3,12 @@
+ {"type": "MemoryGraphEvent", "ts": 1718700003.0, "signal": "protocol_drift", "origin": "openclaw_signal_detector", "weight": 0.9, "context": "Used read tool for binary file or wrong-tool-for-file-read scenario", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+ {"type": "MemoryGraphEvent", "ts": 1718700004.0, "signal": "session_context", "origin": "openclaw_signal_detector", "weight": 0.6, "context": "OpenClaw session marker detected in cwd / context tokens", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
+ {"type": "MemoryGraphEvent", "ts": 1718700005.0, "signal": "repo_context", "origin": "openclaw_signal_detector", "weight": 0.65, "context": "Repository is ai-tool-test-lab with OpenClaw tool discipline focus", "mutation": {"target": "gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible", "action": "select"}}
++{"type":"MemoryGraphEvent","kind":"signal","id":"mge_1781798477023_9c389dc1","ts":"2026-06-18T16:01:17.023Z","signal":{"key":"memory_missing","signals":["memory_missing"],"error_signature":null},"observed":{"agent":"main","session_scope":null,"drift_enabled":false,"review_mode":false,"dry_run":false,"system_health":"Uptime: 3.1h | Node: v22.22.0 | Agent RSS: 111.1MB | Disk: 18% (824.8G free) | Node Processes: 6 | Integrations: Nominal","mood":"Mood: Unknown","scan_ms":198,"memory_size_bytes":0,"recent_error_count":0,"node":"v22.22.0","platform":"linux","cwd":"/tmp/atl-evomap-4a-isolated","evidence":{"recent_session_tail":"--- SESSION (edb78c27-8158-465d-8dc8-caf7ca46273a.jsonl) ---\n**ASSISTANT**: [TOOL: exec]\n   ... [Repeated 5 times] ...","today_log_tail":"[MISSING] /tmp/atl-evomap-4a-isolated/memory/2026-06-18.md"}}}
++{"type":"MemoryGraphEvent","kind":"hypothesis","id":"mge_1781798477079_ea14ba8a","ts":"2026-06-18T16:01:17.077Z","signal":{"key":"memory_missing","signals":["memory_missing"],"error_signature":null},"hypothesis":{"id":"hyp_1781798477077_80241d2e","text":"Given signal_key=memory_missing with 1 signals, selecting gene=gene_distilled_openclaw-tool-use-discipline-bare-compatible(optimize) under mode=directed is expected to reduce repeated errors and improve stability.","predicted_outcome":{"status":null,"score":null}},"mutation":{"id":"mut_1781798477072","category":"optimize","trigger_signals":["memory_missing"],"target":"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible","expected_effect":"improve success rate and reduce repeated operational cost","risk_level":"low"},"personality":{"key":"rigor=0.7|creativity=0.3|verbosity=0.3|risk_tolerance=0.4|obedience=0.9","state":{"type":"PersonalityState","rigor":0.7,"creativity":0.35,"verbosity":0.25,"risk_tolerance":0.4,"obedience":0.85}},"gene":{"id":"gene_distilled_openclaw-tool-use-discipline-bare-compatible","category":"optimize"},"action":{"drift":false,"selected_by":"selector","selector":{"selected":"gene_distilled_openclaw-tool-use-discipline-bare-compatible","reason":["signals match gene.signals_match","signals: memory_missing","drift_intensity: 1.000","selection_path: distilled_fallback"],"alternatives":[],"selectionPath":"distilled_fallback","memoryUsed":false}},"capsules":{"used":[]},"observed":{"agent":"main","session_scope":null,"drift_enabled":false,"review_mode":false,"dry_run":false,"system_health":"Uptime: 3.1h | Node: v22.22.0 | Agent RSS: 111.1MB | Disk: 18% (824.8G free) | Node Processes: 6 | Integrations: Nominal","mood":"Mood: Unknown","scan_ms":198,"memory_size_bytes":0,"recent_error_count":0,"node":"v22.22.0","platform":"linux","cwd":"/tmp/atl-evomap-4a-isolated","evidence":{"recent_session_tail":"--- SESSION (edb78c27-8158-465d-8dc8-caf7ca46273a.jsonl) ---\n**ASSISTANT**: [TOOL: exec]\n   ... [Repeated 5 times] ...","today_log_tail":"[MISSING] /tmp/atl-evomap-4a-isolated/memory/2026-06-18.md"}}}
++{"type":"MemoryGraphEvent","kind":"attempt","id":"mge_1781798477084_41765970","ts":"2026-06-18T16:01:17.082Z","signal":{"key":"memory_missing","signals":["memory_missing"],"error_signature":null},"mutation":{"id":"mut_1781798477072","category":"optimize","trigger_signals":["memory_missing"],"target":"gene:gene_distilled_openclaw-tool-use-discipline-bare-compatible","expected_effect":"improve success rate and reduce repeated operational cost","risk_level":"low"},"personality":{"key":"rigor=0.7|creativity=0.3|verbosity=0.3|risk_tolerance=0.4|obedience=0.9","state":{"type":"PersonalityState","rigor":0.7,"creativity":0.35,"verbosity":0.25,"risk_tolerance":0.4,"obedience":0.85}},"gene":{"id":"gene_distilled_openclaw-tool-use-discipline-bare-compatible","category":"optimize"},"hypothesis":{"id":"hyp_1781798477077_80241d2e"},"action":{"id":"ac
+... (truncated, 14529 chars total)
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

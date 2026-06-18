@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "capsule_count": 1,
+  "capsule_ids": [
+    "capsule_openclaw_tool_use_discipline_phase4b"
+  ],
+  "target_capsule": "capsule_openclaw_tool_use_discipline_phase4b",
+  "target_capsule_gene": "gene_distilled_openclaw-tool-use-discipline-bare-compatible",
+  "target_capsule_execution_trace_steps": 4,
+  "target_capsule_status": "success",
+  "target_capsule_confidence": 0.84
+}

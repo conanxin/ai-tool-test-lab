@@ -593,3 +593,69 @@ Capsule creation in isolated env can proceed. Goals: real Capsule with non-empty
 - `cases/evomap-evolver-openclaw-v0/phase4a-isolation-selector/artifacts/selector-isolation-grep.txt`
 - `reports/ATL_EVOMAP_4A_ISOLATION_SELECTOR_REPORT.md` (top-level)
 
+
+## ATL-EVOMAP-4B · Isolated Capsule Test (2026-06-19)
+
+**Status: PASS** — Capsule seed created, execution_trace non-empty, Capsule survived `evolver run`+`review` cycle.
+
+### What Phase 4B tested
+
+After Phase 4A proved the selector can hit the OpenClaw Gene in clean env, the next question was: can a **real Capsule** referencing the Gene be **created and survive** the evolver cycle in clean env?
+
+### Approach
+
+- Reused Phase 4A's isolated runtime at `/tmp/atl-evomap-4a-isolated` (verified intact: 1 Gene, 0 events, 0 capsules, 0 pollution).
+- Ran `openclaw_tool_use_fixture.py` against `fixtures/session-tool-use-sample.txt` to generate a **real execution_trace** (exec_count=3, read_count=2, edit_count=2, search_count=1, exec_ratio=0.375).
+- Manually wrote a Capsule to `capsules.json` with:
+  - `id: capsule_openclaw_tool_use_discipline_phase4b`
+  - `gene: gene_distilled_openclaw-tool-use-discipline-bare-compatible`
+  - 4-step `execution_trace` (build + 2 validate + canary)
+  - `status: success`, `confidence: 0.84`, `visibility: private`
+  - `source: manual_capsule_seed_phase4b`
+- Ran `evolver run` + `evolver review` in the isolated env (no --approve, no solidify).
+- Verified capsule survival via Python check + grep.
+
+### Result
+
+- `capsule_count: 1` (unchanged after run/review)
+- `target_survived: True`
+- All 4 `execution_trace` steps preserved (build + 2 validate + canary)
+- `gene` / `status` / `confidence` / `source` / `visibility` all preserved
+- **Selector still hit OpenClaw Gene** — seeded Capsule did not destabilize the selector
+- `selection_path: distilled_fallback`, `alternatives: []`
+- 0 pollution events emitted
+
+### Scoring (4 dimensions)
+
+| Dimension | Status |
+|---|---|
+| A. Capsule seed creation | PASS (4 execution_trace steps, schema follows evolver 1.6.0) |
+| B. Capsule survival | PASS (target_survived=True, all fields preserved) |
+| C. Selector behavior | PASS (selector still hit OpenClaw Gene, no GEP-internal pollution) |
+| D. Safety | PASS (all 16 hard boundaries) |
+
+### Local-only Capsule pathway: 2/2 steps proven
+
+- **Step 1 (Phase 4A):** distilled Gene can be **selected** in clean env ✅
+- **Step 2 (Phase 4B):** a Capsule referencing that Gene can be **created and survive** in clean env ✅
+- **Step 3 (Phase 4C):** can the Capsule be **reused across sessions**? (next)
+
+### Phase 4C GO
+
+Cross-session reuse test. Copy `capsules.json` to a second isolated runtime, run evolver in each, verify same Capsule is recognized in both. Document minimal import contract for cross-session-portable Capsules. Assess whether the main repo runtime can accept a Capsule import without triggering GEP-internal repair loop.
+
+**Hard boundaries unchanged** (no Hub, no publish, no credits, no --approve, no solidify).
+
+### Files
+
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md` (full report)
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/capsule-openclaw-tool-use-discipline-phase4b.json`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/capsules-json-after-seed-summary.json`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/execution-trace-openclaw-tool-use.json`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/evolver-run-isolated-capsule-output.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/evolver-review-isolated-capsule-output.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/capsule-survival-check.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/capsule-grep-after-run.txt`
+- `cases/evomap-evolver-openclaw-v0/phase4b-isolated-capsule/artifacts/isolation-capsule-setup-summary.json`
+- `reports/ATL_EVOMAP_4B_ISOLATED_CAPSULE_REPORT.md` (top-level)
+
