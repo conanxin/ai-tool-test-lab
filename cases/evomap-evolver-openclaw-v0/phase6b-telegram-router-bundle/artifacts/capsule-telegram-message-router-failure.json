@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.6.0",
+  "type": "Capsule",
+  "id": "capsule_telegram_message_router_failure_phase6b",
+  "gene": "gene_distilled_telegram-message-router-failure",
+  "status": "success",
+  "confidence": 0.84,
+  "visibility": "private",
+  "source": "manual_capsule_seed_phase6b",
+  "created_at": "2026-06-19T04:35:00Z",
+  "trigger": [
+    "telegram_failure",
+    "message_router_failure",
+    "proxy_mismatch",
+    "delivery_terminal_missing",
+    "sendmessage_timeout",
+    "smoke_not_confirmed"
+  ],
+  "blast_radius": {"files": 0, "lines": 0},
+  "execution_trace": [
+    {
+      "stage": "build",
+      "command": "python3 scripts/telegram_router_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/fixtures/telegram-router-failure-sample.txt",
+      "exit_code": 0,
+      "result": "fixture_parsed_with_12_of_12_signals",
+      "output_summary": {
+        "ok": true,
+        "all_signals_present": true,
+        "checks_passed": 12,
+        "checks_total": 12
+      }
+    },
+    {
+      "stage": "validate",
+      "command": "python3 -m json.tool cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/artifacts/telegram-router-fixture-output.json",
+      "exit_code": 0,
+      "result": "json_parse_pass"
+    },
+    {
+      "stage": "validate",
+      "command": "assert delivery_terminal_missing == true and proxy_mismatch == true and sendmessage_timeout == true",
+      "exit_code": 0,
+      "result": "fixture_detected_expected_router_failure_shape"
+    },
+    {
+      "stage": "canary",
+      "command": "safety_check",
+      "exit_code": 0,
+      "result": {
+        "no_real_telegram_call": true,
+        "no_network_call": true,
+        "no_curl_or_wget": true,
+        "no_env_scan": true,
+        "no_credentials": true,
+        "no_recipient_identifier": true,
+        "no_hub": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ],
+  "summary": "Offline, local-only, no-network Capsule for the Telegram message router failure shape. Reproducible from the bundled fixture without touching the real Hermes gateway or any Telegram credentials."
+}

@@ -1,0 +1,11 @@
+{
+  "gene_count": 1,
+  "capsule_count": 1,
+  "memory_graph_lines": 5,
+  "gene_ids": [
+    "gene_distilled_telegram-message-router-failure"
+  ],
+  "capsule_ids": [
+    "capsule_telegram_message_router_failure_phase6b"
+  ]
+}

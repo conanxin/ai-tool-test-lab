@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "bundle_path": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-6B",
+  "source_session": "/tmp/atl-evomap-phase6b-telegram-target",
+  "gene_id": "gene_distilled_telegram-message-router-failure",
+  "gene_category": "repair",
+  "capsule_id": "capsule_telegram_message_router_failure_phase6b",
+  "capsule_status": "success",
+  "capsule_confidence": 0.84,
+  "capsule_visibility": "private",
+  "capsule_source": "manual_capsule_seed_phase6b",
+  "execution_trace_steps": 4,
+  "execution_trace_stages": [
+    "build",
+    "validate",
+    "validate",
+    "canary"
+  ],
+  "top_level_execution_trace_ok": null,
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages": [
+      "build",
+      "validate",
+      "canary"
+    ]
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "no_real_telegram_call": true,
+    "no_real_config_mutation": true,
+    "no_credentials": true,
+    "no_recipient_identifier": true
+  },
+  "kit_provenance": {
+    "phase_5_commit": "c1a6b9a",
+    "phase_6a_commit": "00caf1d",
+    "phase_6b_phase": "ATL-EVOMAP-6B"
+  }
+}

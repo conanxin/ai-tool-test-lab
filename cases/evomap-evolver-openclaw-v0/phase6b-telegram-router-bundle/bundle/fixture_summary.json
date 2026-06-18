@@ -1,0 +1,20 @@
+{
+  "input_fixture": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/fixtures/telegram-router-failure-sample.txt",
+  "parser_cmd": "python3 scripts/telegram_router_recovery_fixture.py --input <fixture>",
+  "parser_module": "scripts/telegram_router_recovery_fixture.py",
+  "expected_component": "hermes-telegram-message-router",
+  "expected_gateway_alive": true,
+  "expected_delivery_terminal_missing": true,
+  "expected_proxy_mismatch": true,
+  "expected_sendmessage_timeout": true,
+  "expected_sendvoice_unconfirmed": true,
+  "expected_smoke_not_confirmed": true,
+  "no_real_telegram_call": true,
+  "no_network_call": true,
+  "no_env_scan": true,
+  "no_credentials": true,
+  "no_recipient_identifier": true,
+  "checks_passed": 12,
+  "checks_total": 12,
+  "all_signals_present": true
+}

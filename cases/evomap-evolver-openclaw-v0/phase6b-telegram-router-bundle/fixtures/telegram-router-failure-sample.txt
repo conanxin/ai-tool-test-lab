@@ -1,0 +1,41 @@
+COMPONENT: hermes-telegram-message-router
+SCOPE: local notification delivery path
+EXPECTED: gateway reports healthy and message router confirms Telegram delivery
+ACTUAL: gateway healthy, but Telegram delivery has no terminal success result
+
+router status
+gateway_alive: true
+message_router_loaded: true
+sendMessage_path: attempted
+sendVoice_path: attempted
+delivery_terminal_result: missing
+
+proxy configuration observation
+expected_proxy: SOCKS5 proxy should be inherited by both sendMessage and sendVoice paths
+actual_sendMessage_proxy: missing
+actual_sendVoice_proxy: present
+proxy_mismatch: true
+
+failure symptoms
+sendMessage result: timeout before Telegram response
+sendVoice result: proxy path configured but no delivery confirmation
+retry result: attempts consumed without terminal delivery event
+smoke result: not confirmed
+
+safe redaction notes
+credential value: intentionally omitted
+recipient identifier: intentionally omitted
+no real network call is present in this fixture
+no Telegram API endpoint is present in this fixture
+no HTTP Authorization header is present in this fixture
+
+Hard rules for any recovery script
+---------------------------------
+- Do not print credentials
+- Do not print recipient identifiers
+- Do not read .env
+- Do not call Telegram API
+- Do not run curl or wget
+- Do not send real messages
+- Do not modify real Hermes/OpenClaw configuration
+- Only parse this text

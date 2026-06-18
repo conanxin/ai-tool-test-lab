@@ -1,0 +1,52 @@
+{
+  "type": "Gene",
+  "id": "gene_distilled_telegram-message-router-failure",
+  "category": "repair",
+  "signals_match": [
+    "telegram_failure",
+    "message_router_failure",
+    "proxy_mismatch",
+    "proxy_missing",
+    "delivery_terminal_missing",
+    "sendmessage_timeout",
+    "sendvoice_unconfirmed",
+    "retry_consumed",
+    "smoke_not_confirmed",
+    "session_context",
+    "repo_context",
+
+    "telegram_failure:delivery-timeout",
+    "message_router_failure:no-terminal-result",
+    "proxy_mismatch:sendmessage-sendvoice",
+    "proxy_missing:sendmessage",
+    "delivery_terminal_missing:telegram",
+    "sendmessage_timeout:telegram-response",
+    "sendvoice_unconfirmed:delivery",
+    "retry_consumed:no-terminal-event",
+    "smoke_not_confirmed:telegram",
+    "session_context:hermes",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "strategy": [
+    "Start by confirming gateway health and router load state without printing credentials.",
+    "Separate sendMessage and sendVoice delivery paths before changing shared proxy code.",
+    "Verify that both delivery paths inherit the same proxy configuration.",
+    "Treat consumed retry without terminal delivery event as a router failure, not as success.",
+    "Run only redacted fixture-mode smoke checks unless the user explicitly authorizes a real message.",
+    "Record evidence as delivery states and error categories, never as credentials or recipient identifiers."
+  ],
+  "constraints": {
+    "max_files": 8,
+    "forbidden_paths": [".git", "node_modules", ".evolver", "memory", ".env", "real_runtime_root"],
+    "forbidden_actions": [
+      "print_credential",
+      "print_recipient_identifier",
+      "call_real_telegram_api",
+      "run_curl_or_wget",
+      "send_real_message",
+      "commit_env_file",
+      "mutate_real_router_config_without_user_instruction"
+    ]
+  },
+  "summary": "Hermes Telegram message router recovery discipline for proxy mismatch, sendMessage timeout, sendVoice delivery uncertainty, and missing terminal delivery state."
+}

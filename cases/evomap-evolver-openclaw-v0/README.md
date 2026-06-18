@@ -829,6 +829,7 @@ All 16 boundaries preserved by **tool design**, not just by careful usage:
 | 4C | Can Gene + Capsule be reused across sessions? | PASS (selection_path=score_ranked, capsule trigger matches signals) |
 | 5 | Can the proven pathway be productized? | PASS (kit + 3 tools + 3 templates + 4-step recipe) |
 | **6A** | **Can the kit produce a 2nd bundle (repair category) for Hermes systemd recovery?** | **PASS (Hermes Gene + Capsule + bundle, 4-step trace, isolated target, evolver run+review smoke, no Hub / no publish / no approve / no solidify)** |
+| **6B** | **Can the kit produce a 3rd bundle (repair category) for Telegram message router failure?** | **PASS (Telegram Gene + Capsule + bundle, 4-step trace, isolated target, evolver run+review smoke, no Hub / no publish / no approve / no solidify, 12/12 fixture signals detected, 10/10 canary booleans true)** |
 
 **Phase 5 marks the end of the ATL-EVOMAP exploration series.** The kit is now a durable asset that can be referenced for future OpenClaw / Hermes / Codex local evolution work.
 
@@ -878,3 +879,48 @@ capsule_ids: ["capsule_hermes_systemd_service_recovery_phase6a"]
 - Validator (next step): `scripts/validate_evomap_phase6a_hermes_systemd_bundle.py`
 
 **Phase 5 → Phase 6A · The kit now supports a 2nd canonical bundle + a 2nd intent category (repair).** It is no longer a one-bundle kit; it is a multi-bundle kit, with a deterministic offline recipe for one of the most painful recurring failures in this lab.
+
+### ATL-EVOMAP-6B · Telegram Message Router Failure Bundle
+
+**Status:** Telegram router bundle completed (PASS)
+
+**Goal:** Third canonical local-only bundle using the Phase 5 kit (same as 6A, 6B), targeting **Hermes Telegram message router failure** (proxy mismatch, sendMessage timeout, sendVoice delivery uncertainty, missing terminal delivery state) in offline-only mode.
+
+**Bundle:** `cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json` (8157 B, repair-category)
+
+**Gene:** `gene_distilled_telegram-message-router-failure` — 22 signals in dual form (11 bare + 11 qualified, including `telegram_failure`, `message_router_failure`, `proxy_mismatch`, `delivery_terminal_missing`, `sendmessage_timeout`, `sendvoice_unconfirmed`, `retry_consumed`, `smoke_not_confirmed`, plus `session_context:hermes` and `repo_context:ai-tool-test-lab`).
+
+**Capsule:** `capsule_telegram_message_router_failure_phase6b` — 4-step execution_trace (build → validate JSON → assert failure-shape → canary 10/10 safety booleans), confidence 0.84, blast_radius {files:0, lines:0}.
+
+**Offline parser:** `scripts/telegram_router_recovery_fixture.py` (stdlib only, ~9200 B) — parses `fixtures/telegram-router-failure-sample.txt` (1402 B) and emits deterministic JSON summary. Detects 12 signals (gateway_alive, message_router_loaded, sendmessage_attempted, sendvoice_attempted, delivery_terminal_missing, sendmessage_timeout, sendvoice_delivery_unconfirmed, proxy_mismatch, sendmessage_proxy_missing, sendvoice_proxy_present, retry_consumed_without_terminal, smoke_not_confirmed) and 6-step `recommended_check_order`. **Refuses .env-shape basenames, Telegram bot token-shape strings (`\d{6,12}:[A-Za-z0-9_-]{20,}`), HTTP `Authorization:` values, API key tokens, and 12+ digit pure-digit recipient-like IDs** with `unsafe_fixture` refusal. 7/7 safety booleans always true.
+
+**Inspect + validate:** 12 checks PASS, secret scan 0 hits, fixture-parser 12/12 signals detected.
+
+**Apply dry-run:** 0 files written, plan summary: 1 gene + 1 capsule + 5 memory signals.
+
+**Apply --yes** to `/tmp/atl-evomap-phase6b-telegram-target`: 6 files written + 5 memory signals appended; bundle survives.
+
+**Evolver run+review smoke:** Selected Gene `gene_distilled_telegram-message-router-failure`, Capsule visible in review, no Hub contact (`[SearchFirst] No hub match (reason: no_hub_url)`), no crash, no approve, no solidify.
+
+**16 hard boundaries preserved by tool design** (parser refuses `.env`-shape basenames, refuses Telegram bot token-shape + recipient-id-shape, no recursive repo scan, no curl/wget/HTTP exec, no .env read; apply tool does not contact Hub / does not run evolver / does not write secrets / does not touch real OpenClaw-Hermes-systemd config; capsule canary 10/10 true).
+
+**On-disk target verify:**
+
+```
+target_runtime: /tmp/atl-evomap-phase6b-telegram-target
+gene_count: 1
+capsule_count: 1
+memory_graph_lines: 8  (5 from apply + 3 from evolver run cycles)
+gene_ids: ["gene_distilled_telegram-message-router-failure"]
+capsule_ids: ["capsule_telegram_message_router_failure_phase6b"]
+```
+
+**Known limitation (documented in README):** Apply tool injects 5 generic bare signals (Phase 5 baseline), not Telegram-specific signals like `telegram_failure` / `proxy_mismatch` / `delivery_terminal_missing`. Future bundle iteration should add `--inject-signals-from <bundle>` to `evomap_apply_bundle.py`.
+
+**Files:**
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/` (README 14.7 KB, REPORT 19.6 KB, bundle, artifacts, fixtures, tools)
+- Top-level report: `reports/ATL_EVOMAP_6B_TELEGRAM_ROUTER_BUNDLE_REPORT.md`
+- New canonical script: `scripts/telegram_router_recovery_fixture.py`
+- Validator: `scripts/validate_evomap_phase6b_telegram_router_bundle.py`
+
+**Phase 6A → Phase 6B · The kit now supports 3rd canonical bundle + 2nd repair-category bundle (still no Hub, no publish, no credits, no approve, no solidify).** The 5-tool kit has not changed; only the bundle domain changed (systemd → telegram router). The kit is now domain-agnostic for offline repair work.

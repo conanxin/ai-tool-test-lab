@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "component": "hermes-telegram-message-router",
+  "input": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/fixtures/telegram-router-failure-sample.txt",
+  "input_size_bytes": 1402,
+  "redaction_safe": true,
+  "detected_signals": {
+    "gateway_alive": true,
+    "message_router_loaded": true,
+    "sendmessage_attempted": true,
+    "sendvoice_attempted": true,
+    "delivery_terminal_missing": true,
+    "sendmessage_timeout": true,
+    "sendvoice_delivery_unconfirmed": true,
+    "proxy_mismatch": true,
+    "sendmessage_proxy_missing": true,
+    "sendvoice_proxy_present": true,
+    "retry_consumed_without_terminal": true,
+    "smoke_not_confirmed": true
+  },
+  "checks_passed": 12,
+  "checks_total": 12,
+  "all_signals_present": true,
+  "recommended_check_order": [
+    "confirm gateway health without printing credentials",
+    "inspect router path selection for sendMessage and sendVoice",
+    "verify proxy inheritance for both delivery paths",
+    "check retry outcome for terminal success or failure event",
+    "run one redacted dry-run smoke in fixture mode only",
+    "record delivery evidence without printing credentials or recipient identifiers"
+  ],
+  "safety": {
+    "no_real_telegram_call": true,
+    "no_network_call": true,
+    "no_curl_or_wget": true,
+    "no_env_scan": true,
+    "no_credentials": true,
+    "no_recipient_identifier": true,
+    "no_real_config_mutation": true
+  },
+  "gateway_alive": true,
+  "message_router_loaded": true,
+  "sendmessage_attempted": true,
+  "sendvoice_attempted": true,
+  "delivery_terminal_missing": true,
+  "sendmessage_timeout": true,
+  "sendvoice_delivery_unconfirmed": true,
+  "proxy_mismatch": true,
+  "sendmessage_proxy_missing": true,
+  "sendvoice_proxy_present": true,
+  "retry_consumed_without_terminal": true,
+  "smoke_not_confirmed": true
+}

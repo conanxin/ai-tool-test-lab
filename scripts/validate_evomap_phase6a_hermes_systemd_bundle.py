@@ -389,17 +389,30 @@ def main() -> int:
                 _check("evomap case present in cases.json", False)
             else:
                 _check("evomap case present in cases.json", True)
-                _check("cases.json phase contains ATL-EVOMAP-6A",
-                       "ATL-EVOMAP-6A" in case.get("phase", ""),
-                       case.get("phase", ""))
-                _check("cases.json status contains 'hermes systemd bundle completed'",
-                       "hermes systemd bundle completed" in case.get("status", ""),
-                       case.get("status", ""))
-                _check("cases.json final_status contains HERMES_SYSTEMD_BUNDLE_PASS",
-                       "HERMES_SYSTEMD_BUNDLE_PASS" in case.get("final_status", ""),
-                       case.get("final_status", ""))
+                # Forward-compat: accept ATL-EVOMAP-6A in either the top-level
+                # phase or the phase_history. This lets the case advance
+                # (e.g. 6A → 6B) without re-running 6A-specific assertions
+                # on stale top-level fields.
                 hist = case.get("phase_history", [])
                 has_6a = any(e.get("phase") == "ATL-EVOMAP-6A" for e in hist)
+                phase_match = "ATL-EVOMAP-6A" in case.get("phase", "") or has_6a
+                status_match = (
+                    "hermes systemd bundle completed" in case.get("status", "")
+                    or has_6a
+                )
+                final_status_match = (
+                    "HERMES_SYSTEMD_BUNDLE_PASS" in case.get("final_status", "")
+                    or has_6a
+                )
+                _check("cases.json phase contains ATL-EVOMAP-6A (top-level or phase_history)",
+                       phase_match,
+                       case.get("phase", ""))
+                _check("cases.json status contains 'hermes systemd bundle completed' (or phase_history has 6A)",
+                       status_match,
+                       case.get("status", ""))
+                _check("cases.json final_status contains HERMES_SYSTEMD_BUNDLE_PASS (or phase_history has 6A)",
+                       final_status_match,
+                       case.get("final_status", ""))
                 _check("cases.json phase_history has ATL-EVOMAP-6A entry", has_6a)
                 if has_6a:
                     last6a = next(e for e in hist if e.get("phase") == "ATL-EVOMAP-6A")
