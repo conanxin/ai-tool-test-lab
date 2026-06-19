@@ -1,0 +1,11 @@
+{
+  "ok": false,
+  "mode": "rejected",
+  "spec": "/tmp/evomap-curator-unsafe-id.curator-spec.json",
+  "out_dir": "/tmp/curator-unsafe-out",
+  "errors": [
+    "capsule.gene ('gene_distilled_DIFFERENT-id') must equal gene.id ('gene_distilled_sample-safe-bundle')"
+  ],
+  "rejected_signals": [],
+  "secret_hits": []
+}

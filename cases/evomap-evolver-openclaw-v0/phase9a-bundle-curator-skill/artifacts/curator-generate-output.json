@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "mode": "generated",
+  "spec": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/specs/sample-safe-bundle.curator-spec.json",
+  "out_dir": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated",
+  "bundle_path": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json",
+  "gene_path": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/gene-gene_distilled_sample-safe-bundle.json",
+  "capsule_path": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/capsule-capsule_sample_safe_bundle_phase9a.json",
+  "readme_path": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/README.generated.md",
+  "gene_id": "gene_distilled_sample-safe-bundle",
+  "capsule_id": "capsule_sample_safe_bundle_phase9a",
+  "signals_count": 4,
+  "execution_trace_steps": 4,
+  "secret_hits": [],
+  "rejected_signals": [],
+  "strict": true,
+  "safety_summary": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "approve": "not_executed",
+    "solidify": "not_executed",
+    "evolver_run": "not_executed",
+    "evolver_review": "not_executed",
+    "real_cron_install": "not_executed",
+    "systemd_timer_install": "not_executed",
+    "network_calls": "not_executed",
+    "real_tests": "not_executed",
+    "no_env_file_content_scanned": true,
+    "stdlib_only": true,
+    "visibility": "private"
+  }
+}

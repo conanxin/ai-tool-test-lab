@@ -1,0 +1,21 @@
+{
+  "gene_count": 1,
+  "capsule_count": 1,
+  "memory_graph_lines": 9,
+  "distinct_signal_count": 7,
+  "gene_ids": [
+    "gene_distilled_sample-safe-bundle"
+  ],
+  "capsule_ids": [
+    "capsule_sample_safe_bundle_phase9a"
+  ],
+  "signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context",
+    "sample_failure",
+    "sample_failure:fixture"
+  ]
+}

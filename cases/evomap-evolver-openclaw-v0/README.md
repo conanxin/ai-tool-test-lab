@@ -1184,3 +1184,49 @@ python3 scripts/evomap_nightly_validate.py --repo-root . --out-dir <dir>
 
 1. **ATL-EVOMAP-8B · Operator-led real-cron install** (optional; operator-owned; gated on Phase 8A being green for at least N consecutive dry-run / smoke cycles + explicit human authorization; would copy `templates/cron.example` into `/etc/cron.d/evomap-nightly` after substituting `/path/to/ai-tool-test-lab` and adjusting cadence).
 2. **ATL-EVOMAP-9A · `bundle-curator` skill** (auto-generate portable bundles from evolver run outputs; meta-tool that makes all future bundles easier).
+
+---
+
+### ATL-EVOMAP-9A · Bundle Curator Skill (2026-06-19)
+
+**Goal.** Ship a stdlib-only, offline-only *Bundle Curator Skill* that converts a hand-written *curator spec* JSON into a portable bundle draft (and a README draft), then hands the draft to the existing `evomap_inspect_bundle.py` / `evomap_validate_bundle.py` / `evomap_apply_bundle.py` tool chain.
+
+| Aspect | State |
+|--|--|
+| Stdlib-only | YES (AST self-check on `scripts/evomap_curate_bundle.py` enforces; the file imports only `argparse`, `ast`, `json`, `re`, `sys`, `pathlib`, `datetime`, `__future__`) |
+| Visibility hard-coded to private | YES (bundle / gene / capsule / kit_provenance all carry `visibility: private`) |
+| Denylist (signal names) | YES (rejects `api_key`, `private_key`, `password`, `bearer`, `csrf_token`, etc.) |
+| Denylist (secret patterns) | YES (OpenAI key / GitHub PAT / JWT / `Authorization: Bearer` / `BEGIN PRIVATE KEY` / 12+ digit numeric) |
+| Hub / publish / credits / approve / solidify / AI API / network / real test runners | ALL **NO** |
+| Single-file read scope (only `--spec`) | YES (no recursive repo scan, no `.env` read) |
+
+**CLI:** `--spec` (required), `--out-dir` (required), `--bundle-name` (optional), `--dry-run`, `--strict`.
+
+**Smoke run results:**
+
+| Step | Result |
+|--|--|
+| 1. Spec dry-run | `ok=true`, `mode=dry-run`, `signals_count=4`, `execution_trace_steps=4`, `secret_hits=[]`, `rejected_signals=[]`. No files written. |
+| 2. Spec generate (`--strict`) | `ok=true`, `mode=generated`, 4 files written under `generated/`: `sample-safe-bundle.bundle.json` (5065B), `gene-…` (1394B), `capsule-…` (1658B), `README.generated.md` (3366B). |
+| 3. `evomap_inspect_bundle.py` | `ok=true`, `schema_version=atl-evomap-portable-bundle-v0.1`. |
+| 4. `evomap_validate_bundle.py` | `ok=true`, `summary.secret_hits=0`, `summary.capsule_execution_trace_steps=4`, `summary.capsule_gene_match=true`. |
+| 5. `evomap_apply_bundle.py --dry-run` (isolated `/tmp/atl-evomap-9a-curator-target`) | `ok=true`, `mode=dry-run`, `memory_graph_signals_added=9` (5 generic + 4 domain), `domain_signals_rejected=0`. |
+| 6. `evomap_apply_bundle.py --yes` (isolated `/tmp`) | `ok=true`, `mode=applied`, `writes_executed=6`, `errors=[]`. Target post-state: `gene_count=1`, `capsule_count=1`, `memory_graph_lines=9`, `distinct_signal_count=7`. |
+| 7. Unsafe secret self-test (`api_key:omitted`) | `ok=false`, exit `1`, `rejected_signals=["api_key:omitted"]`. No files written. No raw secret echoed. |
+| 8. Unsafe id-mismatch self-test (`capsule.gene != gene.id`) | `ok=false`, exit `1`, descriptive error. No files written. |
+
+**Deliverables:**
+
+- New tool: `scripts/evomap_curate_bundle.py` (stdlib-only, AST self-checked; CLI: `--spec`, `--out-dir`, `--bundle-name`, `--dry-run`, `--strict`; refuses specs that violate safety contract).
+- New validator: `scripts/validate_evomap_phase9a_bundle_curator_skill.py` (verifies file presence, curator CLI shape, spec/schema existence, dry-run + generate artifacts, inspect + validate + apply dry-run + apply --yes outputs, target summary counts, two unsafe self-tests, secret-scan regression, git-hygiene regression, and re-runs all 7 prior phase validators).
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/` (README + BUNDLE_CURATOR.SKILL.md + REPORT + templates/ + specs/ + generated/ + artifacts/).
+- Top-level report: `reports/ATL_EVOMAP_9A_BUNDLE_CURATOR_SKILL_REPORT.md`.
+
+**Phase 6C → Phase 9A · The kit now has a *generator* tool that produces portable bundle drafts from operator-supplied specs, with spec-time safety enforcement (denylisted signal names, secret patterns, ID invariants, visibility / hub / publish / credits rules) that catches mistakes before any file is written.** The curator does not replace the existing inspect / validate / apply pipeline — it sits in front of it and only hands off drafts that already match the canonical schema, the canonical import contract, and the safety contract. Two negative self-tests prove that denylist + ID-mismatch specs are refused with exit 1 and produce no files. All 7 prior phase validators (5/6A/6B/6C/7A/7B/8A) still ALL CHECKS PASSED (no regression). The Phase 9A validator itself ALSO PASSES (full chain).
+
+**Next steps (NOT executed in this phase):**
+
+1. **ATL-EVOMAP-9B · Curator-to-nightly integration** — extend the Phase 8A nightly runner manifest to include curator-generated bundles in the 4-bundle inspect / validate cycle. Out of scope here.
+2. **ATL-EVOMAP-9C · Domain-specific curator specs** — ship curated specs for browser-control, Codex-only, Hermes-only domains. Out of scope.
+3. **ATL-EVOMAP-9D · Curator-driven apply-to-canary** — guarded workflow that, on operator approval, applies curator-generated bundles to a canary runtime and reports back. Out of scope.
+4. **browser-control bundle** — a new canonical portable bundle in the same shape as the 4 existing ones, suitable for the kit's browser-automation path. Out of scope.

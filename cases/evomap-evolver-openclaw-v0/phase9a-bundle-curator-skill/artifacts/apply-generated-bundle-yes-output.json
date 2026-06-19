@@ -1,0 +1,58 @@
+{
+  "ok": true,
+  "mode": "applied",
+  "plan_summary": {
+    "existing_gene_count": 0,
+    "existing_capsule_count": 0,
+    "new_gene_count": 1,
+    "new_capsule_count": 1,
+    "memory_graph_signals_added": 9,
+    "memory_graph_generic_signals": 5,
+    "memory_graph_domain_signals": 4,
+    "memory_graph_domain_rejected": 0
+  },
+  "signal_injection_mode": "generic_plus_domain_from_bundle",
+  "generic_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "domain_signals": [
+    "sample_failure",
+    "sample_failure:fixture",
+    "session_context",
+    "repo_context"
+  ],
+  "domain_signals_rejected": [],
+  "log": {
+    "writes_executed": [
+      {
+        "path": "/tmp/atl-evomap-9a-curator-target/.evolver/gep/genes.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-9a-curator-target/.evolver/gep/capsules.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-9a-curator-target/memory/evolution/memory_graph.jsonl",
+        "action": "append"
+      },
+      {
+        "path": "/tmp/atl-evomap-9a-curator-target/.evolver/gep/events.jsonl",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-9a-curator-target/.evolver/gep/failed_capsules.json",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-9a-curator-target/.evolver/gep/candidates.jsonl",
+        "action": "reset"
+      }
+    ],
+    "errors": []
+  }
+}

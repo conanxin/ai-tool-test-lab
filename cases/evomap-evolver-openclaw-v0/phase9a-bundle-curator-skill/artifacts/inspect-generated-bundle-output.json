@@ -1,0 +1,74 @@
+{
+  "ok": true,
+  "bundle_path": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json",
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-9A",
+  "source_session": "bundle-curator-local",
+  "gene_id": "gene_distilled_sample-safe-bundle",
+  "gene_category": "repair",
+  "capsule_id": "capsule_sample_safe_bundle_phase9a",
+  "capsule_status": "success",
+  "capsule_confidence": 0.8,
+  "capsule_visibility": "private",
+  "capsule_source": "bundle_curator_phase9a",
+  "execution_trace_steps": 4,
+  "execution_trace_stages": [
+    "build",
+    "validate",
+    "canary",
+    "apply_dry_run"
+  ],
+  "top_level_execution_trace_ok": null,
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages_with_unique_stages": 1
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "no_secrets": true
+  },
+  "kit_provenance": {
+    "kit": "OpenClaw/Hermes Local Evolution Kit",
+    "kit_version_phase": "ATL-EVOMAP-9A",
+    "kit_base_commit": "a56e756",
+    "generator": "evomap_curate_bundle.py",
+    "generator_version": "0.1.0",
+    "generated_at": "2026-06-19T10:51:02",
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "approve_executed": false,
+    "solidify_executed": false,
+    "evolver_run_executed": false,
+    "evolver_review_executed": false,
+    "network_calls_executed": false,
+    "real_test_runners_executed": false,
+    "real_cron_installed": false,
+    "systemd_timer_created": false,
+    "env_file_scanned": false
+  }
+}

@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-8A Nightly Validation Loop Asset",
-      "status": "nightly validation loop asset completed",
+      "phase": "ATL-EVOMAP-9A Bundle Curator Skill",
+      "status": "bundle curator skill completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "Phase 6C adds a 4th canonical portable bundle to the OpenClaw / Hermes Local Evolution Kit, covering the characteristic shape of an AI coding / Codex-style test failure loop. Bundle 4 (Codex test failure loop, category: repair) models the same-test-fails-3+ / fix-one-break-another / missing-failure-cluster / stale-context / no-final-green-test-evidence shape with 22 domain signals (9 bare + 2 cross-context + 9 namespaced + 2 namespaced-context). The fixture is offline-only (no real tests, no real source modification, no online coding API); the parser scripts/codex_test_failure_loop_fixture.py refuses to run on .env paths and credential-shaped text, never echoes the original unsafe line, and passes 3 self-tests (OpenAI key / GitHub PAT / env basename). Apply dry-run + --yes both PASS to /tmp/atl-evomap-phase6c-codex-target with 1 gene, 1 capsule, 27 memory_graph lines (5 generic + 22 domain), 25 distinct signals, 0 errors. Optional evolver run/review smoke PASS: no crash, no Hub, gene_distilled_codex-test-failure-loop selected, no --approve, no solidify. inspect + validate 12/12 PASS, 0 secret hits. All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED. ATL-EVOMAP-8A adds a Nightly Validation Loop Asset: an offline-only, local-only, stdlib-only runner (scripts/evomap_nightly_validate.py) plus a dry-run cron example (templates/cron.example). The runner executes 8 blocking checks (stdlib-only guard, A2A_HUB_URL unset, data/cases.json parses + records 8A, 4 canonical bundles inspectable, 6 prior phase validators ALL CHECKS PASSED, secret scan clean, git hygiene clean) and writes a JSON + Markdown digest + run log. Smoke run PASSED 7/8 blocking — the only FAIL was the cases.json self-reference check, which is recorded by this same update. Dry-run cron example is shipped but NOT installed; installing real cron / systemd timer is a separate operator-owned phase (ATL-EVOMAP-8B). No Hub, no credits, no approve/solidify/auto-publish, no real credentials read, no .env scanned, no curl/HTTP, no Telegram API, no online coding API, no real test runner, no evolver source modify. ATL-EVOMAP-8A was then refined to align with the detailed spec (schema v0.1, --repo-root/--out-dir/--markdown-name/--json-name, evomap_validate_bundle.py, in-process stdlib secret scan, stdout_tail ≤ 2000 chars, 9 blocking checks, 22 hard-boundary flags). Manifest upgraded to schema atl-evomap-nightly-validation-v0.1 with schema_version + source_base_commit. Runner smoke run PASSED 9/9 blocking with 0 secret hits, 21 allowed timestamp hits, 301 scanned / 84 binary-skipped / 0 .env paths / 0 /tmp paths. Phase 8A validator PASSED 22/22. No Hub, no credits, no real cron install, no systemd timer create, no evolve r invocation, no .env scan, no real credentials read, no real test runner invoked.",
+      "summary": "ATL-EVOMAP-9A ships a stdlib-only bundle-curator tool (scripts/evomap_curate_bundle.py) with AST self-check, denylisted signal-name + secret-pattern refusal at spec-time, ID-consistency invariant checks, and visibility hard-coded to private. A runnable sample spec produces a portable bundle draft that passes evomap_inspect_bundle.py + evomap_validate_bundle.py, and apply --dry-run + apply --yes against an isolated /tmp target (fresh git init repo) write 1 gene + 1 capsule + 9 memory-graph signals (5 generic + 4 domain, 0 rejected). Two unsafe self-tests prove the curator refuses denylist + id-mismatch specs with exit 1 and writes nothing. All 7 prior phase validators (5/6A/6B/6C/7A/7B/8A) still ALL CHECKS PASSED (no regression). No Hub / no publish / no credits / no approve / no solidify / no AI API / no network / no real test runners. Kit now has a generator that sits in front of the existing inspect / validate / apply pipeline.",
       "updated_at": "2026-06-19",
-      "final_status": "NIGHTLY_VALIDATION_LOOP_ASSET_SMOKE_PASS",
+      "final_status": "BUNDLE_CURATOR_SKILL_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -631,8 +631,72 @@
             "failed": 0
           },
           "notes": "Phase 8A refined to align with the detailed ATL-EVOMAP-8A spec received in the second message. Manifest upgraded to schema v0.1 with schema_version + source_base_commit. Runner now supports the full spec'd CLI: --repo-root, --out-dir, --markdown-name, --json-name, --strict, --dry-run, plus --output-dir backward-compat alias. evomap_validate_bundle.py added to bundle checks. cases.json parse uses `python3 -m json.tool` per spec. Secret scan rewritten as in-process stdlib scanner with full spec'd skip rules + 7 detection patterns + Unix ms timestamp allowlist. stdout_tail/stderr_tail capped at 2000 chars. All 22 hard boundaries enforced. No Hub, no credits, no approve/solidify/auto-publish, no real credentials, no .env scan, no real cron install, no systemd timer create. All 6 prior phase validators still ALL CHECKS PASSED (no regression)."
+        },
+        {
+          "phase": "ATL-EVOMAP-9A",
+          "status": "bundle curator skill completed",
+          "result": "PASS (curator smoke: dry-run ok, generate ok, inspect ok, validate ok, apply --dry-run ok, apply --yes ok, 2 unsafe self-tests rejected)",
+          "curator_tool": "scripts/evomap_curate_bundle.py",
+          "curator_schema_version": "atl-evomap-curator-spec-v0.1",
+          "bundle_schema_version": "atl-evomap-portable-bundle-v0.1",
+          "sample_bundle": "sample-safe-bundle.bundle.json",
+          "validator": "scripts/validate_evomap_phase9a_bundle_curator_skill.py",
+          "skill_doc": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/BUNDLE_CURATOR.SKILL.md",
+          "case_dir": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/",
+          "apply_target": "/tmp/atl-evomap-9a-curator-target (isolated, fresh git init)",
+          "apply_result_summary": {
+            "gene_count": 1,
+            "capsule_count": 1,
+            "memory_graph_lines": 9,
+            "memory_graph_signals_added": 9,
+            "memory_graph_generic_signals": 5,
+            "memory_graph_domain_signals": 4,
+            "memory_graph_domain_rejected": 0,
+            "writes_executed": 6,
+            "errors": 0
+          },
+          "self_tests": {
+            "unsafe_secret_signal_name": {
+              "result": "rejected",
+              "exit_code": 1,
+              "wrote_files": false,
+              "echoed_raw_secret": false
+            },
+            "unsafe_id_mismatch": {
+              "result": "rejected",
+              "exit_code": 1,
+              "wrote_files": false
+            }
+          },
+          "hard_boundaries_enforced": {
+            "hub": "disabled",
+            "publish": "disabled",
+            "credits": 0,
+            "approve": "not_executed",
+            "solidify": "not_executed",
+            "evolver_run": "not_executed",
+            "evolver_review": "not_executed",
+            "real_cron_install": "not_executed",
+            "systemd_timer_install": "not_executed",
+            "network_calls": "not_executed",
+            "real_tests": "not_executed",
+            "no_env_file_content_scanned": true,
+            "stdlib_only": true,
+            "visibility": "private"
+          },
+          "regression_check": {
+            "phase_5": "ALL CHECKS PASSED",
+            "phase_6a": "ALL CHECKS PASSED",
+            "phase_6b": "ALL CHECKS PASSED",
+            "phase_6c": "ALL CHECKS PASSED",
+            "phase_7a": "ALL CHECKS PASSED",
+            "phase_7b": "ALL CHECKS PASSED",
+            "phase_8a": "ALL CHECKS PASSED"
+          },
+          "notes": "ATL-EVOMAP-9A Bundle Curator Skill: stdlib-only tool with AST self-check + spec-time safety enforcement. Generated sample bundle passes inspect/validate/apply chain against isolated /tmp. Unsafe specs (denylisted signal + id mismatch) refused with exit 1, no files written, no raw secret echoed. Curator wired to existing inspect/validate/apply pipeline; integrating curator output into nightly runner is ATL-EVOMAP-9B (out of scope here)."
         }
-      ]
+      ],
+      "phase_history_count": 19
     }
   ]
 }
