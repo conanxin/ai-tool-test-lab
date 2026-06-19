@@ -1,9 +1,10 @@
 {
   "schema_version": "atl-evomap-nightly-validation-v0.1",
   "phase": "ATL-EVOMAP-8A",
+  "extended_by_phase": "ATL-EVOMAP-9B",
   "source_base_commit": "f292757",
   "purpose": "Run local-only validation checks for EvoMap Local Evolution Kit.",
-  "intent": "offline-only, local-only, stdlib-only nightly validation loop asset that can be later wired into a real cron or systemd timer by a human operator; this phase ships only the asset and dry-run example, NOT an installation",
+  "intent": "offline-only, local-only, stdlib-only nightly validation loop asset that can be later wired into a real cron or systemd timer by a human operator; this phase ships only the asset and dry-run example, NOT an installation; Phase 9B extends the runner with a non-blocking canary lane that ingests curator-generated draft bundles (inspect / validate / apply dry-run) without affecting canonical blocking checks",
   "scope": {
     "runtime": "offline",
     "network_required": false,
@@ -58,7 +59,8 @@
     "bundle_inspect",
     "bundle_validate",
     "secret_scan",
-    "git_hygiene"
+    "git_hygiene",
+    "canary_bundles_checked"
   ],
   "checks_detail": {
     "phase_validators": {
@@ -119,6 +121,19 @@
         "case-scoped fixtures (cases/.../fixtures/.../memory/ or .evolver/) are allowed"
       ],
       "status_short_recorded_only": "status may not be clean because this run produces new artifacts; runner only records git status --short, does not require clean"
+    },
+    "canary_bundles_checked": {
+      "kind": "subprocess",
+      "blocking": false,
+      "scope": "canary_bundles[] (curator-generated draft bundles)",
+      "default_when_no_canary_bundles": "SKIP — overall_status determined by blocking checks only",
+      "per_bundle_checks": [
+        "inspect: python3 scripts/evomap_inspect_bundle.py --bundle <path>",
+        "validate: python3 scripts/evomap_validate_bundle.py --bundle <path>",
+        "apply_dry_run: python3 scripts/evomap_apply_bundle.py --bundle <path> --target-runtime /tmp/atl-evomap-nightly-canary-<id> --dry-run (requires the /tmp target dir to be created first by the runner; runner does NOT mutate any real runtime)"
+      ],
+      "default_lane": "curator_generated (non-blocking)",
+      "failure_behavior": "canary failures are recorded as CANARY_FAIL or WARN in digest but do NOT cause overall_status=FAIL; overall_status is determined only by blocking=true checks"
     }
   },
   "outputs": {
@@ -153,11 +168,24 @@
     "cadence_recommended": "daily 02:30 Asia/Shanghai (after wiki compiler at 02:00, before any operator session)",
     "delivery_recommended": "write digest only; do not auto-publish; do not auto-approve; do not auto-solidify"
   },
+  "canary_bundles": [
+    {
+      "id": "sample-safe-bundle-phase9a",
+      "source_phase": "ATL-EVOMAP-9A",
+      "path": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json",
+      "lane": "curator_generated",
+      "blocking": false,
+      "checks": ["inspect", "validate", "apply_dry_run"],
+      "expected_status": "CANARY_PASS",
+      "apply_dry_run_target_runtime": "/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a",
+      "notes": "Phase 9A curator generated sample-safe-bundle as a draft canary bundle. Phase 9B wires it into the nightly runner as a non-blocking canary lane entry. Failure of this canary does NOT fail overall_status."
+    }
+  ],
   "versioning": {
-    "manifest_version": "0.1.0",
+    "manifest_version": "0.2.0",
     "schema_version": "atl-evomap-nightly-validation-v0.1",
     "source_base_commit": "f292757",
-    "compatible_runner_min": "0.1.0",
-    "next_intended_phase": "ATL-EVOMAP-8B (optional operator-led cron install)"
+    "compatible_runner_min": "0.2.0",
+    "next_intended_phase": "ATL-EVOMAP-9C (optional: curator-driven canary apply with operator gate)"
   }
 }

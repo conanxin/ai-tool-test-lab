@@ -3,11 +3,11 @@
   "phase": "ATL-EVOMAP-8A",
   "extended_by_phase": "ATL-EVOMAP-9B",
   "case_slug": "evomap-evolver-openclaw-v0",
-  "generated_at": "2026-06-19T11:58:53",
+  "generated_at": "2026-06-19T11:27:35",
   "project_root": "/mnt/d/AI/ai-tool-test-lab",
-  "out_dir": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts",
+  "out_dir": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9b-curator-nightly-integration/artifacts/nightly-smoke",
   "git_commit": "7811e1b",
-  "git_status_short": " M README.md\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/nightly-validation-digest.json\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/nightly-validation-digest.md\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/validation-loop-manifest.json\n M data/cases.json\n M scripts/evomap_nightly_validate.py\n M scripts/validate_evomap_phase9a_bundle_curator_skill.py\n?? cases/evomap-evolver-openclaw-v0/phase9b-curator-nightly-integration/\n?? reports/ATL_EVOMAP_9B_CURATOR_NIGHTLY_INTEGRATION_REPORT.md\n?? scripts/validate_evomap_phase9b_curator_nightly_integration.py\n",
+  "git_status_short": " M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/nightly-validation-digest.json\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/nightly-validation-digest.md\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/validation-loop-manifest.json\n M data/cases.json\n M scripts/evomap_nightly_validate.py\n M scripts/validate_evomap_phase9a_bundle_curator_skill.py\n?? cases/evomap-evolver-openclaw-v0/phase9b-curator-nightly-integration/\n",
   "runner": "scripts/evomap_nightly_validate.py",
   "python": "3.12.3",
   "stdlib_only": true,
@@ -215,10 +215,10 @@
       "check_id": "git_hygiene_no_root_evolver_or_memory",
       "status": "PASS",
       "blocking": true,
-      "detail": "418 tracked file(s) clean, status_short=10 line(s) (informational)",
+      "detail": "418 tracked file(s) clean, status_short=7 line(s) (informational)",
       "extra": {
         "tracked_count": 418,
-        "status_short_count": 10
+        "status_short_count": 7
       }
     },
     {

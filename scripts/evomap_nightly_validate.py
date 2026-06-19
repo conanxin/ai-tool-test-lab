@@ -2,13 +2,17 @@
 """
 evomap_nightly_validate.py — ATL-EVOMAP-8A Nightly Validation Loop runner.
 
+Extended in ATL-EVOMAP-9B with a non-blocking canary bundle lane that ingests
+curator-generated draft bundles (inspect / validate / apply dry-run against a
+/tmp target). Canary failures do NOT cause overall_status=FAIL.
+
 OFFLINE-ONLY, LOCAL-ONLY, STDLIB-ONLY.
 
 Executes a fixed composite of pre-flight checks for the OpenClaw / Hermes
 Local Evolution Kit, prints human-readable progress to stdout, and writes
 both a JSON digest and a Markdown digest to --out-dir.
 
-CLI (per ATL-EVOMAP-8A spec):
+CLI (per ATL-EVOMAP-8A spec, extended in ATL-EVOMAP-9B):
 
     python3 scripts/evomap_nightly_validate.py \\
         --repo-root . \\
@@ -76,6 +80,30 @@ _IMAGE_EXT = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp",
               ".ico", ".tiff", ".tif", ".svg"}
 _BINARY_PROBE_BYTES = 4096
 _MAX_TAIL_CHARS = 2000  # stdout_tail / stderr_tail cap
+
+# Default manifest path (used to read canary_bundles in 9B mode).
+# NOTE: uses os.path.join so this constant can live at module scope without
+# requiring from pathlib import Path at the top of the file (Path is imported
+# lazily below for the rest of the file).
+_DEFAULT_MANIFEST_PATH = os.path.join(
+    "cases", "evomap-evolver-openclaw-v0",
+    "phase8a-nightly-validation-loop",
+    "validation-loop-manifest.json",
+)
+
+
+def _load_manifest(repo_root: "Path") -> dict[str, Any]:
+    """Read the validation-loop-manifest.json. Returns empty dict if
+    missing or unparseable. Used to discover canary_bundles in 9B mode.
+    """
+    manifest_path = repo_root / _DEFAULT_MANIFEST_PATH
+    if not manifest_path.exists():
+        return {}
+    try:
+        return json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
 
 # Subprocess env: strip A2A_HUB_URL even if the parent has it set.
 def _build_subprocess_env() -> dict[str, str]:
@@ -415,6 +443,8 @@ def check_all_phase_validators_pass(results: list[dict[str, Any]],
          "scripts/validate_evomap_phase7a_domain_signal_injection.py"),
         ("phase7b_cross_bundle_regression",
          "scripts/validate_evomap_phase7b_cross_bundle_regression.py"),
+        ("phase9a_bundle_curator_skill",
+         "scripts/validate_evomap_phase9a_bundle_curator_skill.py"),
     ]
     for vid, rel in validators:
         script = repo_root / rel
@@ -670,6 +700,250 @@ def check_git_hygiene(results: list[dict[str, Any]],
                        "status_short_count": len(status_full_lines)})
 
 
+# ----- canary bundle lane (ATL-EVOMAP-9B) ------------------------------------
+
+
+def _extract_apply_ok(stdout: str) -> tuple[bool, str]:
+    """Try to parse the apply_bundle dry-run JSON. Returns (apply_ok, reason).
+
+    apply_bundle prints a JSON plan with top-level "ok". If parse fails or
+    "ok" is missing, we fall back to rc-only behavior.
+    """
+    if not stdout:
+        return True, "no_stdout"
+    # apply_bundle writes JSON; try to grab a balanced JSON object from
+    # stdout (last 4 KiB is enough; we already cap at 2000 chars)
+    try:
+        parsed = json.loads(stdout)
+    except json.JSONDecodeError:
+        # Maybe the JSON is truncated (2000-char tail). Try to recover.
+        # Find last "}" and attempt to slice — but simpler: just say
+        # "json_truncated" and let the caller treat rc-only as authoritative.
+        return True, "json_truncated_or_unparseable"
+    if isinstance(parsed, dict):
+        if parsed.get("ok") is False:
+            reason = str(parsed.get("reason") or parsed.get("error") or
+                         "apply_ok_false")
+            return False, reason
+        return True, "ok"
+    return True, "non_dict_json"
+
+
+def check_canary_bundles(results: list[dict[str, Any]],
+                         repo_root: Path) -> None:
+    """ATL-EVOMAP-9B canary lane.
+
+    Reads `canary_bundles[]` from the validation-loop-manifest.json. For each
+    canary bundle entry, runs:
+
+      1. python3 scripts/evomap_inspect_bundle.py --bundle <path>
+      2. python3 scripts/evomap_validate_bundle.py --bundle <path>
+      3. python3 scripts/evomap_apply_bundle.py --bundle <path> \\
+            --target-runtime /tmp/atl-evomap-nightly-canary-<id> --dry-run
+
+    Each canary is NON-BLOCKING by default. The check itself records a
+    single non-blocking row `canary_bundles_checked`. Per-bundle details
+    are stored in `extra.canary_bundle_checks` and aggregated in
+    `extra.canary_summary` so the digest JSON / Markdown can render a
+    dedicated canary section.
+
+    overall_status is determined only by blocking checks; canary failures
+    never cause overall_status=FAIL.
+    """
+    manifest = _load_manifest(repo_root)
+    canary_bundles = manifest.get("canary_bundles", []) or []
+    if not canary_bundles:
+        # Backward-compat with 8A: no canary bundles declared → SKIP row,
+        # overall_status determined entirely by blocking checks.
+        _record(results, "canary_bundles_checked", "SKIP", False,
+                detail="no canary bundles declared in manifest "
+                       "(backward-compatible with Phase 8A)",
+                extra={"canary_bundle_checks": [],
+                       "canary_summary": {
+                           "total": 0, "passed": 0, "failed": 0,
+                           "blocking_failures": 0,
+                           "non_blocking_failures": 0,
+                           "status": "CANARY_SKIP",
+                       }})
+        return
+
+    inspect_script = repo_root / "scripts" / "evomap_inspect_bundle.py"
+    validate_script = repo_root / "scripts" / "evomap_validate_bundle.py"
+    apply_script = repo_root / "scripts" / "evomap_apply_bundle.py"
+
+    checks_log: list[dict[str, Any]] = []
+    passed = 0
+    failed = 0
+
+    for entry in canary_bundles:
+        if not isinstance(entry, dict):
+            continue
+        bid = str(entry.get("id", "?"))
+        rel_path = str(entry.get("path", ""))
+        blocking = bool(entry.get("blocking", False))
+        expected = str(entry.get("expected_status", "CANARY_PASS"))
+        source_phase = entry.get("source_phase")
+        target_rt_rel = entry.get("apply_dry_run_target_runtime") or (
+            f"/tmp/atl-evomap-nightly-canary-{bid}"
+        )
+        target_rt = Path(target_rt_rel)
+
+        bundle_path = (repo_root / rel_path).resolve()
+
+        record: dict[str, Any] = {
+            "id": bid,
+            "source_phase": source_phase,
+            "path": rel_path,
+            "lane": entry.get("lane", "curator_generated"),
+            "blocking": blocking,
+            "expected_status": expected,
+            "target_runtime": str(target_rt),
+            "inspect": {"status": "SKIP", "returncode": None,
+                        "reason": "not_run"},
+            "validate": {"status": "SKIP", "returncode": None,
+                         "reason": "not_run"},
+            "apply_dry_run": {"status": "SKIP", "returncode": None,
+                              "reason": "not_run",
+                              "target_runtime": str(target_rt)},
+            "status": "CANARY_FAIL",
+        }
+
+        if not bundle_path.exists():
+            record["inspect"] = {"status": "FAIL", "returncode": -1,
+                                 "reason": "bundle_missing"}
+            record["validate"] = {"status": "FAIL", "returncode": -1,
+                                  "reason": "bundle_missing"}
+            record["apply_dry_run"] = {"status": "FAIL", "returncode": -1,
+                                       "reason": "bundle_missing",
+                                       "target_runtime": str(target_rt)}
+            checks_log.append(record)
+            failed += 1
+            continue
+
+        # 1) inspect
+        if inspect_script.exists():
+            proc = _run_subprocess_capture(
+                ["python3", str(inspect_script), "--bundle",
+                 str(bundle_path)],
+                cwd=repo_root, timeout_seconds=30,
+            )
+            ok = proc["returncode"] == 0
+            record["inspect"] = {
+                "status": "PASS" if ok else "FAIL",
+                "returncode": proc["returncode"],
+                "stdout_tail": proc["stdout_tail"],
+                "stderr_tail": proc["stderr_tail"],
+            }
+        else:
+            record["inspect"] = {"status": "FAIL", "returncode": -1,
+                                 "reason": "script_missing"}
+
+        # 2) validate
+        if validate_script.exists():
+            proc = _run_subprocess_capture(
+                ["python3", str(validate_script), "--bundle",
+                 str(bundle_path)],
+                cwd=repo_root, timeout_seconds=30,
+            )
+            ok = proc["returncode"] == 0
+            record["validate"] = {
+                "status": "PASS" if ok else "FAIL",
+                "returncode": proc["returncode"],
+                "stdout_tail": proc["stdout_tail"],
+                "stderr_tail": proc["stderr_tail"],
+            }
+        else:
+            record["validate"] = {"status": "FAIL", "returncode": -1,
+                                  "reason": "script_missing"}
+
+        # 3) apply dry-run (target = /tmp/atl-evomap-nightly-canary-<id>)
+        if apply_script.exists():
+            try:
+                target_rt.mkdir(parents=True, exist_ok=True)
+            except OSError as exc:
+                record["apply_dry_run"] = {
+                    "status": "FAIL", "returncode": -1,
+                    "reason": f"mkdir_failed: {exc}",
+                    "target_runtime": str(target_rt),
+                }
+            else:
+                proc = _run_subprocess_capture(
+                    ["python3", str(apply_script),
+                     "--bundle", str(bundle_path),
+                     "--target-runtime", str(target_rt),
+                     "--dry-run"],
+                    cwd=repo_root, timeout_seconds=60,
+                )
+                rc = proc["returncode"]
+                apply_json_ok, reason = _extract_apply_ok(
+                    proc.get("stdout_tail", "") or "")
+                # Combine: rc must be 0 AND JSON.ok must not be false.
+                ok = (rc == 0) and apply_json_ok
+                record["apply_dry_run"] = {
+                    "status": "PASS" if ok else "FAIL",
+                    "returncode": rc,
+                    "target_runtime": str(target_rt),
+                    "apply_json_reason": reason,
+                    "stdout_tail": proc["stdout_tail"],
+                    "stderr_tail": proc["stderr_tail"],
+                }
+        else:
+            record["apply_dry_run"] = {"status": "FAIL", "returncode": -1,
+                                       "reason": "script_missing",
+                                       "target_runtime": str(target_rt)}
+
+        # Aggregate this bundle
+        all_ok = (
+            record["inspect"]["status"] == "PASS"
+            and record["validate"]["status"] == "PASS"
+            and record["apply_dry_run"]["status"] == "PASS"
+        )
+        record["status"] = "CANARY_PASS" if all_ok else "CANARY_FAIL"
+        if all_ok:
+            passed += 1
+        else:
+            failed += 1
+        checks_log.append(record)
+
+    total = len(checks_log)
+    blocking_failures = sum(
+        1 for c in checks_log
+        if c.get("blocking") and c.get("status") == "CANARY_FAIL"
+    )
+    non_blocking_failures = sum(
+        1 for c in checks_log
+        if (not c.get("blocking")) and c.get("status") == "CANARY_FAIL"
+    )
+    summary = {
+        "total": total,
+        "passed": passed,
+        "failed": failed,
+        "blocking_failures": blocking_failures,
+        "non_blocking_failures": non_blocking_failures,
+        "status": ("CANARY_PASS" if failed == 0 else "CANARY_FAIL"),
+    }
+
+    # The aggregate row is non-blocking by design. Use status PASS when all
+    # canaries passed, WARN when any failed (overall_status still driven by
+    # blocking checks only).
+    row_status = "PASS" if failed == 0 else "WARN"
+
+    _record(
+        results, "canary_bundles_checked",
+        row_status,
+        blocking=False,
+        detail=(
+            f"total={total}, passed={passed}, failed={failed}, "
+            f"canary_status={summary['status']} "
+            f"(non-blocking; overall_status driven by blocking checks only)"
+        ),
+        extra={
+            "canary_bundle_checks": checks_log,
+            "canary_summary": summary,
+        },
+    )
+
+
 # ----- digest writers --------------------------------------------------------
 
 
@@ -766,6 +1040,39 @@ def _render_markdown_digest(digest: dict[str, Any],
                      f"{git_section['extra'].get('status_short_count', 0)} "
                      "(informational; this run produces new artifacts)")
         lines.append("")
+    # Canary / Curator-generated bundles (ATL-EVOMAP-9B)
+    canary_section = next(
+        (c for c in digest["checks"]
+         if c["check_id"] == "canary_bundles_checked"), None)
+    if canary_section and "extra" in canary_section:
+        canary_log = canary_section["extra"].get("canary_bundle_checks", [])
+        canary_sum = canary_section["extra"].get("canary_summary", {})
+        lines.append("## Canary / Curator-generated bundles")
+        lines.append("")
+        lines.append(f"- **Total:** {canary_sum.get('total', 0)}")
+        lines.append(f"- **Passed:** {canary_sum.get('passed', 0)}")
+        lines.append(f"- **Failed:** {canary_sum.get('failed', 0)}")
+        lines.append(f"- **Blocking failures:** {canary_sum.get('blocking_failures', 0)}")
+        lines.append(f"- **Non-blocking failures:** {canary_sum.get('non_blocking_failures', 0)}")
+        lines.append(f"- **Canary status:** **{canary_sum.get('status', '?')}**")
+        lines.append(f"- **Lane rule:** curator-generated bundles are NON-BLOCKING "
+                     f"by default; a CANARY_FAIL is recorded but does NOT make "
+                     f"`overall_status` FAIL.")
+        lines.append("")
+        if canary_log:
+            lines.append("| ID | Source phase | Path | inspect | validate | apply_dry_run | Status | Blocking |")
+            lines.append("|----|--------------|------|---------|----------|---------------|--------|----------|")
+            for c in canary_log:
+                ins = c.get("inspect", {}).get("status", "?")
+                val = c.get("validate", {}).get("status", "?")
+                dry = c.get("apply_dry_run", {}).get("status", "?")
+                blocking = "yes" if c.get("blocking") else "no"
+                lines.append(
+                    f"| `{c.get('id', '?')}` | {c.get('source_phase') or '-'} | "
+                    f"`{c.get('path', '?')}` | {ins} | {val} | {dry} | "
+                    f"**{c.get('status', '?')}** | {blocking} |"
+                )
+            lines.append("")
     # Hard boundaries
     lines.append("## Hard boundaries (declared in this run)")
     lines.append("")
@@ -938,6 +1245,7 @@ def main(argv: list[str] | None = None) -> int:
         lambda r: check_all_phase_validators_pass(r, repo_root),
         lambda r: check_secret_scan_clean(r, repo_root),
         lambda r: check_git_hygiene(r, repo_root),
+        lambda r: check_canary_bundles(r, repo_root),
     ]
 
     for fn in checks:
@@ -967,9 +1275,75 @@ def main(argv: list[str] | None = None) -> int:
                     for c in results)
     hub_url_set = bool(os.environ.get("A2A_HUB_URL"))
 
+    # Bundle inspect / validate consolidated view (used by 9B summary
+    # extractors that look at digest.bundle_checks.inspect/validate).
+    bundle_checks_view: dict[str, list[dict[str, Any]]] = {"inspect": [],
+                                                            "validate": []}
+    for c in results:
+        if c.get("check_id") == "bundles_inspectable":
+            for entry in c.get("extra", {}).get("inspected", []):
+                bundle_checks_view["inspect"].append({
+                    "id": entry.get("id"),
+                    "path": entry.get("path"),
+                    "returncode": entry.get("returncode"),
+                    "status": ("PASS" if entry.get("returncode") == 0
+                               else "FAIL"),
+                })
+        elif c.get("check_id") == "bundles_validatable":
+            for entry in c.get("extra", {}).get("validated", []):
+                bundle_checks_view["validate"].append({
+                    "id": entry.get("id"),
+                    "path": entry.get("path"),
+                    "returncode": entry.get("returncode"),
+                    "status": ("PASS" if entry.get("returncode") == 0
+                               else "FAIL"),
+                })
+
+    # Canary view (used by 9B summary extractors)
+    canary_section = next(
+        (c for c in results if c.get("check_id") == "canary_bundles_checked"),
+        None,
+    )
+    canary_bundle_checks_view: list[dict[str, Any]] = []
+    canary_summary_view: dict[str, Any] = {
+        "total": 0, "passed": 0, "failed": 0,
+        "blocking_failures": 0, "non_blocking_failures": 0,
+        "status": "CANARY_SKIP",
+    }
+    if canary_section is not None:
+        canary_bundle_checks_view = (canary_section.get("extra", {})
+                                     .get("canary_bundle_checks", []))
+        canary_summary_view = (canary_section.get("extra", {})
+                               .get("canary_summary", canary_summary_view))
+
+    # Validators view: top-level digest["validators"] (used by 9B summary
+    # extractors that count validator_count / validators_passed). This is a
+    # promotion of check_all_phase_validators_pass.extra.validators[] to a
+    # top-level array for convenience.
+    validators_section = next(
+        (c for c in results
+         if c.get("check_id") == "all_phase_validators_pass"),
+        None,
+    )
+    validators_view: list[dict[str, Any]] = []
+    if validators_section is not None:
+        for v in (validators_section.get("extra", {})
+                  .get("validators", [])):
+            rc = v.get("returncode", -1)
+            tail = (v.get("stdout_tail", "") or "")
+            passed = (rc == 0 and "ALL CHECKS PASSED" in tail)
+            validators_view.append({
+                "id": v.get("id"),
+                "returncode": rc,
+                "status": "PASS" if passed else "FAIL",
+                "stdout_tail": tail,
+                "stderr_tail": v.get("stderr_tail", ""),
+            })
+
     digest: dict[str, Any] = {
         "schema_version": "atl-evomap-nightly-validation-v0.1",
         "phase": "ATL-EVOMAP-8A",
+        "extended_by_phase": "ATL-EVOMAP-9B",
         "case_slug": "evomap-evolver-openclaw-v0",
         "generated_at": _now_iso(),
         "project_root": str(repo_root),
@@ -983,6 +1357,10 @@ def main(argv: list[str] | None = None) -> int:
         "overall_status": overall,
         "summary": summary,
         "checks": results,
+        "bundle_checks": bundle_checks_view,
+        "canary_bundle_checks": canary_bundle_checks_view,
+        "canary_summary": canary_summary_view,
+        "validators": validators_view,
         "hard_boundaries": {
             "no_hub_connection": True,
             "no_a2a_hub_url": True,

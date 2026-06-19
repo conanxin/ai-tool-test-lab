@@ -1,6 +1,6 @@
 # EvoMap Nightly Validation Loop — Digest
 
-- **Generated:** 2026-06-19T11:58:53
+- **Generated:** 2026-06-19T11:27:35
 - **Phase:** ATL-EVOMAP-8A
 - **Schema version:** atl-evomap-nightly-validation-v0.1
 - **Source base commit:** f292757
@@ -26,7 +26,7 @@
 | 6 | `bundles_validatable` | PASS | yes | 4 bundle(s) validated |
 | 7 | `all_phase_validators_pass` | PASS | yes | 7 validator(s) ALL CHECKS PASSED |
 | 8 | `secret_scan_clean` | PASS | yes | scanned=333, hits=0, allowed_timestamp_hits=21, skipped={'binary': 85, 'image': 0, 'too_large': 0, 'io_error': 0} |
-| 9 | `git_hygiene_no_root_evolver_or_memory` | PASS | yes | 418 tracked file(s) clean, status_short=10 line(s) (informational) |
+| 9 | `git_hygiene_no_root_evolver_or_memory` | PASS | yes | 418 tracked file(s) clean, status_short=7 line(s) (informational) |
 | 10 | `canary_bundles_checked` | PASS | no | total=1, passed=1, failed=0, canary_status=CANARY_PASS (non-blocking; overall_status driven by blocking checks only) |
 
 ## Phase validators
@@ -285,7 +285,7 @@ Status: bundle curator skill completed (BUNDLE_CURATOR_SKILL_PASS)
 ## Git
 
 - **Tracked file count:** 418
-- **git status --short line count:** 10 (informational; this run produces new artifacts)
+- **git status --short line count:** 7 (informational; this run produces new artifacts)
 
 ## Canary / Curator-generated bundles
 

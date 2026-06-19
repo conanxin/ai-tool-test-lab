@@ -95,8 +95,27 @@ PRIOR_VALIDATORS = (
     "scripts/validate_evomap_phase6c_codex_test_failure_bundle.py",
     "scripts/validate_evomap_phase7a_domain_signal_injection.py",
     "scripts/validate_evomap_phase7b_cross_bundle_regression.py",
-    "scripts/validate_evomap_phase8a_nightly_validation_loop.py",
 )
+
+# NOTE (ATL-EVOMAP-9B forward-compatible fix):
+# 8A (nightly validation loop) was previously listed here. Phase 9B
+# adds the 9A curator-skill validator into the nightly runner's
+# all_phase_validators_pass list, which means the runner now invokes
+# 9A as a subprocess. 9A's prior-validators check then invokes 8A,
+# whose self-host check re-invokes the runner, which in turn re-invokes
+# 9A → infinite recursion / timeout.
+#
+# To break the cycle WITHOUT lowering any artifact / secret-scan /
+# report check (per Step 1 forward-compatible-fix rule), the 8A
+# reference is removed from PRIOR_VALIDATORS here. 8A's own validator
+# still has its self-host check, and is still invoked independently
+# by the operator (or by the 8A → 9B nightly chain).
+#
+# Phase 9B adds a separate top-level `digest["validators"]` field that
+# surfaces the runner's all_phase_validators_pass list (7 entries
+# including 9A) directly in the digest, so 8A passing is still
+# observable from the 9B smoke artifact — just not via a recursive
+# subprocess call from inside 9A itself.
 
 
 # ---------------------------------------------------------------------------
