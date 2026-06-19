@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-6C Codex Test Failure Loop Bundle",
-      "status": "codex test failure bundle completed",
+      "phase": "ATL-EVOMAP-8A Nightly Validation Loop Asset",
+      "status": "nightly validation loop asset completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "Phase 6C adds a 4th canonical portable bundle to the OpenClaw / Hermes Local Evolution Kit, covering the characteristic shape of an AI coding / Codex-style test failure loop. Bundle 4 (Codex test failure loop, category: repair) models the same-test-fails-3+ / fix-one-break-another / missing-failure-cluster / stale-context / no-final-green-test-evidence shape with 22 domain signals (9 bare + 2 cross-context + 9 namespaced + 2 namespaced-context). The fixture is offline-only (no real tests, no real source modification, no online coding API); the parser scripts/codex_test_failure_loop_fixture.py refuses to run on .env paths and credential-shaped text, never echoes the original unsafe line, and passes 3 self-tests (OpenAI key / GitHub PAT / env basename). Apply dry-run + --yes both PASS to /tmp/atl-evomap-phase6c-codex-target with 1 gene, 1 capsule, 27 memory_graph lines (5 generic + 22 domain), 25 distinct signals, 0 errors. Optional evolver run/review smoke PASS: no crash, no Hub, gene_distilled_codex-test-failure-loop selected, no --approve, no solidify. inspect + validate 12/12 PASS, 0 secret hits. All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED.",
+      "summary": "Phase 6C adds a 4th canonical portable bundle to the OpenClaw / Hermes Local Evolution Kit, covering the characteristic shape of an AI coding / Codex-style test failure loop. Bundle 4 (Codex test failure loop, category: repair) models the same-test-fails-3+ / fix-one-break-another / missing-failure-cluster / stale-context / no-final-green-test-evidence shape with 22 domain signals (9 bare + 2 cross-context + 9 namespaced + 2 namespaced-context). The fixture is offline-only (no real tests, no real source modification, no online coding API); the parser scripts/codex_test_failure_loop_fixture.py refuses to run on .env paths and credential-shaped text, never echoes the original unsafe line, and passes 3 self-tests (OpenAI key / GitHub PAT / env basename). Apply dry-run + --yes both PASS to /tmp/atl-evomap-phase6c-codex-target with 1 gene, 1 capsule, 27 memory_graph lines (5 generic + 22 domain), 25 distinct signals, 0 errors. Optional evolver run/review smoke PASS: no crash, no Hub, gene_distilled_codex-test-failure-loop selected, no --approve, no solidify. inspect + validate 12/12 PASS, 0 secret hits. All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED. ATL-EVOMAP-8A adds a Nightly Validation Loop Asset: an offline-only, local-only, stdlib-only runner (scripts/evomap_nightly_validate.py) plus a dry-run cron example (templates/cron.example). The runner executes 8 blocking checks (stdlib-only guard, A2A_HUB_URL unset, data/cases.json parses + records 8A, 4 canonical bundles inspectable, 6 prior phase validators ALL CHECKS PASSED, secret scan clean, git hygiene clean) and writes a JSON + Markdown digest + run log. Smoke run PASSED 7/8 blocking — the only FAIL was the cases.json self-reference check, which is recorded by this same update. Dry-run cron example is shipped but NOT installed; installing real cron / systemd timer is a separate operator-owned phase (ATL-EVOMAP-8B). No Hub, no credits, no approve/solidify/auto-publish, no real credentials read, no .env scanned, no curl/HTTP, no Telegram API, no online coding API, no real test runner, no evolver source modify. ATL-EVOMAP-8A was then refined to align with the detailed spec (schema v0.1, --repo-root/--out-dir/--markdown-name/--json-name, evomap_validate_bundle.py, in-process stdlib secret scan, stdout_tail ≤ 2000 chars, 9 blocking checks, 22 hard-boundary flags). Manifest upgraded to schema atl-evomap-nightly-validation-v0.1 with schema_version + source_base_commit. Runner smoke run PASSED 9/9 blocking with 0 secret hits, 21 allowed timestamp hits, 301 scanned / 84 binary-skipped / 0 .env paths / 0 /tmp paths. Phase 8A validator PASSED 22/22. No Hub, no credits, no real cron install, no systemd timer create, no evolve r invocation, no .env scan, no real credentials read, no real test runner invoked.",
       "updated_at": "2026-06-19",
-      "final_status": "CODEX_TEST_FAILURE_BUNDLE_PASS",
+      "final_status": "NIGHTLY_VALIDATION_LOOP_ASSET_SMOKE_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -505,6 +505,132 @@
           "phase_7b_base_commit": "be84810",
           "hard_boundaries_preserved": 22,
           "notes": "Phase 6C is offline-first by design. Bundle 4 (Codex test failure loop, repair) adds 22 domain signals covering the test-failure-loop shape to the 3-bundle kit. The parser (scripts/codex_test_failure_loop_fixture.py) refuses to run on .env basenames and credential-shaped text (OpenAI key, GitHub PAT, Authorization header, JWT, BEGIN PRIVATE KEY, 12+ digit pure-numeric value), and never echoes the original unsafe line. 3 self-tests (openai-key, github-pat, env-path) all PASS with ok=false, exit=2, no raw unsafe substring in artifacts. Apply dry-run + --yes both PASS to /tmp/atl-evomap-phase6c-codex-target with 1 gene, 1 capsule, 27 memory_graph lines (5 generic + 22 domain), 25 distinct signals, 0 errors. Optional evolver run/review smoke PASS: [SearchFirst] No hub match (reason: no_hub_url), gene_distilled_codex-test-failure-loop selected (selectionPath: distilled_fallback, due to evolver-internal memory_missing signal which matches our gene via session_context/repo_context), no --approve, no solidify, no crash, capsule survives (review output shows full Gene + Capsule summary). All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED. No Hub / no publish / no credits / no approve / no solidify / no real tests / no real source modification / no online coding API / no .env scan / no real OpenAI key or GitHub PAT."
+        },
+        {
+          "phase": "ATL-EVOMAP-8A",
+          "status": "nightly validation loop asset completed",
+          "result": "PASS (dry-run smoke)",
+          "runner_path": "scripts/evomap_nightly_validate.py",
+          "manifest_path": "cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/validation-loop-manifest.json",
+          "cron_example_path": "cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/templates/cron.example",
+          "digest_json_path": "cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/evomap-nightly-digest.json",
+          "digest_md_path": "cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/evomap-nightly-digest.md",
+          "run_log_path": "cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/evomap-nightly-run.log",
+          "report_path": "reports/ATL_EVOMAP_8A_NIGHTLY_VALIDATION_LOOP_REPORT.md",
+          "validator_path": "scripts/validate_evomap_phase8a_nightly_validation_loop.py",
+          "smoke_run": {
+            "command": "python3 scripts/evomap_nightly_validate.py",
+            "python": "3.12.3",
+            "blocking_total": 8,
+            "passed": 7,
+            "failed": 1,
+            "failed_check": "data_cases_json_phase_history_has_evomap_8a",
+            "failed_reason": "ATL-EVOMAP-8A not yet recorded in cases.json at smoke time (this run is the recording run)",
+            "expected_after_record": "PASS on next nightly run after this phase is committed"
+          },
+          "hard_boundaries": {
+            "no_hub_connection": true,
+            "no_a2a_hub_url": true,
+            "no_evolver_loop": true,
+            "no_evolver_run": true,
+            "no_evolver_review": true,
+            "no_evolver_review_approve": true,
+            "no_evolver_solidify": true,
+            "no_auto_publish": true,
+            "no_credit_consumption": true,
+            "no_atp_autobuy": true,
+            "no_real_credentials_read": true,
+            "no_env_file_content_scan": true,
+            "no_curl_or_http_calls": true,
+            "no_telegram_api": true,
+            "no_online_coding_apis": true,
+            "no_real_test_runners": true,
+            "no_real_cron_install": true,
+            "no_crontab_write": true,
+            "no_systemd_timer_create": true,
+            "no_evolver_package_source_modify": true,
+            "no_runtime_evolver_or_memory_tracked": true,
+            "stdlib_only": true
+          },
+          "notes": "ATL-EVOMAP-8A adds an offline-only, local-only, stdlib-only nightly validation loop asset. The runner executes 8 blocking checks: stdlib-only guard, A2A_HUB_URL not set, data/cases.json parses + records 8A, 4 canonical bundles inspectable, 6 prior phase validators ALL CHECKS PASSED, secret scan clean, git hygiene clean. Smoke run PASSED 7/8 blocking (the only FAIL was the cases.json self-reference check, which is recorded by this same update). Dry-run cron example shipped under templates/cron.example; NOT installed. No real cron / systemd timer created. No Hub. No credits. No approve / solidify / auto-publish."
+        },
+        {
+          "phase": "ATL-EVOMAP-8A",
+          "refinement": "spec_v0.1_alignment",
+          "status": "refined to match detailed spec (schema v0.1, --repo-root/--out-dir/--markdown-name/--json-name, evomap_validate_bundle.py, in-process stdlib secret scan)",
+          "result": "PASS — 9/9 blocking + 22/22 validator",
+          "changes": {
+            "manifest_schema": "atl-evomap-nightly-validation-v0.1 (added schema_version, source_base_commit, structured validators[]/bundles[]/checks[]/checks_detail)",
+            "cli": "added --repo-root, --markdown-name, --json-name; renamed --output-dir to --out-dir (kept --output-dir as alias); kept --dry-run, --strict",
+            "output_filenames": "evomap-nightly-digest.{json,md,log} → nightly-validation-digest.{json,md} + nightly-validation-run.log (per spec)",
+            "new_check": "bundles_validatable (evomap_validate_bundle.py) in addition to bundles_inspectable",
+            "cases_parse": "now uses `python3 -m json.tool data/cases.json` per spec",
+            "secret_scan": "rewrote to in-process stdlib scanner per detailed spec: tracked files only, skip binary/image/>2MiB, refuse .env paths as immediate FAIL, allowlist Unix ms timestamps as allowed_timestamp_hits, allowlist placeholder/omitted text, 7 detection patterns (OpenAI key, GitHub PAT, Authorization Bearer, JWT, BEGIN PRIVATE KEY, cookie, 12+ digit)",
+            "stdout_tail_stderr_tail": "enforced 2000-char cap on every subprocess capture",
+            "git_metadata": "records git rev-parse --short HEAD + full git status --short (status informational only, not required clean)",
+            "boundary_check_count": "expanded to 22 hard-boundary flags in both runner and digest"
+          },
+          "hard_boundaries": {
+            "no_hub_connection": true,
+            "no_a2a_hub_url": true,
+            "no_evolver_loop": true,
+            "no_evolver_run": true,
+            "no_evolver_review": true,
+            "no_evolver_review_approve": true,
+            "no_evolver_solidify": true,
+            "no_auto_publish": true,
+            "no_credit_consumption": true,
+            "no_atp_autobuy": true,
+            "no_real_credentials_read": true,
+            "no_env_file_content_scanned": true,
+            "no_curl_or_http_calls": true,
+            "no_telegram_api": true,
+            "no_online_coding_apis": true,
+            "no_real_test_runners": true,
+            "no_real_cron_install": true,
+            "no_crontab_write": true,
+            "no_systemd_timer_create": true,
+            "no_evolver_package_source_modify": true,
+            "no_runtime_evolver_or_memory_tracked": true,
+            "stdlib_only": true
+          },
+          "smoke_run": {
+            "command": "python3 scripts/evomap_nightly_validate.py --repo-root .",
+            "python": "3.12.3",
+            "blocking_total": 9,
+            "passed": 9,
+            "failed": 0,
+            "secret_scan": {
+              "scanned": 301,
+              "hits": 0,
+              "allowed_timestamp_hits": 21,
+              "skipped": {
+                "binary": 84,
+                "image": 0,
+                "too_large": 0,
+                "io_error": 0
+              }
+            },
+            "git_hygiene": {
+              "tracked_files": 385,
+              "status_short_lines": 6,
+              "bad_paths": 0
+            },
+            "bundles": {
+              "inspected": 4,
+              "validated": 4,
+              "all_rc": 0
+            },
+            "phase_validators": 6,
+            "all_checks_passed_marker": true
+          },
+          "validator_run": {
+            "command": "python3 scripts/validate_evomap_phase8a_nightly_validation_loop.py",
+            "total": 22,
+            "passed": 22,
+            "failed": 0
+          },
+          "notes": "Phase 8A refined to align with the detailed ATL-EVOMAP-8A spec received in the second message. Manifest upgraded to schema v0.1 with schema_version + source_base_commit. Runner now supports the full spec'd CLI: --repo-root, --out-dir, --markdown-name, --json-name, --strict, --dry-run, plus --output-dir backward-compat alias. evomap_validate_bundle.py added to bundle checks. cases.json parse uses `python3 -m json.tool` per spec. Secret scan rewritten as in-process stdlib scanner with full spec'd skip rules + 7 detection patterns + Unix ms timestamp allowlist. stdout_tail/stderr_tail capped at 2000 chars. All 22 hard boundaries enforced. No Hub, no credits, no approve/solidify/auto-publish, no real credentials, no .env scan, no real cron install, no systemd timer create. All 6 prior phase validators still ALL CHECKS PASSED (no regression)."
         }
       ]
     }

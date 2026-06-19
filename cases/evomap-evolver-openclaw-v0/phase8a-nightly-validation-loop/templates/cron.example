@@ -1,0 +1,28 @@
+# EvoMap Nightly Validation Loop — DRY-RUN cron example
+# =============================================================================
+# ATL-EVOMAP-8A ships this file ONLY as an example / template.
+#
+# This file MUST NOT be installed by this phase.
+# Installing real cron / systemd timers is a separate, operator-owned action
+# (a future ATL-EVOMAP-8B phase or manual operator step), gated on:
+#
+#   * the runner smoke test passing at least once (this phase)
+#   * explicit human authorization to install real cron
+#   * the runner + manifest being audited
+#
+# To install manually later, an operator would copy the snippet below into
+# /etc/cron.d/evomap-nightly (or the operator's own preferred scheduler)
+# AFTER replacing /path/to/ai-tool-test-lab with the real path on the
+# operator's machine.
+# =============================================================================
+
+# Recommended cadence: daily 02:30 Asia/Shanghai
+# (after the 02:00 wiki compiler if present, before any operator session)
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TZ=Asia/Shanghai
+
+# Nightly EvoMap validation loop
+# -- writes digest JSON + Markdown + run log under the case phase artifacts/
+# -- exits 0 on clean PASS, 1 on any blocking FAIL
+30 2 * * * cd /path/to/ai-tool-test-lab && /usr/bin/python3 scripts/evomap_nightly_validate.py --output-dir cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts >> /var/log/evomap-nightly.log 2>&1

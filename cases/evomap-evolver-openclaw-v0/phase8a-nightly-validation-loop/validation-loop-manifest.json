@@ -1,0 +1,163 @@
+{
+  "schema_version": "atl-evomap-nightly-validation-v0.1",
+  "phase": "ATL-EVOMAP-8A",
+  "source_base_commit": "f292757",
+  "purpose": "Run local-only validation checks for EvoMap Local Evolution Kit.",
+  "intent": "offline-only, local-only, stdlib-only nightly validation loop asset that can be later wired into a real cron or systemd timer by a human operator; this phase ships only the asset and dry-run example, NOT an installation",
+  "scope": {
+    "runtime": "offline",
+    "network_required": false,
+    "external_apis": [],
+    "telemetry": "none",
+    "credentials_touched": "none",
+    "env_files_read": false,
+    "env_files_content_scanned": false,
+    "hub_url_required": false,
+    "real_cron_install": false,
+    "systemd_timer_install": false,
+    "real_test_runners_invoked": false
+  },
+  "runner": {
+    "path": "scripts/evomap_nightly_validate.py",
+    "stdlib_only": true,
+    "python_version_min": "3.10",
+    "execution_model": "single-process sequential",
+    "estimated_runtime_seconds_max": 30,
+    "side_effects": "writes only under --out-dir (default: cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts)",
+    "cli": {
+      "required": [
+        "--repo-root <path>",
+        "--out-dir <path>"
+      ],
+      "optional": [
+        "--strict",
+        "--markdown-name <name>",
+        "--json-name <name>",
+        "--dry-run",
+        "--output-dir <path>  (backward-compat alias for --out-dir)"
+      ]
+    }
+  },
+  "validators": [
+    "scripts/validate_evomap_phase5_local_evolution_kit.py",
+    "scripts/validate_evomap_phase6a_hermes_systemd_bundle.py",
+    "scripts/validate_evomap_phase6b_telegram_router_bundle.py",
+    "scripts/validate_evomap_phase6c_codex_test_failure_bundle.py",
+    "scripts/validate_evomap_phase7a_domain_signal_injection.py",
+    "scripts/validate_evomap_phase7b_cross_bundle_regression.py"
+  ],
+  "bundles": [
+    "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+    "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+    "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+    "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json"
+  ],
+  "checks": [
+    "phase_validators",
+    "data_cases_json_parse",
+    "bundle_inspect",
+    "bundle_validate",
+    "secret_scan",
+    "git_hygiene"
+  ],
+  "checks_detail": {
+    "phase_validators": {
+      "kind": "subprocess_composite",
+      "blocking": true,
+      "scripts": "<see validators[] above>",
+      "pass_criterion": "rc=0 AND stdout contains 'ALL CHECKS PASSED'"
+    },
+    "data_cases_json_parse": {
+      "kind": "subprocess",
+      "blocking": true,
+      "command": "python3 -m json.tool data/cases.json",
+      "pass_criterion": "rc=0"
+    },
+    "bundle_inspect": {
+      "kind": "subprocess",
+      "blocking": true,
+      "command_template": "python3 scripts/evomap_inspect_bundle.py --bundle <bundle>",
+      "pass_criterion": "rc=0"
+    },
+    "bundle_validate": {
+      "kind": "subprocess",
+      "blocking": true,
+      "command_template": "python3 scripts/evomap_validate_bundle.py --bundle <bundle>",
+      "pass_criterion": "rc=0"
+    },
+    "secret_scan": {
+      "kind": "in_process_stdlib",
+      "blocking": true,
+      "scope": "git ls-files (tracked text files only)",
+      "skip_rules": [
+        "binary files",
+        "image files (jpg/jpeg/png/gif/bmp/webp/ico/tiff/svg)",
+        "files > 2 MiB",
+        ".env path anywhere in tracked list (FAIL, do not scan content)",
+        "files under /tmp target runtimes"
+      ],
+      "detection_patterns": [
+        "OpenAI key shape (sk-... 20+ chars)",
+        "GitHub PAT shape (ghp_... 20+ chars)",
+        "Authorization: Bearer header value",
+        "JWT shape (3 base64url segments joined by dots)",
+        "BEGIN PRIVATE KEY block",
+        "cookie assignment (Set-Cookie / Cookie: ...=...)",
+        "12+ digit pure numeric secret-like token"
+      ],
+      "allowlist": [
+        "Unix ms timestamps recorded as allowed_timestamp_hits",
+        "placeholder / omitted / intentionally omitted text"
+      ]
+    },
+    "git_hygiene": {
+      "kind": "subprocess",
+      "blocking": true,
+      "rules": [
+        "git ls-files must not include any root-level .evolver/ path",
+        "git ls-files must not include any root-level memory/ path",
+        "case-scoped fixtures (cases/.../fixtures/.../memory/ or .evolver/) are allowed"
+      ],
+      "status_short_recorded_only": "status may not be clean because this run produces new artifacts; runner only records git status --short, does not require clean"
+    }
+  },
+  "outputs": {
+    "digest_json": "<out-dir>/nightly-validation-digest.json (overridable via --json-name)",
+    "digest_markdown": "<out-dir>/nightly-validation-digest.md (overridable via --markdown-name)",
+    "run_log": "<out-dir>/nightly-validation-run.log"
+  },
+  "hard_boundaries": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "approve": "not_executed",
+    "solidify": "not_executed",
+    "real_cron_install": "not_executed",
+    "systemd_timer_install": "not_executed",
+    "network_calls": "not_executed",
+    "telegram_api": "not_executed",
+    "online_coding_apis": "not_executed",
+    "real_test_runners": "not_executed",
+    "real_credentials_read": "not_executed",
+    "env_file_content_scanned": "not_executed",
+    "evolver_package_source_modified": "not_executed",
+    "runtime_evolver_or_memory_tracked": "not_executed",
+    "stdlib_only": true
+  },
+  "cron_integration": {
+    "installed": false,
+    "example_only": true,
+    "example_path": "cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/templates/cron.example",
+    "expected_drop_in_path": "/etc/cron.d/evomap-nightly (operator-owned, NOT managed by this phase)",
+    "expected_run_command": "cd /path/to/ai-tool-test-lab && python3 scripts/evomap_nightly_validate.py --repo-root . --out-dir cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts",
+    "cadence_recommended": "daily 02:30 Asia/Shanghai (after wiki compiler at 02:00, before any operator session)",
+    "delivery_recommended": "write digest only; do not auto-publish; do not auto-approve; do not auto-solidify"
+  },
+  "versioning": {
+    "manifest_version": "0.1.0",
+    "schema_version": "atl-evomap-nightly-validation-v0.1",
+    "source_base_commit": "f292757",
+    "compatible_runner_min": "0.1.0",
+    "next_intended_phase": "ATL-EVOMAP-8B (optional operator-led cron install)"
+  }
+}

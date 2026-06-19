@@ -1084,8 +1084,103 @@ All 8 spec-required signals present in target memory_graph: `test_failure`, `rep
 
 **Phase 7B → Phase 6C · The kit now has 4 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure, Codex test failure loop) covering the 3 main recovery shapes (tool-discipline, service-restart, message-routing) plus the test-loop shape. The 6C bundle is offline-first by design — the parser refuses to run on `.env` paths and credential-shaped text, and never echoes the original unsafe line.** All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED (no regression).
 
+### ATL-EVOMAP-8A · Nightly Validation Loop Asset
+
+**Status:** Nightly validation loop asset completed (PASS — 9/9 blocking in real smoke run + 22/22 validator checks)
+
+**Goal:** Ship an offline-only, local-only, stdlib-only nightly validation loop asset that can be later wired into a real cron / systemd timer by a human operator. This phase ships **the runner + manifest + dry-run cron example + artifacts + report + validator**. It does **NOT** install any real cron / systemd timer; that is a separate operator-owned phase (e.g. ATL-EVOMAP-8B).
+
+**Runner (`scripts/evomap_nightly_validate.py`):**
+
+| Property | Value |
+|--|--|
+| Stdlib-only | YES (AST-verified by `validate_evomap_phase8a_nightly_validation_loop.py`) |
+| Network egress | none (no urllib, no socket, no requests, no HTTP) |
+| Hub URL read | none (A2A_HUB_URL is explicitly blanked in subprocess env) |
+| Real credentials read | none (no .env read; secret scan reads text only) |
+| Online coding API | not called |
+| Real test runner | not invoked (pytest / npm / cargo / mvn / go all skipped) |
+| Writes outside `--output-dir` | none |
+
+**CLI per the detailed ATL-EVOMAP-8A spec:**
+
+```
+python3 scripts/evomap_nightly_validate.py --repo-root . --out-dir <dir>
+                                            [--strict]
+                                            [--markdown-name <name>]
+                                            [--json-name <name>]
+                                            [--dry-run]
+                                            [--output-dir <path>]   # backward-compat alias
+```
+
+**Blocking checks (9, all PASS in real smoke run):**
+
+| # | Check ID | Result | Detail |
+|--|--|--|--|
+| 1 | `stdlib_only` | PASS | stdlib-only verified |
+| 2 | `no_hub_url_set` | PASS | A2A_HUB_URL not set |
+| 3 | `data_cases_json_parse` | PASS | `python3 -m json.tool data/cases.json` rc=0 |
+| 4 | `data_cases_json_phase_history_has_evomap_8a` | PASS | top — `ATL-EVOMAP-8A Nightly Validation Loop Asset`, history_count=17 |
+| 5 | `bundles_inspectable` | PASS | 4 bundle(s) inspected (OpenClaw / Hermes / Telegram / Codex) |
+| 6 | `bundles_validatable` | PASS | 4 bundle(s) validated (per the spec's add of `evomap_validate_bundle.py`) |
+| 7 | `all_phase_validators_pass` | PASS | 6 validator(s) ALL CHECKS PASSED (5/6A/6B/6C/7A/7B), stdout_tail ≤ 2000 chars |
+| 8 | `secret_scan_clean` | PASS | in-process stdlib scan, scanned=301, hits=0, allowed_timestamp_hits=21, tracked .env paths=0 |
+| 9 | `git_hygiene_no_root_evolver_or_memory` | PASS | 385 tracked file(s) clean, status_short=6 line(s) (informational) |
+
+**Phase validators invoked by the runner (subprocess, 60–180s timeout each):**
+
+| Validator | Result |
+|--|--|
+| `validate_evomap_phase5_local_evolution_kit.py` | ALL CHECKS PASSED |
+| `validate_evomap_phase6a_hermes_systemd_bundle.py` | ALL CHECKS PASSED |
+| `validate_evomap_phase6b_telegram_router_bundle.py` | ALL CHECKS PASSED |
+| `validate_evomap_phase6c_codex_test_failure_bundle.py` | ALL CHECKS PASSED |
+| `validate_evomap_phase7a_domain_signal_injection.py` | ALL CHECKS PASSED |
+| `validate_evomap_phase7b_cross_bundle_regression.py` | ALL CHECKS PASSED |
+
+**Bundle inspect + validate (per-bundle, both rc=0):**
+
+| Bundle | inspect rc | validate rc |
+|--|--|--|
+| openclaw_tool_use_discipline | 0 | 0 |
+| hermes_systemd_recovery | 0 | 0 |
+| telegram_message_router_failure | 0 | 0 |
+| codex_test_failure_loop | 0 | 0 |
+
+**Dry-run cron example (`templates/cron.example`):**
+
+- Marked as `DRY-RUN` / `EXAMPLE` / `MUST NOT` / `NOT installed`.
+- Lists the recommended cadence (daily 02:30 Asia/Shanghai) and command line.
+- Includes the placeholder `/path/to/ai-tool-test-lab` so a future operator can substitute the real path.
+- **No real cron line targeting `/etc/cron.d/` is active** (every such reference is inside a comment / instruction block).
+- The Phase 8A validator verifies this with a structural rule: a real cron drop-in would have a non-comment line referencing `/etc/cron.d/`, `/var/spool/cron/`, or `crontab`; `cron.example` has none.
+
+**Artifacts produced by the smoke run (per spec'd default filenames):**
+
+- `artifacts/nightly-validation-digest.json` — machine-readable digest (9 checks + summary + 22 hard-boundary map + manifest metadata + git commit + git status --short).
+- `artifacts/nightly-validation-digest.md` — human-readable digest (tables for checks, validators, bundle inspect/validate, secret scan, git).
+- `artifacts/nightly-validation-run.log` — short log suitable for tailing in cron output.
+
+**Validation manifest (`validation-loop-manifest.json`):**
+
+- Schema: `atl-evomap-nightly-validation-v0.1`
+- `source_base_commit`: `f292757`
+- Structured top-level fields: `validators[]`, `bundles[]`, `checks[]`, `checks_detail`, `hard_boundaries`, `cron_integration`.
+
+**Hard-boundary enforcement (declared in both runner and digest; 22 flags):**
+
+`no_hub_connection`, `no_a2a_hub_url`, `no_evolver_loop`, `no_evolver_run`, `no_evolver_review`, `no_evolver_review_approve`, `no_evolver_solidify`, `no_auto_publish`, `no_credit_consumption`, `no_atp_autobuy`, `no_real_credentials_read`, `no_env_file_content_scan`, `no_curl_or_http_calls`, `no_telegram_api`, `no_online_coding_apis`, `no_real_test_runners`, `no_real_cron_install`, `no_crontab_write`, `no_systemd_timer_create`, `no_evolver_package_source_modify`, `no_runtime_evolver_or_memory_tracked`, `stdlib_only`.
+
+**Files:**
+
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/` (README + REPORT + manifest + cron example + 3 artifacts)
+- New tool: `scripts/evomap_nightly_validate.py` (offline-only, stdlib-only, 9 blocking checks; spec'd CLI: `--repo-root` + `--out-dir` + `--markdown-name` + `--json-name` + `--strict` + `--dry-run` + `--output-dir` alias; writes JSON + Markdown + log with spec'd default filenames)
+- New validator: `scripts/validate_evomap_phase8a_nightly_validation_loop.py` (22 checks: file presence + AST stdlib guard + 4 CLI flag checks + manifest schema v0.1 + manifest structural fields + digest shape + cases.json + main README + backward-compat composite of all 6 prior validators + runner self-host)
+- Top-level report: `reports/ATL_EVOMAP_8A_NIGHTLY_VALIDATION_LOOP_REPORT.md`
+
+**Phase 6C → Phase 8A · The kit now has a reusable, future-installable nightly validation loop asset: an offline / local-only / stdlib-only runner that executes all 6 prior phase validators plus bundle inspect + bundle validate + cases.json parse + in-process stdlib secret scan + git hygiene checks, and writes a JSON + Markdown digest. The runner ships with the full spec'd CLI (`--repo-root` + `--out-dir` + `--markdown-name` + `--json-name` + `--strict` + `--dry-run` + `--output-dir` alias) and respects all 22 hard boundaries. The runner is shipped but NOT installed; a dry-run cron example is included for future operator use.** All 6 prior validators (5/6A/6B/6C/7A/7B) still ALL CHECKS PASSED (no regression). The Phase 8A validator itself ALSO PASSES 22/22.
+
 **Next steps:**
 
-1. **Automated nightly validation loop asset** (cron-driven run of the 6 validators + 6C parser + secret scan; produces a daily PASS/FAIL digest; uses the kit's existing tools and spec'd fixtures; direct match to user's stated "夜间自动验证循环" goal).
-2. **ATL-EVOMAP-7A · Browser-Control `rate-limit-recovery` Bundle** (new asset — covers browser automation rate-limit / cooldown cycles; complements 6C nicely: Codex = local test loop, browser-control = external API loop).
-3. **ATL-EVOMAP-8A · `bundle-curator` skill** (auto-generate portable bundles from evolver run outputs; meta-tool that makes all future bundles easier).
+1. **ATL-EVOMAP-8B · Operator-led real-cron install** (optional; operator-owned; gated on Phase 8A being green for at least N consecutive dry-run / smoke cycles + explicit human authorization; would copy `templates/cron.example` into `/etc/cron.d/evomap-nightly` after substituting `/path/to/ai-tool-test-lab` and adjusting cadence).
+2. **ATL-EVOMAP-9A · `bundle-curator` skill** (auto-generate portable bundles from evolver run outputs; meta-tool that makes all future bundles easier).
