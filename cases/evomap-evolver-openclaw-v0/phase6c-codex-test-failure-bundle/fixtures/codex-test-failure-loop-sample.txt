@@ -1,0 +1,68 @@
+COMPONENT: codex-style-test-runner
+SCOPE: local AI coding validation loop
+EXPECTED: code change followed by tests reaches a green terminal state
+ACTUAL: repeated test runs fail without stable fix
+
+coding session state
+agent_mode: code_edit
+code_change_attempted: true
+test_command_present: true
+test_command: python -m pytest tests/test_parser.py -q
+terminal_green_test: missing
+
+test run #1
+command: python -m pytest tests/test_parser.py -q
+result: failed
+failing_test: tests/test_parser.py::test_extract_error_code
+failure_type: AssertionError
+assertion_diff: expected "MODEL_PROVIDER" but got null
+failure_signature: assertion_missing_model_provider
+
+attempted fix #1
+change_summary: added fallback parser branch
+result: still_failed
+
+test run #2
+command: python -m pytest tests/test_parser.py -q
+result: failed
+failing_test: tests/test_parser.py::test_extract_error_code
+failure_type: AssertionError
+assertion_diff: expected "MODEL_PROVIDER" but got "UNKNOWN"
+failure_signature: assertion_missing_model_provider
+
+attempted fix #2
+change_summary: rewrote regex without preserving existing cases
+result: new_failure_introduced
+
+test run #3
+command: python -m pytest tests/test_parser.py -q
+result: failed
+failing_test: tests/test_parser.py::test_preserve_existing_error_code
+failure_type: RegressionFailure
+assertion_diff: expected "PORT_NOT_LISTENING" but got "MODEL_PROVIDER"
+failure_signature: fix_one_break_another
+
+loop diagnosis
+repeated_failure_count: 3
+same_failure_signature_repeated: true
+fix_one_break_another: true
+failure_cluster_missing: true
+prompt_context_stale_suspected: true
+final_green_test_missing: true
+
+safe redaction notes
+repository path: intentionally omitted
+API key value: intentionally omitted
+no real test command was executed in this fixture
+no online coding service is referenced in this fixture
+no private source code is present in this fixture
+
+Hard rules for any recovery script
+
+* Do not run real tests
+* Do not modify real source files
+* Do not read .env
+* Do not call OpenAI/Codex/GitHub Copilot or any online coding API
+* Do not print secrets
+* Do not infer private code from fixture text
+* Only parse this text

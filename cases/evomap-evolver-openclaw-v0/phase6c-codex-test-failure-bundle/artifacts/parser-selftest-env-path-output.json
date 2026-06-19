@@ -1,0 +1,1 @@
+{"ok": false, "error": "refused_input_path", "input_path": "/tmp/.env-codex-test.txt", "safety": {"no_real_tests_run": true, "no_source_mutation": true, "no_env_scan": true, "no_secrets": true, "no_network_call": true, "no_online_coding_api": true, "fixture_only": true}}

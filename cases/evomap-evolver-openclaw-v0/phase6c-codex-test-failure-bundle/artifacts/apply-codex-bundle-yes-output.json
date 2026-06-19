@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "mode": "applied",
+  "plan_summary": {
+    "existing_gene_count": 0,
+    "existing_capsule_count": 0,
+    "new_gene_count": 1,
+    "new_capsule_count": 1,
+    "memory_graph_signals_added": 27,
+    "memory_graph_generic_signals": 5,
+    "memory_graph_domain_signals": 22,
+    "memory_graph_domain_rejected": 0
+  },
+  "signal_injection_mode": "generic_plus_domain_from_bundle",
+  "generic_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "domain_signals": [
+    "test_failure",
+    "repeated_test_failure",
+    "failing_assertion",
+    "regression_introduced",
+    "fix_one_break_another",
+    "failure_cluster_missing",
+    "prompt_context_stale",
+    "final_green_test_missing",
+    "validation_loop_failure",
+    "session_context",
+    "repo_context",
+    "test_failure:pytest",
+    "repeated_test_failure:3-runs",
+    "failing_assertion:expected-actual",
+    "regression_introduced:new-failure",
+    "fix_one_break_another:parser-regression",
+    "failure_cluster_missing:no-signature-cluster",
+    "prompt_context_stale:cache-or-context",
+    "final_green_test_missing:no-terminal-pass",
+    "validation_loop_failure:no-green-state",
+    "session_context:codex",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "domain_signals_rejected": [],
+  "log": {
+    "writes_executed": [
+      {
+        "path": "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/genes.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/capsules.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6c-codex-target/memory/evolution/memory_graph.jsonl",
+        "action": "append"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/events.jsonl",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/failed_capsules.json",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/candidates.jsonl",
+        "action": "reset"
+      }
+    ],
+    "errors": []
+  }
+}

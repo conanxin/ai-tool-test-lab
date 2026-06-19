@@ -1,0 +1,1 @@
+{"ok": false, "error": "unsafe_fixture (github personal access token)", "input_path": "/tmp/codex-unsafe-github-pat.txt", "safety": {"no_real_tests_run": true, "no_source_mutation": true, "no_env_scan": true, "no_secrets": true, "no_network_call": true, "no_online_coding_api": true, "fixture_only": true}}

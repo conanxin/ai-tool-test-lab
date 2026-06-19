@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.6.0",
+  "type": "Capsule",
+  "id": "capsule_codex_test_failure_loop_phase6c",
+  "gene": "gene_distilled_codex-test-failure-loop",
+  "status": "success",
+  "confidence": 0.85,
+  "visibility": "private",
+  "source": "manual_capsule_seed_phase6c",
+  "trigger": [
+    "test_failure",
+    "repeated_test_failure",
+    "failing_assertion",
+    "regression_introduced",
+    "fix_one_break_another",
+    "final_green_test_missing"
+  ],
+  "blast_radius": {"files": 0, "lines": 0},
+  "execution_trace": [
+    {
+      "step": 1,
+      "stage": "build",
+      "command": "python3 scripts/codex_test_failure_loop_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/fixtures/codex-test-failure-loop-sample.txt",
+      "exit_code": 0,
+      "output_json": {
+        "ok": true,
+        "component": "codex-style-test-runner",
+        "agent_mode": "code_edit",
+        "code_change_attempted": true,
+        "test_command_present": true,
+        "tests_failed": true,
+        "repeated_failure_count": 3,
+        "same_failure_signature_repeated": true,
+        "failing_assertion_detected": true,
+        "regression_introduced": true,
+        "fix_one_break_another": true,
+        "failure_cluster_missing": true,
+        "prompt_context_stale_suspected": true,
+        "final_green_test_missing": true,
+        "terminal_green_test_missing": true
+      }
+    },
+    {
+      "step": 2,
+      "stage": "validate",
+      "command": "python3 -m json.tool artifacts/codex-test-failure-fixture-output.json",
+      "exit_code": 0,
+      "result": "json_parse_pass"
+    },
+    {
+      "step": 3,
+      "stage": "validate",
+      "command": "assert repeated_failure_count == 3 and fix_one_break_another == true and final_green_test_missing == true",
+      "exit_code": 0,
+      "result": "fixture_detected_expected_test_failure_loop_shape"
+    },
+    {
+      "step": 4,
+      "stage": "canary",
+      "command": "safety_check",
+      "exit_code": 0,
+      "result": {
+        "no_real_tests_run": true,
+        "no_source_mutation": true,
+        "no_env_scan": true,
+        "no_secrets": true,
+        "no_network_call": true,
+        "no_online_coding_api": true,
+        "no_hub": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ]
+}

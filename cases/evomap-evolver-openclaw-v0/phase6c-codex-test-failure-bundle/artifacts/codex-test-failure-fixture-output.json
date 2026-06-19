@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "component": "codex-style-test-runner",
+  "agent_mode": "code_edit",
+  "code_change_attempted": true,
+  "test_command_present": true,
+  "tests_failed": true,
+  "repeated_failure_count": 3,
+  "same_failure_signature_repeated": true,
+  "failing_assertion_detected": true,
+  "regression_introduced": true,
+  "fix_one_break_another": true,
+  "failure_cluster_missing": true,
+  "prompt_context_stale_suspected": true,
+  "final_green_test_missing": true,
+  "terminal_green_test_missing": true,
+  "failing_tests": [
+    "tests/test_parser.py::test_extract_error_code",
+    "tests/test_parser.py::test_preserve_existing_error_code"
+  ],
+  "failure_signatures": [
+    "assertion_missing_model_provider",
+    "fix_one_break_another"
+  ],
+  "recommended_check_order": [
+    "freeze the failing test command before editing again",
+    "cluster failures by stable signature before changing code",
+    "separate repeated same-signature failure from new regression failure",
+    "write down expected vs actual assertion diff",
+    "make one minimal fix per cycle",
+    "rerun the exact failing test before broad test suites",
+    "record the final green test evidence before marking done"
+  ],
+  "safety": {
+    "no_real_tests_run": true,
+    "no_source_mutation": true,
+    "no_env_scan": true,
+    "no_secrets": true,
+    "no_network_call": true,
+    "no_online_coding_api": true,
+    "fixture_only": true
+  },
+  "input_path": "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/fixtures/codex-test-failure-loop-sample.txt"
+}

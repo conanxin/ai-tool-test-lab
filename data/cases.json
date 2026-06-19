@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-7B Cross-Bundle Regression Test",
-      "status": "cross-bundle regression completed",
+      "phase": "ATL-EVOMAP-6C Codex Test Failure Loop Bundle",
+      "status": "codex test failure bundle completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
-      "summary": "Phase 7B proves that all 3 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure) can safely coexist in a single fresh isolated target runtime at /tmp/atl-evomap-7b-cross-bundle-target. After 3 sequential apply calls (each with --inject-signals-from), the runtime contains 3 genes, 3 capsules, 59 memory_graph lines (15+17+27), 39 distinct signals, 0 dangerous signals, 0 pollution signals, 0 duplicate gene_ids, 0 duplicate capsule_ids, 0 broken capsule-to-gene links. Combined evolver smoke is clean: no crash, no Hub, no --approve, no solidify, OpenClaw gene selected via score_ranked. All 5 score dimensions (Apply / ID / Signal / Smoke / Safety) PASS. 4 prior phase validators (5/6A/6B/7A) still ALL CHECKS PASSED.",
+      "summary": "Phase 6C adds a 4th canonical portable bundle to the OpenClaw / Hermes Local Evolution Kit, covering the characteristic shape of an AI coding / Codex-style test failure loop. Bundle 4 (Codex test failure loop, category: repair) models the same-test-fails-3+ / fix-one-break-another / missing-failure-cluster / stale-context / no-final-green-test-evidence shape with 22 domain signals (9 bare + 2 cross-context + 9 namespaced + 2 namespaced-context). The fixture is offline-only (no real tests, no real source modification, no online coding API); the parser scripts/codex_test_failure_loop_fixture.py refuses to run on .env paths and credential-shaped text, never echoes the original unsafe line, and passes 3 self-tests (OpenAI key / GitHub PAT / env basename). Apply dry-run + --yes both PASS to /tmp/atl-evomap-phase6c-codex-target with 1 gene, 1 capsule, 27 memory_graph lines (5 generic + 22 domain), 25 distinct signals, 0 errors. Optional evolver run/review smoke PASS: no crash, no Hub, gene_distilled_codex-test-failure-loop selected, no --approve, no solidify. inspect + validate 12/12 PASS, 0 secret hits. All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED.",
       "updated_at": "2026-06-19",
-      "final_status": "CROSS_BUNDLE_REGRESSION_PASS",
+      "final_status": "CODEX_TEST_FAILURE_BUNDLE_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -429,6 +429,82 @@
           "hard_boundaries_preserved": 20,
           "phase_7a_base_commit": "3112f07",
           "notes": "Phase 7B is a cross-bundle regression test that applies all 3 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure) sequentially to a single fresh isolated target runtime at /tmp/atl-evomap-7b-cross-bundle-target. All 3 are applied with --inject-signals-from, so the apply tool extracts gene.signals_match + capsule.trigger from each bundle and writes 5 generic + N domain signals. Cumulative: 59 apply-format memory_graph lines (15+17+27), 39 distinct signals, 0 dangerous, 0 pollution, 0 duplicate gene_ids, 0 duplicate capsule_ids, 0 broken capsule-to-gene links, all 19 spec-required signals present (5 OpenClaw + 6 Hermes + 8 Telegram). Combined evolver smoke in the runtime is clean: [SearchFirst] No hub match (reason: no_hub_url), selectionPath=score_ranked, no --approve, no solidify, no crash. 5/5 score dimensions PASS. All 4 prior phase validators still ALL CHECKS PASSED (no regression)."
+        },
+        {
+          "phase": "ATL-EVOMAP-6C",
+          "status": "codex test failure bundle completed",
+          "result": "PASS",
+          "bundle": "codex-test-failure-loop",
+          "category": "repair",
+          "target_runtime": "/tmp/atl-evomap-phase6c-codex-target",
+          "gene_id": "gene_distilled_codex-test-failure-loop",
+          "capsule_id": "capsule_codex_test_failure_loop_phase6c",
+          "signals_match_count": 22,
+          "capsule_execution_trace_steps": 4,
+          "capsule_execution_trace_stages": [
+            "build",
+            "validate",
+            "validate",
+            "canary"
+          ],
+          "parser_self_tests": [
+            {
+              "input": "openai-key",
+              "expected": "ok=false, error=unsafe_fixture (openai-style api key), exit=2",
+              "actual": "PASS"
+            },
+            {
+              "input": "github-pat",
+              "expected": "ok=false, error=unsafe_fixture (github personal access token), exit=2",
+              "actual": "PASS"
+            },
+            {
+              "input": ".env-codex-test.txt",
+              "expected": "ok=false, error=refused_input_path, exit=2",
+              "actual": "PASS"
+            }
+          ],
+          "apply_results": {
+            "dry_run": {
+              "ok": true,
+              "mode": "dry-run",
+              "new_genes": 1,
+              "new_capsules": 1,
+              "memory_signals": 27,
+              "domain_rejected": 0
+            },
+            "yes": {
+              "ok": true,
+              "mode": "applied",
+              "new_genes": 1,
+              "new_capsules": 1,
+              "memory_signals": 27,
+              "domain_rejected": 0
+            }
+          },
+          "evolver_smoke": {
+            "no_crash": true,
+            "no_hub": true,
+            "selected_gene": "gene_distilled_codex-test-failure-loop",
+            "selection_path": "distilled_fallback",
+            "no_approve": true,
+            "no_solidify": true,
+            "capsule_survives": true
+          },
+          "new_tools": [
+            "scripts/codex_test_failure_loop_fixture.py"
+          ],
+          "new_validator": "scripts/validate_evomap_phase6c_codex_test_failure_bundle.py",
+          "backward_compat_validators_passing": [
+            "scripts/validate_evomap_phase5_local_evolution_kit.py",
+            "scripts/validate_evomap_phase6a_hermes_systemd_bundle.py",
+            "scripts/validate_evomap_phase6b_telegram_router_bundle.py",
+            "scripts/validate_evomap_phase7a_domain_signal_injection.py",
+            "scripts/validate_evomap_phase7b_cross_bundle_regression.py"
+          ],
+          "phase_7b_base_commit": "be84810",
+          "hard_boundaries_preserved": 22,
+          "notes": "Phase 6C is offline-first by design. Bundle 4 (Codex test failure loop, repair) adds 22 domain signals covering the test-failure-loop shape to the 3-bundle kit. The parser (scripts/codex_test_failure_loop_fixture.py) refuses to run on .env basenames and credential-shaped text (OpenAI key, GitHub PAT, Authorization header, JWT, BEGIN PRIVATE KEY, 12+ digit pure-numeric value), and never echoes the original unsafe line. 3 self-tests (openai-key, github-pat, env-path) all PASS with ok=false, exit=2, no raw unsafe substring in artifacts. Apply dry-run + --yes both PASS to /tmp/atl-evomap-phase6c-codex-target with 1 gene, 1 capsule, 27 memory_graph lines (5 generic + 22 domain), 25 distinct signals, 0 errors. Optional evolver run/review smoke PASS: [SearchFirst] No hub match (reason: no_hub_url), gene_distilled_codex-test-failure-loop selected (selectionPath: distilled_fallback, due to evolver-internal memory_missing signal which matches our gene via session_context/repo_context), no --approve, no solidify, no crash, capsule survives (review output shows full Gene + Capsule summary). All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED. No Hub / no publish / no credits / no approve / no solidify / no real tests / no real source modification / no online coding API / no .env scan / no real OpenAI key or GitHub PAT."
         }
       ]
     }

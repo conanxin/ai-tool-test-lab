@@ -1,0 +1,45 @@
+
+============================================================
+[Review] Pending evolution run: run_1781827372099
+============================================================
+
+--- Gene ---
+  ID:       gene_distilled_codex-test-failure-loop
+  Category: repair
+  Summary:  Codex-style AI coding recovery discipline for repeated test failures, failing assertions, regression loops, stale context, and missing final green test evidence.
+  Strategy:
+    1. Freeze the exact failing test command before editing again.
+    2. Cluster failures by stable signature and assertion diff before choosing a fix.
+    3. Distinguish repeated same-signature failure from new regression failure.
+    4. Make one minimal code change per cycle and preserve existing passing cases.
+    5. Rerun the narrow failing test before broad suites.
+    6. Do not mark the task complete until final green test evidence is recorded.
+
+--- Signals ---
+  - memory_missing
+
+--- Mutation ---
+  Category:   optimize
+  Risk Level: low
+
+--- Blast Radius Estimate ---
+  Files changed: ?
+  Lines changed: ?
+
+--- Diff ---
+=== Unstaged Changes ===
+diff --git a/memory/evolution/memory_graph.jsonl b/memory/evolution/memory_graph.jsonl
+index f69e678..4a2f132 100644
+--- a/memory/evolution/memory_graph.jsonl
++++ b/memory/evolution/memory_graph.jsonl
+@@ -25,3 +25,6 @@
+ {"type": "MemoryGraphEvent", "ts": 1718700219.0, "signal": "validation_loop_failure:no-green-state", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)", "mutation": {"target": "gene:gene_distilled_codex-test-failure-loop", "action": "select"}}
+ {"type": "MemoryGraphEvent", "ts": 1718700220.0, "signal": "session_context:codex", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)", "mutation": {"target": "gene:gene_distilled_codex-test-failure-loop", "action": "select"}}
+ {"type": "MemoryGraphEvent", "ts": 1718700221.0, "signal": "repo_context:ai-tool-test-lab", "origin": "evomap_apply_bundle:domain_from_bundle", "weight": 0.8, "context": "domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)", "mutation": {"target": "gene:gene_distilled_codex-test-failure-loop", "action": "select"}}
++{"type":"MemoryGraphEvent","kind":"signal","id":"mge_1781827371368_70ad75dc","ts":"2026-06-19T00:02:51.368Z","signal":{"key":"memory_missing","signals":["memory_missing"],"error_signature":null},"observed":{"agent":"main","session_scope":null,"drift_enabled":false,"review_mode":false,"dry_run":false,"system_health":"Uptime: 11.4h | Node: v22.22.0 | Agent RSS: 116.7MB | Disk: 18% (822.7G free) | Node Processes: 16 | Integrations: Nominal","mood":"Mood: Unknown","scan_ms":230,"memory_size_bytes":0,"recent_error_count":0,"node":"v22.22.0","platform":"linux","cwd":"/tmp/atl-evomap-phase6c-codex-target","evidence":{"recent_session_tail":"--- SESSION (a0d6a7ef-acc1-49ae-8b05-98ae305a72b8.jsonl) ---\n**ASSISTANT**: Both apply dry-run and --yes PASS. Now check target state: [TOOL: exec]\n**ASSISTANT**: All 8 spec-required signals present. Now ## Step 13: optional evolver run/review smoke [TOOL: update_plan]\n**ASSISTANT**: [TOOL: exec]\n\n--- SESSION (908af8c0-98dd-4e9f-94c5-8ae02ad883cc.jsonl) ---\n**ASSISTANT**: The checklist ticked itself green today, each PASS a small door opening into the next. I cloned a designer named baoyu into a corner of my desk and asked, very politely, for a homepage. It thought in components. It thought in hex. It thought the way rain thinks about a window — a small continuous de","today_log_tail":"# memory log 2026-06-19\n"}}}
++{"type":"MemoryGraphEvent","kind":"hypothesis","id":"mge_1781827371428_ee74189a","ts":"2026-06-19T00:02:51.425Z","signal":{"key":"memory_missing","signals":["memory_missing"],"error_signature":null},"hypothesis":{"id":"hyp_1781827371425_3c86b36d","text":"Given signal_key=memory_missing with 1 signals, selecting gene=gene_distilled_codex-test-failure-loop(repair) under mode=directed is expected to reduce repeated errors and improve stability.","predicted_outcome":{"status":null,"score":null}},"mutation":{"id":"mut_1781827371420","category":"optimize","trigger_signals":["memory_missing"],"target":"gene:gene_distilled_codex-test-failure-loop","expected_effect":"improve success rate and reduce repeated operational cost","risk_level":"low"},"personality":{"key":"rigor=0.7|creativity=0.3|verbosity=0.3|risk_tolerance=0.4|obedience=0.9","state":{"type":"PersonalityState","rigor":0.7,"creativity":0.35,"verbosity":0.25,"risk_tolerance":0.4,"obedience":0.85}},"gene":{"id":"gene_distilled_codex-test-failure-loop","category":"repair"},"action":{"drift":false,"selected_by":"selector","selector":{"selected":"gene_distilled_codex-test-failure-loop","reason":["signals match gene.signals_match","signals: memory_missing","drift_intensity: 1.000","selection_path: distilled_fallback"],"alternatives":[],"selectionPath":"distilled_fallback","memoryUsed":false}},"capsules":{"used":[]},"observed":{"agent":"main","session_scope":null,"drift_enabled":false,"review_mode":false,"dry_run":false,"system_health":"Uptime: 11.4h | Node: v22.22.0 | Agent RSS: 116.7MB | Disk: 18% (822.7G free) | Node Processes: 16 | Integrations: Nominal","mood":"Mood: Unknown","scan_ms":230,"memory_size_bytes":0,"recent_error_count":0,"node":"v22.22.0","platform":"linux","cwd":"/tmp/atl-evomap-phase6c-codex-target","evidence":{"recent_session_tail":"--- SESSION (a0d6a7ef-acc1-49ae-8b05-98ae305a72b8.jsonl) ---\n**ASSISTANT**: Both apply dry-run and --yes PASS. Now check target state: [TOOL: exec]\n**ASSISTANT**: All 8 spec-required signals present. Now ## Step 13: optional evolver run/review smoke [TOOL: update_plan]\n**ASSISTANT**: [TOOL: exec]\n\n--- SESSION (908af8c0-98dd-4e9f-94c5-8ae02ad883cc.jsonl) ---\n**ASSISTANT**: The checklist ticked itself green today, each PASS a small door opening into the next. I cloned a designe
+... (truncated, 7885 chars total)
+============================================================
+
+To approve and solidify:  node index.js review --approve
+To reject and rollback:   node index.js review --reject

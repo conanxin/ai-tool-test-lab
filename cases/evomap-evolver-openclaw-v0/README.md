@@ -1027,7 +1027,65 @@ PARTIAL on 2/3 probes is acceptable per spec — the evolver's selector combines
 
 **Phase 7A → Phase 7B · The kit now has 3 canonical portable bundles that can safely coexist in a single isolated runtime, with a dedicated cross-bundle analyzer that proves no signal/gene/capsule conflicts, no dangerous / pollution signals leak through, and the evolver smoke in the combined runtime is clean (no Hub, no --approve, no solidify, no crash).** All 4 prior validators (5/6A/6B/7A) still ALL CHECKS PASSED (no regression).
 
+### ATL-EVOMAP-6C · Codex Test Failure Loop Bundle
+
+**Status:** Codex test failure bundle completed (PASS)
+
+**Goal:** Add a 4th canonical portable bundle covering the characteristic shape of an AI coding / Codex-style test failure loop (same test fails 3+ times, fix-one-break-another, missing failure cluster, stale context, no final green test evidence).
+
+**Offline-first design:** The bundle is offline-first. The only test data it touches is a fixture text file (no real test execution, no real source modification, no online coding API). The parser (`scripts/codex_test_failure_loop_fixture.py`) reads the fixture and outputs a JSON summary.
+
+**Bundle structure (offline-safe):**
+
+| Layer | ID | Count |
+|--|--|--|
+| Gene | `gene_distilled_codex-test-failure-loop` (category: repair) | 1 |
+| Capsule | `capsule_codex_test_failure_loop_phase6c` (status: success, confidence: 0.85) | 1 |
+| Capsule execution_trace | build → validate → validate → canary | 4 steps |
+| Gene signals_match | 9 bare + 2 cross-context + 9 namespaced + 2 namespaced-context | 22 signals |
+| Recommended recovery order | 7 steps | 7 |
+
+**Parser self-tests (3, all PASS):**
+
+| Self-test input | Expected | Actual |
+|--|--|--|
+| OpenAI key (`sk-XXXX...X`) | `ok=false, error=unsafe_fixture (openai-style api key)`, exit=2 | ✅ |
+| GitHub PAT (`ghp_YYYY...Y`) | `ok=false, error=unsafe_fixture (github personal access token)`, exit=2 | ✅ |
+| `.env-codex-test.txt` (basename contains `.env`) | `ok=false, error=refused_input_path`, exit=2 | ✅ |
+
+0 occurrences of unsafe raw strings (`sk-X...`, `ghp_Y...`, etc.) in any committed artifact.
+
+**Apply to isolated `/tmp/atl-evomap-phase6c-codex-target`:**
+
+| Apply | mode | ok | gene | capsule | memory_signals | domain_rejected |
+|--|--|--|--|--|--|--|
+| dry-run | plan | ✅ | 1 | 1 | 27 (5 generic + 22 domain) | 0 |
+| --yes   | applied | ✅ | 1 | 1 | 27 (5 generic + 22 domain) | 0 |
+
+All 8 spec-required signals present in target memory_graph: `test_failure`, `repeated_test_failure`, `failing_assertion`, `regression_introduced`, `fix_one_break_another`, `final_green_test_missing`, `test_failure:pytest`, `repeated_test_failure:3-runs`.
+
+**Optional evolver run/review smoke (in target):**
+
+| Criterion | Expected | Actual |
+|--|--|--|
+| No crash | 0 Traceback / FATAL | ✅ across 786-line run output |
+| No Hub | `[SearchFirst] No hub match (reason: no_hub_url)` | ✅ found |
+| Selected Gene is bundle's Gene | `gene_distilled_codex-test-failure-loop` | ✅ selected (selectionPath: distilled_fallback) |
+| No `--approve` | review invoked without `--approve` | ✅ |
+| No `solidify` | `node index.js solidify` not executed | ✅ |
+| Capsule survives | review output shows full Capsule with execution_trace | ✅ |
+
+**Files:**
+
+- Case dir: `cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/` (README + REPORT + 4 tools + 13 artifacts + 1 fixture + 1 bundle)
+- Top-level report: `reports/ATL_EVOMAP_6C_CODEX_TEST_FAILURE_BUNDLE_REPORT.md`
+- New tool: `scripts/codex_test_failure_loop_fixture.py` (offline parser, stdlib only, refuses `.env` paths and credential-shaped text without echoing raw unsafe content)
+- New validator: `scripts/validate_evomap_phase6c_codex_test_failure_bundle.py` (23 checks)
+
+**Phase 7B → Phase 6C · The kit now has 4 canonical portable bundles (OpenClaw tool-use discipline, Hermes systemd service recovery, Telegram message router failure, Codex test failure loop) covering the 3 main recovery shapes (tool-discipline, service-restart, message-routing) plus the test-loop shape. The 6C bundle is offline-first by design — the parser refuses to run on `.env` paths and credential-shaped text, and never echoes the original unsafe line.** All 5 prior validators (5/6A/6B/7A/7B) still ALL CHECKS PASSED (no regression).
+
 **Next steps:**
 
-1. **ATL-EVOMAP-6C · Codex Test Failure Loop Bundle** (new asset — covers AI coding test-failure loops; matches the user's stated "夜间自动验证循环" / overnight auto-verification goal most directly).
-2. **ATL-EVOMAP-8A · `bundle-curator` skill** (auto-generate portable bundles from evolver run outputs; meta-tool that makes all future bundles easier).
+1. **Automated nightly validation loop asset** (cron-driven run of the 6 validators + 6C parser + secret scan; produces a daily PASS/FAIL digest; uses the kit's existing tools and spec'd fixtures; direct match to user's stated "夜间自动验证循环" goal).
+2. **ATL-EVOMAP-7A · Browser-Control `rate-limit-recovery` Bundle** (new asset — covers browser automation rate-limit / cooldown cycles; complements 6C nicely: Codex = local test loop, browser-control = external API loop).
+3. **ATL-EVOMAP-8A · `bundle-curator` skill** (auto-generate portable bundles from evolver run outputs; meta-tool that makes all future bundles easier).

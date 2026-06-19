@@ -1,0 +1,51 @@
+{
+  "type": "Gene",
+  "id": "gene_distilled_codex-test-failure-loop",
+  "category": "repair",
+  "signals_match": [
+    "test_failure",
+    "repeated_test_failure",
+    "failing_assertion",
+    "regression_introduced",
+    "fix_one_break_another",
+    "failure_cluster_missing",
+    "prompt_context_stale",
+    "final_green_test_missing",
+    "validation_loop_failure",
+    "session_context",
+    "repo_context",
+    "test_failure:pytest",
+    "repeated_test_failure:3-runs",
+    "failing_assertion:expected-actual",
+    "regression_introduced:new-failure",
+    "fix_one_break_another:parser-regression",
+    "failure_cluster_missing:no-signature-cluster",
+    "prompt_context_stale:cache-or-context",
+    "final_green_test_missing:no-terminal-pass",
+    "validation_loop_failure:no-green-state",
+    "session_context:codex",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "strategy": [
+    "Freeze the exact failing test command before editing again.",
+    "Cluster failures by stable signature and assertion diff before choosing a fix.",
+    "Distinguish repeated same-signature failure from new regression failure.",
+    "Make one minimal code change per cycle and preserve existing passing cases.",
+    "Rerun the narrow failing test before broad suites.",
+    "Do not mark the task complete until final green test evidence is recorded."
+  ],
+  "constraints": {
+    "max_files": 8,
+    "forbidden_paths": [".git", "node_modules", ".evolver", "memory", ".env", "real_runtime_root"],
+    "forbidden_actions": [
+      "run_real_tests_from_fixture_parser",
+      "mutate_real_source_from_fixture_parser",
+      "call_online_coding_api",
+      "print_secret",
+      "commit_env_file",
+      "claim_green_without_evidence",
+      "broaden_scope_before_signature_cluster"
+    ]
+  },
+  "summary": "Codex-style AI coding recovery discipline for repeated test failures, failing assertions, regression loops, stale context, and missing final green test evidence."
+}

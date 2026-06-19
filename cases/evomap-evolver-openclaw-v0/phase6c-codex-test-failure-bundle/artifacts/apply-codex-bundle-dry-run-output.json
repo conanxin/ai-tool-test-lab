@@ -1,0 +1,248 @@
+{
+  "ok": true,
+  "mode": "dry-run",
+  "plan": {
+    "target": "/tmp/atl-evomap-phase6c-codex-target",
+    "is_git_repo": true,
+    "gene_id": "gene_distilled_codex-test-failure-loop",
+    "capsule_id": "capsule_codex_test_failure_loop_phase6c",
+    "signal_injection_mode": "generic_plus_domain_from_bundle",
+    "generic_signals": [
+      "tool_bypass",
+      "repeated_tool_usage",
+      "protocol_drift",
+      "session_context",
+      "repo_context"
+    ],
+    "domain_signals": [
+      "test_failure",
+      "repeated_test_failure",
+      "failing_assertion",
+      "regression_introduced",
+      "fix_one_break_another",
+      "failure_cluster_missing",
+      "prompt_context_stale",
+      "final_green_test_missing",
+      "validation_loop_failure",
+      "session_context",
+      "repo_context",
+      "test_failure:pytest",
+      "repeated_test_failure:3-runs",
+      "failing_assertion:expected-actual",
+      "regression_introduced:new-failure",
+      "fix_one_break_another:parser-regression",
+      "failure_cluster_missing:no-signature-cluster",
+      "prompt_context_stale:cache-or-context",
+      "final_green_test_missing:no-terminal-pass",
+      "validation_loop_failure:no-green-state",
+      "session_context:codex",
+      "repo_context:ai-tool-test-lab"
+    ],
+    "domain_signals_rejected": [],
+    "writes": {
+      "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/genes.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "genes": [
+          {
+            "type": "Gene",
+            "id": "gene_distilled_codex-test-failure-loop",
+            "category": "repair",
+            "signals_match": [
+              "test_failure",
+              "repeated_test_failure",
+              "failing_assertion",
+              "regression_introduced",
+              "fix_one_break_another",
+              "failure_cluster_missing",
+              "prompt_context_stale",
+              "final_green_test_missing",
+              "validation_loop_failure",
+              "session_context",
+              "repo_context",
+              "test_failure:pytest",
+              "repeated_test_failure:3-runs",
+              "failing_assertion:expected-actual",
+              "regression_introduced:new-failure",
+              "fix_one_break_another:parser-regression",
+              "failure_cluster_missing:no-signature-cluster",
+              "prompt_context_stale:cache-or-context",
+              "final_green_test_missing:no-terminal-pass",
+              "validation_loop_failure:no-green-state",
+              "session_context:codex",
+              "repo_context:ai-tool-test-lab"
+            ],
+            "strategy": [
+              "Freeze the exact failing test command before editing again.",
+              "Cluster failures by stable signature and assertion diff before choosing a fix.",
+              "Distinguish repeated same-signature failure from new regression failure.",
+              "Make one minimal code change per cycle and preserve existing passing cases.",
+              "Rerun the narrow failing test before broad suites.",
+              "Do not mark the task complete until final green test evidence is recorded."
+            ],
+            "constraints": {
+              "max_files": 8,
+              "forbidden_paths": [
+                ".git",
+                "node_modules",
+                ".evolver",
+                "memory",
+                ".env",
+                "real_runtime_root"
+              ],
+              "forbidden_actions": [
+                "run_real_tests_from_fixture_parser",
+                "mutate_real_source_from_fixture_parser",
+                "call_online_coding_api",
+                "print_secret",
+                "commit_env_file",
+                "claim_green_without_evidence",
+                "broaden_scope_before_signature_cluster"
+              ]
+            },
+            "summary": "Codex-style AI coding recovery discipline for repeated test failures, failing assertions, regression loops, stale context, and missing final green test evidence."
+          }
+        ]
+      },
+      "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/capsules.json": {
+        "action": "overwrite",
+        "schema_version": "1.6.0",
+        "capsules": [
+          {
+            "schema_version": "1.6.0",
+            "type": "Capsule",
+            "id": "capsule_codex_test_failure_loop_phase6c",
+            "gene": "gene_distilled_codex-test-failure-loop",
+            "status": "success",
+            "confidence": 0.85,
+            "visibility": "private",
+            "source": "manual_capsule_seed_phase6c",
+            "trigger": [
+              "test_failure",
+              "repeated_test_failure",
+              "failing_assertion",
+              "regression_introduced",
+              "fix_one_break_another",
+              "final_green_test_missing"
+            ],
+            "blast_radius": {
+              "files": 0,
+              "lines": 0
+            },
+            "execution_trace": [
+              {
+                "step": 1,
+                "stage": "build",
+                "command": "python3 scripts/codex_test_failure_loop_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/fixtures/codex-test-failure-loop-sample.txt",
+                "exit_code": 0,
+                "output_json": {
+                  "ok": true,
+                  "component": "codex-style-test-runner",
+                  "agent_mode": "code_edit",
+                  "code_change_attempted": true,
+                  "test_command_present": true,
+                  "tests_failed": true,
+                  "repeated_failure_count": 3,
+                  "same_failure_signature_repeated": true,
+                  "failing_assertion_detected": true,
+                  "regression_introduced": true,
+                  "fix_one_break_another": true,
+                  "failure_cluster_missing": true,
+                  "prompt_context_stale_suspected": true,
+                  "final_green_test_missing": true,
+                  "terminal_green_test_missing": true
+                }
+              },
+              {
+                "step": 2,
+                "stage": "validate",
+                "command": "python3 -m json.tool artifacts/codex-test-failure-fixture-output.json",
+                "exit_code": 0,
+                "result": "json_parse_pass"
+              },
+              {
+                "step": 3,
+                "stage": "validate",
+                "command": "assert repeated_failure_count == 3 and fix_one_break_another == true and final_green_test_missing == true",
+                "exit_code": 0,
+                "result": "fixture_detected_expected_test_failure_loop_shape"
+              },
+              {
+                "step": 4,
+                "stage": "canary",
+                "command": "safety_check",
+                "exit_code": 0,
+                "result": {
+                  "no_real_tests_run": true,
+                  "no_source_mutation": true,
+                  "no_env_scan": true,
+                  "no_secrets": true,
+                  "no_network_call": true,
+                  "no_online_coding_api": true,
+                  "no_hub": true,
+                  "no_publish": true,
+                  "no_approve": true,
+                  "no_solidify": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "/tmp/atl-evomap-phase6c-codex-target/memory/evolution/memory_graph.jsonl": {
+        "action": "append",
+        "lines": [
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700001.0, \"signal\": \"tool_bypass\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.85, \"context\": \"Detected exec invocation without prior read on .md file\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700002.0, \"signal\": \"repeated_tool_usage\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.7, \"context\": \"Same read+edit+search pattern repeated 3x\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700003.0, \"signal\": \"protocol_drift\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.9, \"context\": \"Detected sed -i usage forbidden by OpenClaw protocol\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700004.0, \"signal\": \"session_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.6, \"context\": \"Session has multiple file ops requiring tool discipline\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700005.0, \"signal\": \"repo_context\", \"origin\": \"openclaw_signal_detector\", \"weight\": 0.65, \"context\": \"Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700200.0, \"signal\": \"test_failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700201.0, \"signal\": \"repeated_test_failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700202.0, \"signal\": \"failing_assertion\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700203.0, \"signal\": \"regression_introduced\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700204.0, \"signal\": \"fix_one_break_another\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700205.0, \"signal\": \"failure_cluster_missing\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700206.0, \"signal\": \"prompt_context_stale\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700207.0, \"signal\": \"final_green_test_missing\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700208.0, \"signal\": \"validation_loop_failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700209.0, \"signal\": \"session_context\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700210.0, \"signal\": \"repo_context\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700211.0, \"signal\": \"test_failure:pytest\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700212.0, \"signal\": \"repeated_test_failure:3-runs\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700213.0, \"signal\": \"failing_assertion:expected-actual\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700214.0, \"signal\": \"regression_introduced:new-failure\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700215.0, \"signal\": \"fix_one_break_another:parser-regression\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700216.0, \"signal\": \"failure_cluster_missing:no-signature-cluster\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700217.0, \"signal\": \"prompt_context_stale:cache-or-context\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700218.0, \"signal\": \"final_green_test_missing:no-terminal-pass\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700219.0, \"signal\": \"validation_loop_failure:no-green-state\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700220.0, \"signal\": \"session_context:codex\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}",
+          "{\"type\": \"MemoryGraphEvent\", \"ts\": 1718700221.0, \"signal\": \"repo_context:ai-tool-test-lab\", \"origin\": \"evomap_apply_bundle:domain_from_bundle\", \"weight\": 0.8, \"context\": \"domain-specific signal injected from bundle (gene=gene_distilled_codex-test-failure-loop)\", \"mutation\": {\"target\": \"gene:gene_distilled_codex-test-failure-loop\", \"action\": \"select\"}}"
+        ]
+      },
+      "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/events.jsonl": {
+        "action": "reset",
+        "content": ""
+      },
+      "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/failed_capsules.json": {
+        "action": "reset",
+        "content": "[]\n"
+      },
+      "/tmp/atl-evomap-phase6c-codex-target/.evolver/gep/candidates.jsonl": {
+        "action": "reset",
+        "content": ""
+      }
+    },
+    "summary": {
+      "existing_gene_count": 0,
+      "existing_capsule_count": 0,
+      "new_gene_count": 1,
+      "new_capsule_count": 1,
+      "memory_graph_signals_added": 27,
+      "memory_graph_generic_signals": 5,
+      "memory_graph_domain_signals": 22,
+      "memory_graph_domain_rejected": 0
+    }
+  }
+}

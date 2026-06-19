@@ -1,0 +1,279 @@
+{
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-6C",
+  "source_session": "/tmp/atl-evomap-phase6c-codex-target",
+  "target_gene_id": "gene_distilled_codex-test-failure-loop",
+  "target_capsule_id": "capsule_codex_test_failure_loop_phase6c",
+  "gene": {
+    "type": "Gene",
+    "id": "gene_distilled_codex-test-failure-loop",
+    "category": "repair",
+    "signals_match": [
+      "test_failure",
+      "repeated_test_failure",
+      "failing_assertion",
+      "regression_introduced",
+      "fix_one_break_another",
+      "failure_cluster_missing",
+      "prompt_context_stale",
+      "final_green_test_missing",
+      "validation_loop_failure",
+      "session_context",
+      "repo_context",
+      "test_failure:pytest",
+      "repeated_test_failure:3-runs",
+      "failing_assertion:expected-actual",
+      "regression_introduced:new-failure",
+      "fix_one_break_another:parser-regression",
+      "failure_cluster_missing:no-signature-cluster",
+      "prompt_context_stale:cache-or-context",
+      "final_green_test_missing:no-terminal-pass",
+      "validation_loop_failure:no-green-state",
+      "session_context:codex",
+      "repo_context:ai-tool-test-lab"
+    ],
+    "strategy": [
+      "Freeze the exact failing test command before editing again.",
+      "Cluster failures by stable signature and assertion diff before choosing a fix.",
+      "Distinguish repeated same-signature failure from new regression failure.",
+      "Make one minimal code change per cycle and preserve existing passing cases.",
+      "Rerun the narrow failing test before broad suites.",
+      "Do not mark the task complete until final green test evidence is recorded."
+    ],
+    "constraints": {
+      "max_files": 8,
+      "forbidden_paths": [
+        ".git",
+        "node_modules",
+        ".evolver",
+        "memory",
+        ".env",
+        "real_runtime_root"
+      ],
+      "forbidden_actions": [
+        "run_real_tests_from_fixture_parser",
+        "mutate_real_source_from_fixture_parser",
+        "call_online_coding_api",
+        "print_secret",
+        "commit_env_file",
+        "claim_green_without_evidence",
+        "broaden_scope_before_signature_cluster"
+      ]
+    },
+    "summary": "Codex-style AI coding recovery discipline for repeated test failures, failing assertions, regression loops, stale context, and missing final green test evidence."
+  },
+  "capsule": {
+    "schema_version": "1.6.0",
+    "type": "Capsule",
+    "id": "capsule_codex_test_failure_loop_phase6c",
+    "gene": "gene_distilled_codex-test-failure-loop",
+    "status": "success",
+    "confidence": 0.85,
+    "visibility": "private",
+    "source": "manual_capsule_seed_phase6c",
+    "trigger": [
+      "test_failure",
+      "repeated_test_failure",
+      "failing_assertion",
+      "regression_introduced",
+      "fix_one_break_another",
+      "final_green_test_missing"
+    ],
+    "blast_radius": {
+      "files": 0,
+      "lines": 0
+    },
+    "execution_trace": [
+      {
+        "step": 1,
+        "stage": "build",
+        "command": "python3 scripts/codex_test_failure_loop_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/fixtures/codex-test-failure-loop-sample.txt",
+        "exit_code": 0,
+        "output_json": {
+          "ok": true,
+          "component": "codex-style-test-runner",
+          "agent_mode": "code_edit",
+          "code_change_attempted": true,
+          "test_command_present": true,
+          "tests_failed": true,
+          "repeated_failure_count": 3,
+          "same_failure_signature_repeated": true,
+          "failing_assertion_detected": true,
+          "regression_introduced": true,
+          "fix_one_break_another": true,
+          "failure_cluster_missing": true,
+          "prompt_context_stale_suspected": true,
+          "final_green_test_missing": true,
+          "terminal_green_test_missing": true
+        }
+      },
+      {
+        "step": 2,
+        "stage": "validate",
+        "command": "python3 -m json.tool artifacts/codex-test-failure-fixture-output.json",
+        "exit_code": 0,
+        "result": "json_parse_pass"
+      },
+      {
+        "step": 3,
+        "stage": "validate",
+        "command": "assert repeated_failure_count == 3 and fix_one_break_another == true and final_green_test_missing == true",
+        "exit_code": 0,
+        "result": "fixture_detected_expected_test_failure_loop_shape"
+      },
+      {
+        "step": 4,
+        "stage": "canary",
+        "command": "safety_check",
+        "exit_code": 0,
+        "result": {
+          "no_real_tests_run": true,
+          "no_source_mutation": true,
+          "no_env_scan": true,
+          "no_secrets": true,
+          "no_network_call": true,
+          "no_online_coding_api": true,
+          "no_hub": true,
+          "no_publish": true,
+          "no_approve": true,
+          "no_solidify": true
+        }
+      }
+    ]
+  },
+  "execution_trace": [
+    {
+      "step": 1,
+      "stage": "build",
+      "command": "python3 scripts/codex_test_failure_loop_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/fixtures/codex-test-failure-loop-sample.txt",
+      "exit_code": 0,
+      "output_json": {
+        "ok": true,
+        "component": "codex-style-test-runner",
+        "agent_mode": "code_edit",
+        "code_change_attempted": true,
+        "test_command_present": true,
+        "tests_failed": true,
+        "repeated_failure_count": 3,
+        "same_failure_signature_repeated": true,
+        "failing_assertion_detected": true,
+        "regression_introduced": true,
+        "fix_one_break_another": true,
+        "failure_cluster_missing": true,
+        "prompt_context_stale_suspected": true,
+        "final_green_test_missing": true,
+        "terminal_green_test_missing": true
+      }
+    },
+    {
+      "step": 2,
+      "stage": "validate",
+      "command": "python3 -m json.tool artifacts/codex-test-failure-fixture-output.json",
+      "exit_code": 0,
+      "result": "json_parse_pass"
+    },
+    {
+      "step": 3,
+      "stage": "validate",
+      "command": "assert repeated_failure_count == 3 and fix_one_break_another == true and final_green_test_missing == true",
+      "exit_code": 0,
+      "result": "fixture_detected_expected_test_failure_loop_shape"
+    },
+    {
+      "step": 4,
+      "stage": "canary",
+      "command": "safety_check",
+      "exit_code": 0,
+      "result": {
+        "no_real_tests_run": true,
+        "no_source_mutation": true,
+        "no_env_scan": true,
+        "no_secrets": true,
+        "no_network_call": true,
+        "no_online_coding_api": true,
+        "no_hub": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ],
+  "fixture_summary": {
+    "component": "codex-style-test-runner",
+    "agent_mode": "code_edit",
+    "code_change_attempted": true,
+    "test_command_present": true,
+    "tests_failed": true,
+    "repeated_failure_count": 3,
+    "same_failure_signature_repeated": true,
+    "failing_assertion_detected": true,
+    "regression_introduced": true,
+    "fix_one_break_another": true,
+    "failure_cluster_missing": true,
+    "prompt_context_stale_suspected": true,
+    "final_green_test_missing": true,
+    "failing_tests": [
+      "tests/test_parser.py::test_extract_error_code",
+      "tests/test_parser.py::test_preserve_existing_error_code"
+    ],
+    "failure_signatures": [
+      "assertion_missing_model_provider",
+      "fix_one_break_another"
+    ],
+    "recommended_check_order": [
+      "freeze the failing test command before editing again",
+      "cluster failures by stable signature before changing code",
+      "separate repeated same-signature failure from new regression failure",
+      "write down expected vs actual assertion diff",
+      "make one minimal fix per cycle",
+      "rerun the exact failing test before broad test suites",
+      "record the final green test evidence before marking done"
+    ]
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "no_real_tests_run": true,
+    "no_source_mutation": true,
+    "no_online_coding_api": true,
+    "no_secrets": true
+  },
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages": [
+      "build",
+      "validate",
+      "canary"
+    ]
+  },
+  "kit_provenance": {
+    "phase_5_commit": "c1a6b9a",
+    "phase_6a_commit": "00caf1d",
+    "phase_6b_commit": "f72b0c1",
+    "phase_7a_commit": "3112f07",
+    "phase_7b_commit": "be848109401966b8c856719662adfc1d1e5ccead",
+    "phase_6c_phase": "ATL-EVOMAP-6C"
+  }
+}
