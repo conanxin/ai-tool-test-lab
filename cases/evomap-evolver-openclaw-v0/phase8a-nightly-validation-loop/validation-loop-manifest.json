@@ -1,10 +1,10 @@
 {
   "schema_version": "atl-evomap-nightly-validation-v0.1",
-  "phase": "ATL-EVOMAP-8A",
-  "extended_by_phase": "ATL-EVOMAP-9B",
+  "phase": "ATL-EVOMAP-6D (Browser-Control Recovery Bundle added as 5th canonical bundle; Phase 9B canary lane unchanged)",
+  "extended_by_phase": "ATL-EVOMAP-6D",
   "source_base_commit": "f292757",
   "purpose": "Run local-only validation checks for EvoMap Local Evolution Kit.",
-  "intent": "offline-only, local-only, stdlib-only nightly validation loop asset that can be later wired into a real cron or systemd timer by a human operator; this phase ships only the asset and dry-run example, NOT an installation; Phase 9B extends the runner with a non-blocking canary lane that ingests curator-generated draft bundles (inspect / validate / apply dry-run) without affecting canonical blocking checks",
+  "intent": "offline-only, local-only, stdlib-only nightly validation loop asset that can be later wired into a real cron or systemd timer by a human operator; this phase ships only the asset and dry-run example, NOT an installation; Phase 9B extends the runner with a non-blocking canary lane that ingests curator-generated draft bundles (inspect / validate / apply dry-run) without affecting canonical blocking checks; Phase 6D extends canonical lane from 4 -> 5 bundles by adding browser-control recovery as a blocking bundle (port / auth / launch timeout / navigation / screenshot evidence with anti-curl-bypass constraint); runner stays manifest-driven and stdlib-only",
   "scope": {
     "runtime": "offline",
     "network_required": false,
@@ -51,7 +51,8 @@
     "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
     "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
     "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
-    "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json"
+    "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+    "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json"
   ],
   "checks": [
     "phase_validators",
@@ -134,7 +135,15 @@
       ],
       "default_lane": "curator_generated (non-blocking)",
       "failure_behavior": "canary failures are recorded as CANARY_FAIL or WARN in digest but do NOT cause overall_status=FAIL; overall_status is determined only by blocking=true checks"
-    }
+    },
+    "bundle_count_expected": 5,
+    "canonical_bundle_paths": [
+      "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+      "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+      "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+      "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+      "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json"
+    ]
   },
   "outputs": {
     "digest_json": "<out-dir>/nightly-validation-digest.json (overridable via --json-name)",
@@ -175,17 +184,22 @@
       "path": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json",
       "lane": "curator_generated",
       "blocking": false,
-      "checks": ["inspect", "validate", "apply_dry_run"],
+      "checks": [
+        "inspect",
+        "validate",
+        "apply_dry_run"
+      ],
       "expected_status": "CANARY_PASS",
       "apply_dry_run_target_runtime": "/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a",
       "notes": "Phase 9A curator generated sample-safe-bundle as a draft canary bundle. Phase 9B wires it into the nightly runner as a non-blocking canary lane entry. Failure of this canary does NOT fail overall_status."
     }
   ],
   "versioning": {
-    "manifest_version": "0.2.0",
+    "manifest_version": "0.3.0",
     "schema_version": "atl-evomap-nightly-validation-v0.1",
     "source_base_commit": "f292757",
-    "compatible_runner_min": "0.2.0",
-    "next_intended_phase": "ATL-EVOMAP-9C (optional: curator-driven canary apply with operator gate)"
+    "compatible_runner_min": "0.3.0",
+    "next_intended_phase": "Phase 6E (proposed: more domain curator specs / canary apply gate / operator-led real cron install)",
+    "previous_manifest_version": "0.2.0"
   }
 }

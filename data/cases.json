@@ -17,14 +17,14 @@
     {
       "slug": "evomap-evolver-openclaw-v0",
       "title": "EvoMap Evolver — OpenClaw Local Self-Evolution Smoke Test v0",
-      "phase": "ATL-EVOMAP-9B Curator-to-Nightly Integration",
-      "status": "curator nightly integration smoke pass",
+      "phase": "ATL-EVOMAP-6D Browser-Control Recovery Bundle",
+      "status": "browser-control recovery bundle completed",
       "category": "AI agent self-evolution / experience reuse / local agent workflow",
       "local_role": "Install and run @evomap/evolver locally; create failure-log fixtures; run evolver run+review with Hub disabled; evaluate whether generated repair prompts are useful for OpenClaw / Hermes / Codex workflows.",
       "cloud_role": "Not used in this phase. EvoMap Hub connection, auto-publish, validator, ATP autobuy, and credits are disabled.",
       "summary": "ATL-EVOMAP-9A ships a stdlib-only bundle-curator tool (scripts/evomap_curate_bundle.py) with AST self-check, denylisted signal-name + secret-pattern refusal at spec-time, ID-consistency invariant checks, and visibility hard-coded to private. A runnable sample spec produces a portable bundle draft that passes evomap_inspect_bundle.py + evomap_validate_bundle.py, and apply --dry-run + apply --yes against an isolated /tmp target (fresh git init repo) write 1 gene + 1 capsule + 9 memory-graph signals (5 generic + 4 domain, 0 rejected). Two unsafe self-tests prove the curator refuses denylist + id-mismatch specs with exit 1 and writes nothing. All 7 prior phase validators (5/6A/6B/6C/7A/7B/8A) still ALL CHECKS PASSED (no regression). No Hub / no publish / no credits / no approve / no solidify / no AI API / no network / no real test runners. Kit now has a generator that sits in front of the existing inspect / validate / apply pipeline.",
       "updated_at": "2026-06-19",
-      "final_status": "CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS",
+      "final_status": "BROWSER_CONTROL_BUNDLE_PASS",
       "phase_history": [
         {
           "phase": "ATL-EVOMAP-1",
@@ -758,6 +758,12 @@
             "phase_9a": "ALL CHECKS PASSED"
           },
           "notes": "ATL-EVOMAP-9B extends the Phase 8A nightly validation runner with a non-blocking canary bundle lane. Manifest adds canary_bundles[] (curator-generated draft bundles; default blocking=false). Runner reads canary_bundles from manifest, then runs inspect + validate + apply --dry-run against isolated /tmp targets for each canary. Canary failures are recorded as CANARY_FAIL/WARN in the digest but do NOT cause overall_status=FAIL. 4 canonical bundles remain blocking (inspect+validate). 7 phase validators (incl. 9A) all pass. No real cron / systemd timer / Hub / publish / credits / approve / solidify / evolver run. No env content scanned. No network calls. Apply dry-run target is /tmp (isolated)."
+        },
+        {
+          "phase": "ATL-EVOMAP-6D",
+          "status": "BROWSER_CONTROL_BUNDLE_PASS",
+          "base_commit": "b34c4a3",
+          "notes": "5th canonical bundle (browser-control recovery) added to nightly canonical blocking lane (4 -> 5); canary lane (sample-safe-bundle-phase9a) unchanged and still non-blocking; 9B/8A/9A validator forward-compatible fixes applied without lowering artifact/secret/report checks; no real browser launched, no port 18791 connection, no HTTP/curl/wget, no .env read, no Hub, no publish, no credits, no approve, no solidify, no cron install"
         }
       ],
       "phase_history_count": 20

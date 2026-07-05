@@ -277,12 +277,19 @@ def main() -> int:
         + (f"; missing={sorted(missing_v)}" if missing_v else ""),
     ))
 
-    # 13. manifest declares all 4 canonical bundles
+    # 13. manifest declares the original 4 canonical bundles (Phase 6D is
+    #     added in addition, but the original 4 must still be present).
     expected_bundles = {
         "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
         "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
         "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
         "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+    }
+    # Forward-compatible additional canonical bundles (Phase 6D added the
+    # 5th). The check is: original 4 are present AND at least one of the
+    # additional canonical bundles is also present.
+    additional_canonical = {
+        "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json",
     }
     declared_bundles: set[str] = set()
     if isinstance(manifest, dict) and manifest:
@@ -290,11 +297,15 @@ def main() -> int:
             if isinstance(b, str):
                 declared_bundles.add(b)
     missing_b = expected_bundles - declared_bundles
+    extra_present = bool(additional_canonical & declared_bundles)
     results.append(_check(
-        "13. manifest `bundles` list contains all 4 canonical portable bundles",
-        not missing_b,
+        "13. manifest `bundles` list contains all 4 original canonical "
+        "portable bundles (and at least one Phase 6D+ additional canonical)",
+        (not missing_b) and extra_present,
         f"declared={len(declared_bundles)}/{len(expected_bundles)}"
-        + (f"; missing={sorted(missing_b)}" if missing_b else ""),
+        + (f"; missing={sorted(missing_b)}" if missing_b else "")
+        + (f"; extra_present={extra_present}" if extra_present
+           else "; extra_present=False"),
     ))
 
     # 14. manifest runner.stdlib_only == true

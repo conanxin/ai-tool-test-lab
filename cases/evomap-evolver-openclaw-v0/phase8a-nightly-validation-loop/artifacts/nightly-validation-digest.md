@@ -1,6 +1,6 @@
 # EvoMap Nightly Validation Loop — Digest
 
-- **Generated:** 2026-06-19T11:58:53
+- **Generated:** 2026-06-19T12:31:40
 - **Phase:** ATL-EVOMAP-8A
 - **Schema version:** atl-evomap-nightly-validation-v0.1
 - **Source base commit:** f292757
@@ -21,19 +21,19 @@
 | 1 | `stdlib_only` | PASS | yes | stdlib-only verified |
 | 2 | `no_hub_url_set` | PASS | yes | A2A_HUB_URL not set |
 | 3 | `data_cases_json_parse` | PASS | yes | rc=0 |
-| 4 | `data_cases_json_phase_history_has_evomap_8a` | PASS | yes | history, history_count=20 |
-| 5 | `bundles_inspectable` | PASS | yes | 4 bundle(s) inspected |
-| 6 | `bundles_validatable` | PASS | yes | 4 bundle(s) validated |
+| 4 | `data_cases_json_phase_history_has_evomap_8a` | PASS | yes | history, history_count=21 |
+| 5 | `bundles_inspectable` | PASS | yes | 5 bundle(s) inspected |
+| 6 | `bundles_validatable` | PASS | yes | 5 bundle(s) validated |
 | 7 | `all_phase_validators_pass` | PASS | yes | 7 validator(s) ALL CHECKS PASSED |
-| 8 | `secret_scan_clean` | PASS | yes | scanned=333, hits=0, allowed_timestamp_hits=21, skipped={'binary': 85, 'image': 0, 'too_large': 0, 'io_error': 0} |
-| 9 | `git_hygiene_no_root_evolver_or_memory` | PASS | yes | 418 tracked file(s) clean, status_short=10 line(s) (informational) |
+| 8 | `secret_scan_clean` | PASS | yes | scanned=338, hits=0, allowed_timestamp_hits=21, skipped={'binary': 87, 'image': 0, 'too_large': 0, 'io_error': 0} |
+| 9 | `git_hygiene_no_root_evolver_or_memory` | PASS | yes | 425 tracked file(s) clean, status_short=12 line(s) (informational) |
 | 10 | `canary_bundles_checked` | PASS | no | total=1, passed=1, failed=0, canary_status=CANARY_PASS (non-blocking; overall_status driven by blocking checks only) |
 
 ## Phase validators
 
 | Validator | Returncode | Last 2000 chars of stdout |
 |-----------|------------|----------------------------|
-| `phase5_local_evolution_kit` | 0 | 0m  templates/GENE_TEMPLATE.json exists
+| `phase5_local_evolution_kit` | 0 | templates/GENE_TEMPLATE.json exists
 [92mPASS[0m  templates/CAPSULE_TEMPLATE.json exists
 [92mPASS[0m  templates/MEMORY_GRAPH_SIGNAL_TEMPLATE.jsonl exists
 [94mINFO[0m  9. Checking inspect-bundle-output.json exists and ok=true...
@@ -52,8 +52,8 @@
 [92mPASS[0m  summary.memory_graph_lines >= 5 — 5
 [94mINFO[0m  14. Checking data/cases.json phase contains ATL-EVOMAP-5...
 [92mPASS[0m  evomap case present in cases.json
-[92mPASS[0m  cases.json phase references ATL-EVOMAP-5 (current or phase_history) — ATL-EVOMAP-9B Curator-to-Nightly Integration
-[92mPASS[0m  cases.json status references 'local evolution kit completed' (current or via history) — curator nightly integration smoke pass
+[92mPASS[0m  cases.json phase references ATL-EVOMAP-5 (current or phase_history) — ATL-EVOMAP-6D Browser-Control Recovery Bundle
+[92mPASS[0m  cases.json status references 'local evolution kit completed' (current or via history) — browser-control recovery bundle completed
 [92mPASS[0m  cases.json phase_history has ATL-EVOMAP-5 entry
 [94mINFO[0m  15. Checking case README contains ATL-EVOMAP-5...
 [92mPASS[0m  case README contains ATL-EVOMAP-5
@@ -66,7 +66,7 @@
 Case: evomap-evolver-openclaw-v0 (Phase 5 Local Evolution Kit)
 Status: local evolution kit completed (PASS)
  |
-| `phase6a_hermes_systemd_bundle` | 0 | counts...
+| `phase6a_hermes_systemd_bundle` | 0 |  valid counts...
 [92mPASS[0m  summary.gene_count >= 1 — 1
 [92mPASS[0m  summary.capsule_count >= 1 — 1
 [92mPASS[0m  summary.memory_graph_lines >= 5 — 5
@@ -78,9 +78,9 @@ Status: local evolution kit completed (PASS)
 [92mPASS[0m  case tools/evomap_apply_bundle.py exists
 [94mINFO[0m  16. Checking data/cases.json phase + phase_history for ATL-EVOMAP-6A...
 [92mPASS[0m  evomap case present in cases.json
-[92mPASS[0m  cases.json phase contains ATL-EVOMAP-6A (top-level or phase_history) — ATL-EVOMAP-9B Curator-to-Nightly Integration
-[92mPASS[0m  cases.json status contains 'hermes systemd bundle completed' (or phase_history has 6A) — curator nightly integration smoke pass
-[92mPASS[0m  cases.json final_status contains HERMES_SYSTEMD_BUNDLE_PASS (or phase_history has 6A) — CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS
+[92mPASS[0m  cases.json phase contains ATL-EVOMAP-6A (top-level or phase_history) — ATL-EVOMAP-6D Browser-Control Recovery Bundle
+[92mPASS[0m  cases.json status contains 'hermes systemd bundle completed' (or phase_history has 6A) — browser-control recovery bundle completed
+[92mPASS[0m  cases.json final_status contains HERMES_SYSTEMD_BUNDLE_PASS (or phase_history has 6A) — BROWSER_CONTROL_BUNDLE_PASS
 [92mPASS[0m  cases.json phase_history has ATL-EVOMAP-6A entry
 [92mPASS[0m  phase_history ATL-EVOMAP-6A result == PASS
 [92mPASS[0m  phase_history ATL-EVOMAP-6A has gene_id
@@ -98,7 +98,8 @@ Status: local evolution kit completed (PASS)
 Case: evomap-evolver-openclaw-v0 (Phase 6A Hermes Systemd Bundle)
 Status: hermes systemd bundle completed (PASS)
  |
-| `phase6b_telegram_router_bundle` | 0 | [92mPASS[0m] 6. gene artifact contains expected gene id
+| `phase6b_telegram_router_bundle` | 0 | rue
+  [[92mPASS[0m] 6. gene artifact contains expected gene id
           got id='gene_distilled_telegram-message-router-failure'
   [[92mPASS[0m] 7. capsule artifact contains expected capsule id
           got id='capsule_telegram_message_router_failure_phase6b'
@@ -123,7 +124,7 @@ Status: hermes systemd bundle completed (PASS)
   [[92mPASS[0m] 16. case README exists
           cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/README.md
   [[92mPASS[0m] 17. data/cases.json contains ATL-EVOMAP-6B in phase or phase_history
-          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20
+          top_phase='ATL-EVOMAP-6D Browser-Control Recovery Bundle', history_count=21
   [[92mPASS[0m] 18. main case README references ATL-EVOMAP-6B
           main README len=70583
   [[92mPASS[0m] 19. secret scan: no Telegram credential / recipient id / API key / Authorization / private key in committed files
@@ -131,9 +132,9 @@ Status: hermes systemd bundle completed (PASS)
 
 [92mPASS[0m  ALL CHECKS PASSED
 Case: evomap-evolver-openclaw-v0 (Phase 6B Telegram Message Router Failure Bundle)
-Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)
+Status: browser-control recovery bundle completed (BROWSER_CONTROL_BUNDLE_PASS)
  |
-| `phase6c_codex_test_failure_bundle` | 0 |  exists and contains 'capsule_codex_test_failure_loop_phase6c'
+| `phase6c_codex_test_failure_bundle` | 0 | artifact exists and contains 'capsule_codex_test_failure_loop_phase6c'
           id=capsule_codex_test_failure_loop_phase6c, type=Capsule
   [[92mPASS[0m] 14. capsule.execution_trace is non-empty list with >= 4 steps
           type=list, len=4
@@ -158,9 +159,9 @@ Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOK
 
 [92mPASS[0m  ALL CHECKS PASSED
 Case: evomap-evolver-openclaw-v0 (Phase 6C Codex Test Failure Loop Bundle)
-Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)
+Status: browser-control recovery bundle completed (BROWSER_CONTROL_BUNDLE_PASS)
  |
-| `phase7a_domain_signal_injection` | 0 | omain_from_bundle
+| `phase7a_domain_signal_injection` | 0 | _plus_domain_from_bundle
           ok=True, mode=generic_plus_domain_from_bundle
   [[92mPASS[0m] 9. hermes-domain --yes: ok & mode=generic_plus_domain_from_bundle
           ok=True, mode=generic_plus_domain_from_bundle
@@ -175,7 +176,7 @@ Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOK
   [[92mPASS[0m] 14. domain-signal-extraction-summary: hermes+telegram injected, default preserved, no hub/approve/solidify
           default=True hermes=True telegram=True hub=disabled
   [[92mPASS[0m] 15. data/cases.json contains ATL-EVOMAP-7A in phase or phase_history
-          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20
+          top_phase='ATL-EVOMAP-6D Browser-Control Recovery Bundle', history_count=21
   [[92mPASS[0m] 16. main case README references ATL-EVOMAP-7A
           main README len=70583
   [[92mPASS[0m] 17. secret scan: no Telegram credential / recipient id / API key / Authorization / private key in committed files
@@ -189,9 +190,9 @@ Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOK
 
 [92mPASS[0m  ALL CHECKS PASSED
 Case: evomap-evolver-openclaw-v0 (Phase 7A Domain-Specific Signal Injection)
-Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)
+Status: browser-control recovery bundle completed (BROWSER_CONTROL_BUNDLE_PASS)
  |
-| `phase7b_cross_bundle_regression` | 0 | plicate_gene_ids=[]
+| `phase7b_cross_bundle_regression` | 0 |      duplicate_gene_ids=[]
   [[92mPASS[0m] 13. duplicate_capsule_ids == []
           duplicate_capsule_ids=[]
   [[92mPASS[0m] 14. required_openclaw_signals_present == true
@@ -213,7 +214,7 @@ Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOK
   [[92mPASS[0m] 22. combined smoke output contains 'No hub match' or 'no_hub_url' (no Hub confirmation)
           found in evolver-run output
   [[92mPASS[0m] 23. data/cases.json phase contains 'ATL-EVOMAP-7B' (top or history)
-          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20
+          top_phase='ATL-EVOMAP-6D Browser-Control Recovery Bundle', history_count=21
   [[92mPASS[0m] 24. main case README references ATL-EVOMAP-7B
           main README len=70583
   [[92mPASS[0m] 25. secret scan: no Telegram credential / recipient id / API key / cookie / Authorization / private key in committed files
@@ -225,9 +226,9 @@ Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOK
 
 [92mPASS[0m  ALL CHECKS PASSED
 Case: evomap-evolver-openclaw-v0 (Phase 7B Cross-Bundle Regression)
-Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)
+Status: browser-control recovery bundle completed (BROWSER_CONTROL_BUNDLE_PASS)
  |
-| `phase9a_bundle_curator_skill` | 0 | ejected=0
+| `phase9a_bundle_curator_skill` | 0 | jected=0
   [PASS]  0. artifact: apply-generated-bundle-yes-output.json: ok=true, writes>=6, errors=0
           ok=True, writes_executed=6, errors=0, plan_summary.new_gene_count=1
   [PASS]  0. artifact: apply-generated-target-summary.json: gene>=1, capsule>=1
@@ -240,13 +241,13 @@ Status: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOK
 === data/cases.json + main README 9A markers ===
   [PASS]  0. data/cases.json: evomap-evolver-openclaw-v0 case present
   [PASS]  0. data/cases.json: phase or phase_history contains ATL-EVOMAP-9A
-          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration'
+          top_phase='ATL-EVOMAP-6D Browser-Control Recovery Bundle'
   [PASS]  0. main case README contains ATL-EVOMAP-9A
 
 === Git hygiene: no root .evolver/ or memory/ tracked ===
   [PASS]  0. git ls-files succeeds
   [PASS]  0. git ls-files: no root .evolver/ or memory/ tracked
-          418 tracked files, 0 bad paths
+          425 tracked files, 0 bad paths
 
 === Prior validators regression (5/6A/6B/6C/7A/7B/8A) ===
   [PASS]  0. prior validator scripts/validate_evomap_phase5_local_evolution_kit.py PASS
@@ -270,22 +271,23 @@ Status: bundle curator skill completed (BUNDLE_CURATOR_SKILL_PASS)
 
 | Bundle | Path | inspect rc | validate rc |
 |--------|------|------------|-------------|
-| `openclaw_tool_use_discipline` | `cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json` | 0 | 0 |
-| `hermes_systemd_recovery` | `cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json` | 0 | 0 |
-| `telegram_message_router_failure` | `cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json` | 0 | 0 |
-| `codex_test_failure_loop` | `cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json` | 0 | 0 |
+| `openclaw-tool-use-discipline.bundle` | `cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json` | 0 | 0 |
+| `hermes-systemd-service-recovery.bundle` | `cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json` | 0 | 0 |
+| `telegram-message-router-failure.bundle` | `cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json` | 0 | 0 |
+| `codex-test-failure-loop.bundle` | `cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json` | 0 | 0 |
+| `browser-control-recovery.bundle` | `cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json` | 0 | 0 |
 
 ## Secret scan
 
-- **Scanned file count:** 333
+- **Scanned file count:** 338
 - **Allowed timestamp hits:** 21
-- **Skipped:** {'binary': 85, 'image': 0, 'too_large': 0, 'io_error': 0}
+- **Skipped:** {'binary': 87, 'image': 0, 'too_large': 0, 'io_error': 0}
 - **Hits:** {}
 
 ## Git
 
-- **Tracked file count:** 418
-- **git status --short line count:** 10 (informational; this run produces new artifacts)
+- **Tracked file count:** 425
+- **git status --short line count:** 12 (informational; this run produces new artifacts)
 
 ## Canary / Curator-generated bundles
 

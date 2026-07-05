@@ -22,7 +22,8 @@ Verifies, in order:
      status == CANARY_PASS, blocking_failures == 0.
   7. Digest canary_bundle_checks[0]: id points at the 9A sample bundle,
      blocking == False, inspect/validate/apply_dry_run all PASS.
-  8. Canonical bundle_checks.inspect / validate length == 4.
+  8. Canonical bundle_checks.inspect / validate length == 5
+     (Phase 6D added the 5th canonical bundle; count is now 5).
   9. Top-level validators[] length == 7 and all PASS.
  10. Secret scan clean (digest secret_scan_clean row PASS, hits == 0).
  11. Git hygiene clean (digest git_hygiene row PASS, no root .evolver/
@@ -383,12 +384,12 @@ def check_digest() -> None:
 
     # bundle_checks
     bc = d.get("bundle_checks", {}) or {}
-    record(idx, "digest.bundle_checks.inspect length == 4 (canonical)",
-           len(bc.get("inspect", [])) == 4,
+    record(idx, "digest.bundle_checks.inspect length == 5 (canonical)",
+           len(bc.get("inspect", [])) == 5,
            f"len={len(bc.get('inspect', []))}")
     idx += 1
-    record(idx, "digest.bundle_checks.validate length == 4 (canonical)",
-           len(bc.get("validate", [])) == 4,
+    record(idx, "digest.bundle_checks.validate length == 5 (canonical)",
+           len(bc.get("validate", [])) == 5,
            f"len={len(bc.get('validate', []))}")
     idx += 1
 

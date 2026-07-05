@@ -332,6 +332,41 @@ def check_data_cases_json_parse(results: list[dict[str, Any]],
 
 
 def _resolve_bundle_paths(repo_root: Path) -> list[tuple[str, Path]]:
+    """Resolve canonical bundle (id, path) pairs from the validation
+    loop manifest. Forward-compatible: when the manifest declares
+    additional canonical bundles (e.g. Phase 6D added a 5th), they are
+    picked up automatically; when the manifest is missing or unreadable,
+    the original 4 hardcoded defaults are used as a backward-compat
+    fallback so older invocations still pass.
+    """
+    manifest_path = repo_root / _DEFAULT_MANIFEST_PATH
+    bundles_out: list[tuple[str, Path]] = []
+    try:
+        if manifest_path.exists():
+            manifest = json.loads(
+                manifest_path.read_text(encoding="utf-8"))
+            declared = manifest.get("bundles", []) or []
+            for entry in declared:
+                if isinstance(entry, str) and entry:
+                    # id is derived from basename stem
+                    p = Path(entry)
+                    if not p.is_absolute():
+                        p = repo_root / entry
+                    bid = p.stem
+                    bundles_out.append((bid, p))
+                elif isinstance(entry, dict) and entry.get("path"):
+                    p = Path(entry["path"])
+                    if not p.is_absolute():
+                        p = repo_root / entry["path"]
+                    bid = entry.get("id") or p.stem
+                    bundles_out.append((bid, p))
+    except Exception:
+        bundles_out = []
+
+    if bundles_out:
+        return bundles_out
+
+    # Backward-compat fallback: original 4 hardcoded paths.
     return [
         ("openclaw_tool_use_discipline",
          repo_root / "cases" / "evomap-evolver-openclaw-v0"
@@ -1343,7 +1378,8 @@ def main(argv: list[str] | None = None) -> int:
     digest: dict[str, Any] = {
         "schema_version": "atl-evomap-nightly-validation-v0.1",
         "phase": "ATL-EVOMAP-8A",
-        "extended_by_phase": "ATL-EVOMAP-9B",
+        "extended_by_phase": _load_manifest(repo_root).get(
+            "extended_by_phase", "ATL-EVOMAP-6D"),
         "case_slug": "evomap-evolver-openclaw-v0",
         "generated_at": _now_iso(),
         "project_root": str(repo_root),
