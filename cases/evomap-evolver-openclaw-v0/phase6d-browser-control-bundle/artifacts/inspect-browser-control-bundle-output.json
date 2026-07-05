@@ -1,0 +1,74 @@
+{
+  "ok": true,
+  "bundle_path": "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json",
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-6D",
+  "source_session": "/tmp/atl-evomap-phase6d-browser-control-target",
+  "gene_id": "gene_distilled_browser-control-recovery",
+  "gene_category": "repair",
+  "capsule_id": "capsule_browser_control_recovery_phase6d",
+  "capsule_status": "success",
+  "capsule_confidence": 0.84,
+  "capsule_visibility": "private",
+  "capsule_source": "manual_capsule_seed_phase6d",
+  "execution_trace_steps": 4,
+  "execution_trace_stages": [
+    "build",
+    "validate",
+    "validate",
+    "canary"
+  ],
+  "top_level_execution_trace_ok": null,
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages": [
+      "build",
+      "validate",
+      "canary"
+    ]
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "no_real_browser_launch": true,
+    "no_port_connection": true,
+    "no_http_request": true,
+    "no_curl_wget": true,
+    "no_env_scan": true,
+    "no_secrets": true
+  },
+  "kit_provenance": {
+    "phase_5_commit": "c1a6b9a",
+    "phase_6a_commit": "00caf1d",
+    "phase_6b_commit": "f72b0c1",
+    "phase_6c_commit": "f292757",
+    "phase_7a_commit": "3112f07",
+    "phase_7b_commit": "be84810",
+    "phase_8a_commit": "a56e756",
+    "phase_9a_commit": "7811e1b",
+    "phase_9b_commit": "b34c4a38bac09dabc1cbcd7315bb8d5f2d04c8b6",
+    "phase_6d_phase": "ATL-EVOMAP-6D"
+  }
+}

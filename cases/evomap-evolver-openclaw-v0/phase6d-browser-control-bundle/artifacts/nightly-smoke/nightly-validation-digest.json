@@ -1,0 +1,470 @@
+{
+  "schema_version": "atl-evomap-nightly-validation-v0.1",
+  "phase": "ATL-EVOMAP-8A",
+  "extended_by_phase": "ATL-EVOMAP-6D",
+  "case_slug": "evomap-evolver-openclaw-v0",
+  "generated_at": "2026-06-19T12:21:23",
+  "project_root": "/mnt/d/AI/ai-tool-test-lab",
+  "out_dir": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/artifacts/nightly-smoke",
+  "git_commit": "b34c4a3",
+  "git_status_short": " M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/nightly-validation-digest.json\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/artifacts/nightly-validation-digest.md\n M cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/validation-loop-manifest.json\n M scripts/evomap_nightly_validate.py\n M scripts/validate_evomap_phase8a_nightly_validation_loop.py\n M scripts/validate_evomap_phase9b_curator_nightly_integration.py\n?? cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/\n?? scripts/browser_control_recovery_fixture.py\n",
+  "runner": "scripts/evomap_nightly_validate.py",
+  "python": "3.12.3",
+  "stdlib_only": true,
+  "hub_url_set": false,
+  "overall_status": "PASS",
+  "summary": {
+    "blocking_total": 9,
+    "passed": 9,
+    "failed": 0,
+    "non_blocking": 1
+  },
+  "checks": [
+    {
+      "check_id": "stdlib_only",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "stdlib-only verified"
+    },
+    {
+      "check_id": "no_hub_url_set",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "A2A_HUB_URL not set"
+    },
+    {
+      "check_id": "data_cases_json_parse",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "rc=0",
+      "extra": {
+        "command": [
+          "python3",
+          "-m",
+          "json.tool",
+          "data/cases.json"
+        ],
+        "stdout_tail": "d\",\n                        \"evolver_run\": \"not_executed\",\n                        \"evolver_review\": \"not_executed\",\n                        \"real_cron_install\": \"not_executed\",\n                        \"systemd_timer_install\": \"not_executed\",\n                        \"network_calls\": \"not_executed\",\n                        \"real_tests\": \"not_executed\",\n                        \"no_env_file_content_scanned\": true,\n                        \"stdlib_only\": true,\n                        \"visibility\": \"private\",\n                        \"canary_bundle_apply_dry_run_target\": \"/tmp/atl-evomap-nightly-canary-* (isolated; apply --dry-run only)\"\n                    },\n                    \"regression_check\": {\n                        \"phase_5\": \"ALL CHECKS PASSED\",\n                        \"phase_6a\": \"ALL CHECKS PASSED\",\n                        \"phase_6b\": \"ALL CHECKS PASSED\",\n                        \"phase_6c\": \"ALL CHECKS PASSED\",\n                        \"phase_7a\": \"ALL CHECKS PASSED\",\n                        \"phase_7b\": \"ALL CHECKS PASSED\",\n                        \"phase_8a\": \"ALL CHECKS PASSED\",\n                        \"phase_9a\": \"ALL CHECKS PASSED\"\n                    },\n                    \"notes\": \"ATL-EVOMAP-9B extends the Phase 8A nightly validation runner with a non-blocking canary bundle lane. Manifest adds canary_bundles[] (curator-generated draft bundles; default blocking=false). Runner reads canary_bundles from manifest, then runs inspect + validate + apply --dry-run against isolated /tmp targets for each canary. Canary failures are recorded as CANARY_FAIL/WARN in the digest but do NOT cause overall_status=FAIL. 4 canonical bundles remain blocking (inspect+validate). 7 phase validators (incl. 9A) all pass. No real cron / systemd timer / Hub / publish / credits / approve / solidify / evolver run. No env content scanned. No network calls. Apply dry-run target is /tmp (isolated).\"\n                }\n            ],\n            \"phase_history_count\": 20\n        }\n    ]\n}\n",
+        "stderr_tail": ""
+      }
+    },
+    {
+      "check_id": "data_cases_json_phase_history_has_evomap_8a",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "history, history_count=20"
+    },
+    {
+      "check_id": "bundles_inspectable",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "5 bundle(s) inspected",
+      "extra": {
+        "inspected": [
+          {
+            "id": "openclaw-tool-use-discipline.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "portable-bundle-v0.1\",\n  \"source_phase\": \"ATL-EVOMAP-4B\",\n  \"source_session\": \"/tmp/atl-evomap-4a-isolated\",\n  \"gene_id\": \"gene_distilled_openclaw-tool-use-discipline-bare-compatible\",\n  \"gene_category\": \"optimize\",\n  \"capsule_id\": \"capsule_openclaw_tool_use_discipline_phase4b\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.84,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"manual_capsule_seed_phase4b\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"validate\",\n    \"canary\"\n  ],\n  \"top_level_execution_trace_ok\": true,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages\": [\n      \"build OR validate OR canary\"\n    ]\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"approve\": \"not_executed\",\n    \"solidify\": \"not_executed\",\n    \"validator_enabled\": false,\n    \"atp_autobuy\": \"off\",\n    \"loop_used\": false\n  },\n  \"kit_provenance\": {\n    \"kit_name\": \"OpenClaw Local Evolution Kit\",\n    \"kit_version\": \"v1\",\n    \"phase_5_commit\": \"pending\",\n    \"phase_4c_validation\": {\n      \"commit\": \"f7897da\",\n      \"session_a\": \"/tmp/atl-evomap-4c-session-a\",\n      \"session_b\": \"/tmp/atl-evomap-4c-session-b\",\n      \"result\": \"PASS\",\n      \"selector_paths\": [\n        \"score_ranked\",\n        \"score_ranked\"\n      ],\n      \"capsule_trigger_match\": [\n        true,\n        true\n      ]\n    }\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "hermes-systemd-service-recovery.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "undle/hermes-systemd-service-recovery.bundle.json\",\n  \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n  \"source_phase\": \"ATL-EVOMAP-6A\",\n  \"source_session\": \"/tmp/atl-evomap-phase6a-hermes-target\",\n  \"gene_id\": \"gene_distilled_hermes-systemd-service-recovery\",\n  \"gene_category\": \"repair\",\n  \"capsule_id\": \"capsule_hermes_systemd_service_recovery_phase6a\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.82,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"manual_capsule_seed_phase6a\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"validate\",\n    \"canary\"\n  ],\n  \"top_level_execution_trace_ok\": null,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages\": [\n      \"build\",\n      \"validate\",\n      \"canary\"\n    ]\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"no_real_system_mutation\": true,\n    \"approve\": \"not_executed\",\n    \"solidify\": \"not_executed\",\n    \"validator_enabled\": false,\n    \"atp_autobuy\": \"off\",\n    \"loop_used\": false\n  },\n  \"kit_provenance\": {\n    \"kit_name\": \"OpenClaw Local Evolution Kit\",\n    \"kit_version\": \"v1\",\n    \"phase_5_commit\": \"c1a6b9a\",\n    \"phase_6a_phase\": \"ATL-EVOMAP-6A\",\n    \"bundle_intent\": \"Hermes systemd user-service recovery (repair-category) — second canonical bundle after Phase 5 OpenClaw tool-use-discipline (optimize-category).\"\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "telegram-message-router-failure.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "{\n  \"ok\": true,\n  \"bundle_path\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json\",\n  \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n  \"source_phase\": \"ATL-EVOMAP-6B\",\n  \"source_session\": \"/tmp/atl-evomap-phase6b-telegram-target\",\n  \"gene_id\": \"gene_distilled_telegram-message-router-failure\",\n  \"gene_category\": \"repair\",\n  \"capsule_id\": \"capsule_telegram_message_router_failure_phase6b\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.84,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"manual_capsule_seed_phase6b\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"validate\",\n    \"canary\"\n  ],\n  \"top_level_execution_trace_ok\": null,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages\": [\n      \"build\",\n      \"validate\",\n      \"canary\"\n    ]\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"no_real_telegram_call\": true,\n    \"no_real_config_mutation\": true,\n    \"no_credentials\": true,\n    \"no_recipient_identifier\": true\n  },\n  \"kit_provenance\": {\n    \"phase_5_commit\": \"c1a6b9a\",\n    \"phase_6a_commit\": \"00caf1d\",\n    \"phase_6b_phase\": \"ATL-EVOMAP-6B\"\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "codex-test-failure-loop.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "{\n  \"ok\": true,\n  \"bundle_path\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json\",\n  \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n  \"source_phase\": \"ATL-EVOMAP-6C\",\n  \"source_session\": \"/tmp/atl-evomap-phase6c-codex-target\",\n  \"gene_id\": \"gene_distilled_codex-test-failure-loop\",\n  \"gene_category\": \"repair\",\n  \"capsule_id\": \"capsule_codex_test_failure_loop_phase6c\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.85,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"manual_capsule_seed_phase6c\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"validate\",\n    \"canary\"\n  ],\n  \"top_level_execution_trace_ok\": null,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages\": [\n      \"build\",\n      \"validate\",\n      \"canary\"\n    ]\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"no_real_tests_run\": true,\n    \"no_source_mutation\": true,\n    \"no_online_coding_api\": true,\n    \"no_secrets\": true\n  },\n  \"kit_provenance\": {\n    \"phase_5_commit\": \"c1a6b9a\",\n    \"phase_6a_commit\": \"00caf1d\",\n    \"phase_6b_commit\": \"f72b0c1\",\n    \"phase_7a_commit\": \"3112f07\",\n    \"phase_7b_commit\": \"be848109401966b8c856719662adfc1d1e5ccead\",\n    \"phase_6c_phase\": \"ATL-EVOMAP-6C\"\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "browser-control-recovery.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "n\",\n  \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n  \"source_phase\": \"ATL-EVOMAP-6D\",\n  \"source_session\": \"/tmp/atl-evomap-phase6d-browser-control-target\",\n  \"gene_id\": \"gene_distilled_browser-control-recovery\",\n  \"gene_category\": \"repair\",\n  \"capsule_id\": \"capsule_browser_control_recovery_phase6d\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.84,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"manual_capsule_seed_phase6d\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"validate\",\n    \"canary\"\n  ],\n  \"top_level_execution_trace_ok\": null,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages\": [\n      \"build\",\n      \"validate\",\n      \"canary\"\n    ]\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"no_real_browser_launch\": true,\n    \"no_port_connection\": true,\n    \"no_http_request\": true,\n    \"no_curl_wget\": true,\n    \"no_env_scan\": true,\n    \"no_secrets\": true\n  },\n  \"kit_provenance\": {\n    \"phase_5_commit\": \"c1a6b9a\",\n    \"phase_6a_commit\": \"00caf1d\",\n    \"phase_6b_commit\": \"f72b0c1\",\n    \"phase_6c_commit\": \"f292757\",\n    \"phase_7a_commit\": \"3112f07\",\n    \"phase_7b_commit\": \"be84810\",\n    \"phase_8a_commit\": \"a56e756\",\n    \"phase_9a_commit\": \"7811e1b\",\n    \"phase_9b_commit\": \"b34c4a38bac09dabc1cbcd7315bb8d5f2d04c8b6\",\n    \"phase_6d_phase\": \"ATL-EVOMAP-6D\"\n  }\n}\n",
+            "stderr_tail": ""
+          }
+        ]
+      }
+    },
+    {
+      "check_id": "bundles_validatable",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "5 bundle(s) validated",
+      "extra": {
+        "validated": [
+          {
+            "id": "openclaw-tool-use-discipline.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "e\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_openclaw-tool-use-discipline-bare-compatible\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_openclaw_tool_use_discipline_phase4b\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_openclaw-tool-use-discipline-bare-compatible', gene_id='gene_distilled_openclaw-tool-use-discipline-bare-compatible'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_openclaw-tool-use-discipline-bare-compatible\",\n    \"capsule_id\": \"capsule_openclaw_tool_use_discipline_phase4b\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "hermes-systemd-service-recovery.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "k\": true,\n  \"checks\": [\n    {\n      \"name\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_hermes-systemd-service-recovery\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_hermes_systemd_service_recovery_phase6a\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_hermes-systemd-service-recovery', gene_id='gene_distilled_hermes-systemd-service-recovery'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_hermes-systemd-service-recovery\",\n    \"capsule_id\": \"capsule_hermes_systemd_service_recovery_phase6a\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "telegram-message-router-failure.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "\": true,\n  \"checks\": [\n    {\n      \"name\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_telegram-message-router-failure\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_telegram_message_router_failure_phase6b\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_telegram-message-router-failure', gene_id='gene_distilled_telegram-message-router-failure'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_telegram-message-router-failure\",\n    \"capsule_id\": \"capsule_telegram_message_router_failure_phase6b\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "codex-test-failure-loop.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "{\n  \"ok\": true,\n  \"checks\": [\n    {\n      \"name\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_codex-test-failure-loop\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_codex_test_failure_loop_phase6c\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_codex-test-failure-loop', gene_id='gene_distilled_codex-test-failure-loop'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_codex-test-failure-loop\",\n    \"capsule_id\": \"capsule_codex_test_failure_loop_phase6c\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "browser-control-recovery.bundle",
+            "path": "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json",
+            "returncode": 0,
+            "stdout_tail": "{\n  \"ok\": true,\n  \"checks\": [\n    {\n      \"name\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_browser-control-recovery\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_browser_control_recovery_phase6d\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_browser-control-recovery', gene_id='gene_distilled_browser-control-recovery'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_browser-control-recovery\",\n    \"capsule_id\": \"capsule_browser_control_recovery_phase6d\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+            "stderr_tail": ""
+          }
+        ]
+      }
+    },
+    {
+      "check_id": "all_phase_validators_pass",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "7 validator(s) ALL CHECKS PASSED",
+      "extra": {
+        "validators": [
+          {
+            "id": "phase5_local_evolution_kit",
+            "returncode": 0,
+            "stdout_tail": "0m  templates/GENE_TEMPLATE.json exists\n\u001b[92mPASS\u001b[0m  templates/CAPSULE_TEMPLATE.json exists\n\u001b[92mPASS\u001b[0m  templates/MEMORY_GRAPH_SIGNAL_TEMPLATE.jsonl exists\n\u001b[94mINFO\u001b[0m  9. Checking inspect-bundle-output.json exists and ok=true...\n\u001b[92mPASS\u001b[0m  inspect-bundle-output.json ok=true\n\u001b[94mINFO\u001b[0m  10. Checking validate-bundle-output.json exists and ok=true...\n\u001b[92mPASS\u001b[0m  validate-bundle-output.json ok=true\n\u001b[92mPASS\u001b[0m  validate-bundle-output.json has 12+ checks — 12/12 pass\n\u001b[94mINFO\u001b[0m  11. Checking apply-bundle-dry-run-output.json exists...\n\u001b[92mPASS\u001b[0m  apply-dry-run mode='dry-run'\n\u001b[94mINFO\u001b[0m  12. Checking apply-bundle-yes-output.json exists...\n\u001b[92mPASS\u001b[0m  apply-yes mode='applied'\n\u001b[92mPASS\u001b[0m  apply-yes ok=true\n\u001b[94mINFO\u001b[0m  13. Checking apply-target-summary.json has valid counts...\n\u001b[92mPASS\u001b[0m  summary.gene_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.capsule_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.memory_graph_lines >= 5 — 5\n\u001b[94mINFO\u001b[0m  14. Checking data/cases.json phase contains ATL-EVOMAP-5...\n\u001b[92mPASS\u001b[0m  evomap case present in cases.json\n\u001b[92mPASS\u001b[0m  cases.json phase references ATL-EVOMAP-5 (current or phase_history) — ATL-EVOMAP-9B Curator-to-Nightly Integration\n\u001b[92mPASS\u001b[0m  cases.json status references 'local evolution kit completed' (current or via history) — curator nightly integration smoke pass\n\u001b[92mPASS\u001b[0m  cases.json phase_history has ATL-EVOMAP-5 entry\n\u001b[94mINFO\u001b[0m  15. Checking case README contains ATL-EVOMAP-5...\n\u001b[92mPASS\u001b[0m  case README contains ATL-EVOMAP-5\n\u001b[94mINFO\u001b[0m  16. Scanning for secret patterns in Phase 5 artifacts...\n\u001b[92mPASS\u001b[0m  no secret patterns in Phase 5 artifacts\n\u001b[94mINFO\u001b[0m  17. Checking no root .evolver/ or memory/ tracked by git...\n\u001b[92mPASS\u001b[0m  no root .evolver/ or memory/ tracked by git — clean\n============================================================\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 5 Local Evolution Kit)\nStatus: local evolution kit completed (PASS)\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "phase6a_hermes_systemd_bundle",
+            "returncode": 0,
+            "stdout_tail": "counts...\n\u001b[92mPASS\u001b[0m  summary.gene_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.capsule_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.memory_graph_lines >= 5 — 5\n\u001b[92mPASS\u001b[0m  summary.gene_ids contains Hermes gene\n\u001b[92mPASS\u001b[0m  summary.capsule_ids contains Hermes capsule\n\u001b[94mINFO\u001b[0m  15. Checking case tools/ has 3 script copies...\n\u001b[92mPASS\u001b[0m  case tools/evomap_inspect_bundle.py exists\n\u001b[92mPASS\u001b[0m  case tools/evomap_validate_bundle.py exists\n\u001b[92mPASS\u001b[0m  case tools/evomap_apply_bundle.py exists\n\u001b[94mINFO\u001b[0m  16. Checking data/cases.json phase + phase_history for ATL-EVOMAP-6A...\n\u001b[92mPASS\u001b[0m  evomap case present in cases.json\n\u001b[92mPASS\u001b[0m  cases.json phase contains ATL-EVOMAP-6A (top-level or phase_history) — ATL-EVOMAP-9B Curator-to-Nightly Integration\n\u001b[92mPASS\u001b[0m  cases.json status contains 'hermes systemd bundle completed' (or phase_history has 6A) — curator nightly integration smoke pass\n\u001b[92mPASS\u001b[0m  cases.json final_status contains HERMES_SYSTEMD_BUNDLE_PASS (or phase_history has 6A) — CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS\n\u001b[92mPASS\u001b[0m  cases.json phase_history has ATL-EVOMAP-6A entry\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A result == PASS\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A has gene_id\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A has capsule_id\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A has evolver_smoke\n\u001b[94mINFO\u001b[0m  17. Checking case README contains ATL-EVOMAP-6A...\n\u001b[92mPASS\u001b[0m  case README contains ATL-EVOMAP-6A\n\u001b[92mPASS\u001b[0m  case README contains '6A' row in phase table\n\u001b[94mINFO\u001b[0m  18. Scanning for secret patterns in Phase 6A artifacts...\n\u001b[92mPASS\u001b[0m  no secret patterns in Phase 6A artifacts\n\u001b[94mINFO\u001b[0m  19. Checking no root .evolver/ or memory/ tracked by git...\n\u001b[92mPASS\u001b[0m  no root .evolver/ or memory/ tracked by git — clean\n============================================================\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 6A Hermes Systemd Bundle)\nStatus: hermes systemd bundle completed (PASS)\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "phase6b_telegram_router_bundle",
+            "returncode": 0,
+            "stdout_tail": "\u001b[92mPASS\u001b[0m] 6. gene artifact contains expected gene id\n          got id='gene_distilled_telegram-message-router-failure'\n  [\u001b[92mPASS\u001b[0m] 7. capsule artifact contains expected capsule id\n          got id='capsule_telegram_message_router_failure_phase6b'\n  [\u001b[92mPASS\u001b[0m] 8. capsule execution_trace non-empty with >= 4 steps\n          len=4\n  [\u001b[92mPASS\u001b[0m] 9. bundle JSON valid with gene + capsule + schema_version\n          schema='atl-evomap-portable-bundle-v0.1'\n  [\u001b[92mPASS\u001b[0m] 10. inspect-bundle output ok == true\n          ok=True\n  [\u001b[92mPASS\u001b[0m] 11. validate-bundle output ok == true\n          ok=True, failures=0\n  [\u001b[92mPASS\u001b[0m] 12. apply dry-run output present and mode == dry-run\n          mode='dry-run', ok=True\n  [\u001b[92mPASS\u001b[0m] 13. apply --yes output present and mode == applied\n          mode='applied', ok=True\n  [\u001b[92mPASS\u001b[0m] 14. apply target summary: gene_count >= 1 and capsule_count >= 1\n          gene_count=1, capsule_count=1\n  [\u001b[92mPASS\u001b[0m] 15. case report exists\n          cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/ATL_EVOMAP_6B_TELEGRAM_ROUTER_BUNDLE_REPORT.md\n  [\u001b[92mPASS\u001b[0m] 15. top-level report exists\n          reports/ATL_EVOMAP_6B_TELEGRAM_ROUTER_BUNDLE_REPORT.md\n  [\u001b[92mPASS\u001b[0m] 16. case README exists\n          cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/README.md\n  [\u001b[92mPASS\u001b[0m] 17. data/cases.json contains ATL-EVOMAP-6B in phase or phase_history\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20\n  [\u001b[92mPASS\u001b[0m] 18. main case README references ATL-EVOMAP-6B\n          main README len=70583\n  [\u001b[92mPASS\u001b[0m] 19. secret scan: no Telegram credential / recipient id / API key / Authorization / private key in committed files\n          scanned=16 files, hits=0\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 6B Telegram Message Router Failure Bundle)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "phase6c_codex_test_failure_bundle",
+            "returncode": 0,
+            "stdout_tail": " exists and contains 'capsule_codex_test_failure_loop_phase6c'\n          id=capsule_codex_test_failure_loop_phase6c, type=Capsule\n  [\u001b[92mPASS\u001b[0m] 14. capsule.execution_trace is non-empty list with >= 4 steps\n          type=list, len=4\n  [\u001b[92mPASS\u001b[0m] 15. bundle/codex-test-failure-loop.bundle.json exists and JSON is valid\n          schema_version=atl-evomap-portable-bundle-v0.1\n  [\u001b[92mPASS\u001b[0m] 16. inspect-codex-bundle-output.json exists and ok=true\n          ok=True\n  [\u001b[92mPASS\u001b[0m] 17. validate-codex-bundle-output.json exists and ok=true\n          ok=True, failures=[]\n  [\u001b[92mPASS\u001b[0m] 18. apply-codex-bundle-dry-run-output.json exists and ok=true & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 19. apply-codex-bundle-yes-output.json exists and ok=true & mode=generic_plus_domain_from_bundle & gene=1 & capsule=1 & 27 memory signals\n          ok=True, mode=generic_plus_domain_from_bundle, gene=1, cap=1, mem=27\n  [\u001b[92mPASS\u001b[0m] 20. apply-codex-target-summary.json: gene_count >= 1, capsule_count >= 1\n          gene_count=1, capsule_count=1\n  [\u001b[92mPASS\u001b[0m] 21. apply-codex-target-summary.json signals contain test_failure, repeated_test_failure, failing_assertion, fix_one_break_another, final_green_test_missing\n          all 5 required signals present in 25 distinct signals\n  [\u001b[92mPASS\u001b[0m] 22. evolver-run-codex-target-output.txt contains 'No hub match' or 'no_hub_url' (combined smoke no-Hub confirmation)\n          found in evolver run output\n  [\u001b[92mPASS\u001b[0m] 23. data/cases.json + main case README + secret scan + git status + 5 prior validators (composite)\n          data/cases.json_6c=True, main_README_6c=True, secret_scan=23 files, 0 hits, git_root_evolver_or_memory_tracked=False, 5_prior_validators=PASS\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 6C Codex Test Failure Loop Bundle)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "phase7a_domain_signal_injection",
+            "returncode": 0,
+            "stdout_tail": "omain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 9. hermes-domain --yes: ok & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 10. hermes target summary contains systemd_failure / missing_env_var / port_not_listening\n          all 3 present in 17 signals\n  [\u001b[92mPASS\u001b[0m] 11. telegram-domain dry-run: ok & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 12. telegram-domain --yes: ok & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 13. telegram target summary contains telegram_failure / proxy_mismatch / delivery_terminal_missing / sendmessage_timeout\n          all 4 present in 27 signals\n  [\u001b[92mPASS\u001b[0m] 14. domain-signal-extraction-summary: hermes+telegram injected, default preserved, no hub/approve/solidify\n          default=True hermes=True telegram=True hub=disabled\n  [\u001b[92mPASS\u001b[0m] 15. data/cases.json contains ATL-EVOMAP-7A in phase or phase_history\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20\n  [\u001b[92mPASS\u001b[0m] 16. main case README references ATL-EVOMAP-7A\n          main README len=70583\n  [\u001b[92mPASS\u001b[0m] 17. secret scan: no Telegram credential / recipient id / API key / Authorization / private key in committed files\n          scanned=24 files, hits=0\n  [\u001b[92mPASS\u001b[0m] 18. git status: no root .evolver/ or memory/ tracked\n          clean\n  [\u001b[92mPASS\u001b[0m] 19. Phase 5 validator ALL CHECKS PASSED (backward-compat)\n          returncode=0, output_tail=Status: local evolution kit completed (PASS)\n  [\u001b[92mPASS\u001b[0m] 20. Phase 6A + 6B validators ALL CHECKS PASSED (backward-compat)\n          6A_rc=0, 6B_rc=0\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 7A Domain-Specific Signal Injection)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "phase7b_cross_bundle_regression",
+            "returncode": 0,
+            "stdout_tail": "plicate_gene_ids=[]\n  [\u001b[92mPASS\u001b[0m] 13. duplicate_capsule_ids == []\n          duplicate_capsule_ids=[]\n  [\u001b[92mPASS\u001b[0m] 14. required_openclaw_signals_present == true\n          missing=[]\n  [\u001b[92mPASS\u001b[0m] 15. required_hermes_signals_present == true\n          missing=[]\n  [\u001b[92mPASS\u001b[0m] 16. required_telegram_signals_present == true\n          missing=[]\n  [\u001b[92mPASS\u001b[0m] 17. dangerous_signals == []\n          dangerous_signals=[]\n  [\u001b[92mPASS\u001b[0m] 18. pollution_signals == []\n          pollution_signals=[]\n  [\u001b[92mPASS\u001b[0m] 19. cross-bundle-regression-summary.json exists with status & scoring & probes\n          status=PASS\n  [\u001b[92mPASS\u001b[0m] 20. evolver-run-cross-bundle-output.txt exists\n          cases/evomap-evolver-openclaw-v0/phase7b-cross-bundle-regression/artifacts/evolver-run-cross-bundle-output.txt\n  [\u001b[92mPASS\u001b[0m] 21. evolver-review-cross-bundle-output.txt exists\n          cases/evomap-evolver-openclaw-v0/phase7b-cross-bundle-regression/artifacts/evolver-review-cross-bundle-output.txt\n  [\u001b[92mPASS\u001b[0m] 22. combined smoke output contains 'No hub match' or 'no_hub_url' (no Hub confirmation)\n          found in evolver-run output\n  [\u001b[92mPASS\u001b[0m] 23. data/cases.json phase contains 'ATL-EVOMAP-7B' (top or history)\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20\n  [\u001b[92mPASS\u001b[0m] 24. main case README references ATL-EVOMAP-7B\n          main README len=70583\n  [\u001b[92mPASS\u001b[0m] 25. secret scan: no Telegram credential / recipient id / API key / cookie / Authorization / private key in committed files\n          scanned=26 files, hits=0\n  [\u001b[92mPASS\u001b[0m] 26. git status: no root .evolver/ or memory/ tracked\n          clean\n  [\u001b[92mPASS\u001b[0m] 27. prior validators (5, 6A, 6B, 7A) ALL CHECKS PASSED (backward-compat)\n          4/4 prior validators PASS\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 7B Cross-Bundle Regression)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+            "stderr_tail": ""
+          },
+          {
+            "id": "phase9a_bundle_curator_skill",
+            "returncode": 0,
+            "stdout_tail": "ejected=0\n  [PASS]  0. artifact: apply-generated-bundle-yes-output.json: ok=true, writes>=6, errors=0\n          ok=True, writes_executed=6, errors=0, plan_summary.new_gene_count=1\n  [PASS]  0. artifact: apply-generated-target-summary.json: gene>=1, capsule>=1\n          gene_count=1, capsule_count=1, distinct_signal_count=7\n  [PASS]  0. artifact: curator-selftest-unsafe-secret-output.json: ok=false, rejected\n          ok=False, mode='rejected'\n  [PASS]  0. artifact: curator-selftest-unsafe-id-output.json: ok=false, rejected\n          ok=False, mode='rejected'\n\n=== data/cases.json + main README 9A markers ===\n  [PASS]  0. data/cases.json: evomap-evolver-openclaw-v0 case present\n  [PASS]  0. data/cases.json: phase or phase_history contains ATL-EVOMAP-9A\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration'\n  [PASS]  0. main case README contains ATL-EVOMAP-9A\n\n=== Git hygiene: no root .evolver/ or memory/ tracked ===\n  [PASS]  0. git ls-files succeeds\n  [PASS]  0. git ls-files: no root .evolver/ or memory/ tracked\n          425 tracked files, 0 bad paths\n\n=== Prior validators regression (5/6A/6B/6C/7A/7B/8A) ===\n  [PASS]  0. prior validator scripts/validate_evomap_phase5_local_evolution_kit.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase6a_hermes_systemd_bundle.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase6b_telegram_router_bundle.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase6c_codex_test_failure_bundle.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase7a_domain_signal_injection.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase7b_cross_bundle_regression.py PASS\n  [PASS]  0. python3 -m json.tool data/cases.json succeeds\n\n======================================================================\nPASSED: 51\nFAILED: 0\n\nPASS  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 9A Bundle Curator Skill)\nStatus: bundle curator skill completed (BUNDLE_CURATOR_SKILL_PASS)\n",
+            "stderr_tail": ""
+          }
+        ]
+      }
+    },
+    {
+      "check_id": "secret_scan_clean",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "scanned=338, hits=0, allowed_timestamp_hits=21, skipped={'binary': 87, 'image': 0, 'too_large': 0, 'io_error': 0}",
+      "extra": {
+        "scanned_file_count": 338,
+        "skipped": {
+          "binary": 87,
+          "image": 0,
+          "too_large": 0,
+          "io_error": 0
+        },
+        "hits": {},
+        "allowed_timestamp_hits": 21,
+        "skipped_paths_sample": [
+          "README.md (binary)",
+          "assets/js/app.js (binary)",
+          "cases/castform-hermes-phase-closer-v0/account-billing-preflight.md (binary)",
+          "cases/castform-hermes-phase-closer-v0/castform-env-stub.py (binary)",
+          "cases/castform-hermes-phase-closer-v0/cloud-smoke-run/smoke-eval.preview.jsonl (binary)",
+          "cases/castform-hermes-phase-closer-v0/cloud-smoke-run/smoke-train.preview.jsonl (binary)",
+          "cases/castform-hermes-phase-closer-v0/credit-billing-verification.md (binary)",
+          "cases/castform-hermes-phase-closer-v0/dataset-notes.md (binary)",
+          "cases/castform-hermes-phase-closer-v0/index.html (binary)",
+          "cases/castform-hermes-phase-closer-v0/local-readiness.md (binary)"
+        ]
+      }
+    },
+    {
+      "check_id": "git_hygiene_no_root_evolver_or_memory",
+      "status": "PASS",
+      "blocking": true,
+      "detail": "425 tracked file(s) clean, status_short=8 line(s) (informational)",
+      "extra": {
+        "tracked_count": 425,
+        "status_short_count": 8
+      }
+    },
+    {
+      "check_id": "canary_bundles_checked",
+      "status": "PASS",
+      "blocking": false,
+      "detail": "total=1, passed=1, failed=0, canary_status=CANARY_PASS (non-blocking; overall_status driven by blocking checks only)",
+      "extra": {
+        "canary_bundle_checks": [
+          {
+            "id": "sample-safe-bundle-phase9a",
+            "source_phase": "ATL-EVOMAP-9A",
+            "path": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json",
+            "lane": "curator_generated",
+            "blocking": false,
+            "expected_status": "CANARY_PASS",
+            "target_runtime": "/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a",
+            "inspect": {
+              "status": "PASS",
+              "returncode": 0,
+              "stdout_tail": " \"source_phase\": \"ATL-EVOMAP-9A\",\n  \"source_session\": \"bundle-curator-local\",\n  \"gene_id\": \"gene_distilled_sample-safe-bundle\",\n  \"gene_category\": \"repair\",\n  \"capsule_id\": \"capsule_sample_safe_bundle_phase9a\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.8,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"bundle_curator_phase9a\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"canary\",\n    \"apply_dry_run\"\n  ],\n  \"top_level_execution_trace_ok\": null,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages_with_unique_stages\": 1\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"no_secrets\": true\n  },\n  \"kit_provenance\": {\n    \"kit\": \"OpenClaw/Hermes Local Evolution Kit\",\n    \"kit_version_phase\": \"ATL-EVOMAP-9A\",\n    \"kit_base_commit\": \"a56e756\",\n    \"generator\": \"evomap_curate_bundle.py\",\n    \"generator_version\": \"0.1.0\",\n    \"generated_at\": \"2026-06-19T10:51:02\",\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"approve_executed\": false,\n    \"solidify_executed\": false,\n    \"evolver_run_executed\": false,\n    \"evolver_review_executed\": false,\n    \"network_calls_executed\": false,\n    \"real_test_runners_executed\": false,\n    \"real_cron_installed\": false,\n    \"systemd_timer_created\": false,\n    \"env_file_scanned\": false\n  }\n}\n",
+              "stderr_tail": ""
+            },
+            "validate": {
+              "status": "PASS",
+              "returncode": 0,
+              "stdout_tail": "{\n  \"ok\": true,\n  \"checks\": [\n    {\n      \"name\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_sample-safe-bundle\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_sample_safe_bundle_phase9a\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_sample-safe-bundle', gene_id='gene_distilled_sample-safe-bundle'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_sample-safe-bundle\",\n    \"capsule_id\": \"capsule_sample_safe_bundle_phase9a\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+              "stderr_tail": ""
+            },
+            "apply_dry_run": {
+              "status": "PASS",
+              "returncode": 0,
+              "target_runtime": "/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a",
+              "apply_json_reason": "json_truncated_or_unparseable",
+              "stdout_tail": "penclaw_signal_detector\\\", \\\"weight\\\": 0.7, \\\"context\\\": \\\"Same read+edit+search pattern repeated 3x\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\",\n          \"{\\\"type\\\": \\\"MemoryGraphEvent\\\", \\\"ts\\\": 1718700003.0, \\\"signal\\\": \\\"protocol_drift\\\", \\\"origin\\\": \\\"openclaw_signal_detector\\\", \\\"weight\\\": 0.9, \\\"context\\\": \\\"Detected sed -i usage forbidden by OpenClaw protocol\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\",\n          \"{\\\"type\\\": \\\"MemoryGraphEvent\\\", \\\"ts\\\": 1718700004.0, \\\"signal\\\": \\\"session_context\\\", \\\"origin\\\": \\\"openclaw_signal_detector\\\", \\\"weight\\\": 0.6, \\\"context\\\": \\\"Session has multiple file ops requiring tool discipline\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\",\n          \"{\\\"type\\\": \\\"MemoryGraphEvent\\\", \\\"ts\\\": 1718700005.0, \\\"signal\\\": \\\"repo_context\\\", \\\"origin\\\": \\\"openclaw_signal_detector\\\", \\\"weight\\\": 0.65, \\\"context\\\": \\\"Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\"\n        ]\n      },\n      \"/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a/.evolver/gep/events.jsonl\": {\n        \"action\": \"reset\",\n        \"content\": \"\"\n      },\n      \"/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a/.evolver/gep/failed_capsules.json\": {\n        \"action\": \"reset\",\n        \"content\": \"[]\\n\"\n      },\n      \"/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a/.evolver/gep/candidates.jsonl\": {\n        \"action\": \"reset\",\n        \"content\": \"\"\n      }\n    },\n    \"summary\": {\n      \"existing_gene_count\": 0,\n      \"existing_capsule_count\": 0,\n      \"new_gene_count\": 1,\n      \"new_capsule_count\": 1,\n      \"memory_graph_signals_added\": 5,\n      \"memory_graph_generic_signals\": 5,\n      \"memory_graph_domain_signals\": 0,\n      \"memory_graph_domain_rejected\": 0\n    }\n  }\n}\n",
+              "stderr_tail": ""
+            },
+            "status": "CANARY_PASS"
+          }
+        ],
+        "canary_summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "blocking_failures": 0,
+          "non_blocking_failures": 0,
+          "status": "CANARY_PASS"
+        }
+      }
+    }
+  ],
+  "bundle_checks": {
+    "inspect": [
+      {
+        "id": "openclaw-tool-use-discipline.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "hermes-systemd-service-recovery.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "telegram-message-router-failure.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "codex-test-failure-loop.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "browser-control-recovery.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      }
+    ],
+    "validate": [
+      {
+        "id": "openclaw-tool-use-discipline.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase5-local-evolution-kit/bundle/openclaw-tool-use-discipline.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "hermes-systemd-service-recovery.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6a-hermes-systemd-bundle/bundle/hermes-systemd-service-recovery.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "telegram-message-router-failure.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/bundle/telegram-message-router-failure.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "codex-test-failure-loop.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6c-codex-test-failure-bundle/bundle/codex-test-failure-loop.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      },
+      {
+        "id": "browser-control-recovery.bundle",
+        "path": "cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/bundle/browser-control-recovery.bundle.json",
+        "returncode": 0,
+        "status": "PASS"
+      }
+    ]
+  },
+  "canary_bundle_checks": [
+    {
+      "id": "sample-safe-bundle-phase9a",
+      "source_phase": "ATL-EVOMAP-9A",
+      "path": "cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json",
+      "lane": "curator_generated",
+      "blocking": false,
+      "expected_status": "CANARY_PASS",
+      "target_runtime": "/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a",
+      "inspect": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": " \"source_phase\": \"ATL-EVOMAP-9A\",\n  \"source_session\": \"bundle-curator-local\",\n  \"gene_id\": \"gene_distilled_sample-safe-bundle\",\n  \"gene_category\": \"repair\",\n  \"capsule_id\": \"capsule_sample_safe_bundle_phase9a\",\n  \"capsule_status\": \"success\",\n  \"capsule_confidence\": 0.8,\n  \"capsule_visibility\": \"private\",\n  \"capsule_source\": \"bundle_curator_phase9a\",\n  \"execution_trace_steps\": 4,\n  \"execution_trace_stages\": [\n    \"build\",\n    \"validate\",\n    \"canary\",\n    \"apply_dry_run\"\n  ],\n  \"top_level_execution_trace_ok\": null,\n  \"import_contract\": {\n    \"required_files\": [\n      \".evolver/gep/genes.json\",\n      \".evolver/gep/capsules.json\",\n      \"memory/evolution/memory_graph.jsonl\"\n    ],\n    \"optional_files\": [\n      \".evolver/gep/events.jsonl\",\n      \".evolver/gep/failed_capsules.json\",\n      \".evolver/gep/candidates.jsonl\"\n    ],\n    \"required_in_genes\": [\n      \"genes[].id\"\n    ],\n    \"required_in_capsules\": [\n      \"capsules[].id\",\n      \"capsules[].gene\",\n      \"capsules[].execution_trace\"\n    ],\n    \"minimum_execution_trace_steps\": 1,\n    \"minimum_execution_trace_stages_with_unique_stages\": 1\n  },\n  \"safety\": {\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"no_failed_events\": true,\n    \"no_pollution_signals\": true,\n    \"no_secrets\": true\n  },\n  \"kit_provenance\": {\n    \"kit\": \"OpenClaw/Hermes Local Evolution Kit\",\n    \"kit_version_phase\": \"ATL-EVOMAP-9A\",\n    \"kit_base_commit\": \"a56e756\",\n    \"generator\": \"evomap_curate_bundle.py\",\n    \"generator_version\": \"0.1.0\",\n    \"generated_at\": \"2026-06-19T10:51:02\",\n    \"hub\": \"disabled\",\n    \"publish\": \"disabled\",\n    \"credits\": 0,\n    \"visibility\": \"private\",\n    \"approve_executed\": false,\n    \"solidify_executed\": false,\n    \"evolver_run_executed\": false,\n    \"evolver_review_executed\": false,\n    \"network_calls_executed\": false,\n    \"real_test_runners_executed\": false,\n    \"real_cron_installed\": false,\n    \"systemd_timer_created\": false,\n    \"env_file_scanned\": false\n  }\n}\n",
+        "stderr_tail": ""
+      },
+      "validate": {
+        "status": "PASS",
+        "returncode": 0,
+        "stdout_tail": "{\n  \"ok\": true,\n  \"checks\": [\n    {\n      \"name\": \"bundle file exists\",\n      \"ok\": true,\n      \"detail\": \"/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase9a-bundle-curator-skill/generated/sample-safe-bundle.bundle.json\"\n    },\n    {\n      \"name\": \"bundle is valid JSON\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"bundle has schema_version\",\n      \"ok\": true,\n      \"detail\": \"atl-evomap-portable-bundle-v0.1\"\n    },\n    {\n      \"name\": \"bundle has 'gene' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'capsule' field\",\n      \"ok\": true,\n      \"detail\": \"dict\"\n    },\n    {\n      \"name\": \"bundle has 'execution_trace' field\",\n      \"ok\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"gene.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"gene_distilled_sample-safe-bundle\"\n    },\n    {\n      \"name\": \"capsule.id present and non-empty\",\n      \"ok\": true,\n      \"detail\": \"capsule_sample_safe_bundle_phase9a\"\n    },\n    {\n      \"name\": \"capsule.gene (or gene_id) == gene.id\",\n      \"ok\": true,\n      \"detail\": \"capsule_gene_ref='gene_distilled_sample-safe-bundle', gene_id='gene_distilled_sample-safe-bundle'\"\n    },\n    {\n      \"name\": \"capsule.execution_trace is non-empty list\",\n      \"ok\": true,\n      \"detail\": \"type=list, len=4\"\n    },\n    {\n      \"name\": \"import_contract.required_files contains 3 required paths\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"no secret patterns in bundle\",\n      \"ok\": true,\n      \"detail\": \"clean\"\n    }\n  ],\n  \"failures\": [],\n  \"summary\": {\n    \"schema_version\": \"atl-evomap-portable-bundle-v0.1\",\n    \"gene_id\": \"gene_distilled_sample-safe-bundle\",\n    \"capsule_id\": \"capsule_sample_safe_bundle_phase9a\",\n    \"capsule_gene_match\": true,\n    \"capsule_execution_trace_steps\": 4,\n    \"required_import_files_count\": 3,\n    \"secret_hits\": 0\n  }\n}\n",
+        "stderr_tail": ""
+      },
+      "apply_dry_run": {
+        "status": "PASS",
+        "returncode": 0,
+        "target_runtime": "/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a",
+        "apply_json_reason": "json_truncated_or_unparseable",
+        "stdout_tail": "penclaw_signal_detector\\\", \\\"weight\\\": 0.7, \\\"context\\\": \\\"Same read+edit+search pattern repeated 3x\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\",\n          \"{\\\"type\\\": \\\"MemoryGraphEvent\\\", \\\"ts\\\": 1718700003.0, \\\"signal\\\": \\\"protocol_drift\\\", \\\"origin\\\": \\\"openclaw_signal_detector\\\", \\\"weight\\\": 0.9, \\\"context\\\": \\\"Detected sed -i usage forbidden by OpenClaw protocol\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\",\n          \"{\\\"type\\\": \\\"MemoryGraphEvent\\\", \\\"ts\\\": 1718700004.0, \\\"signal\\\": \\\"session_context\\\", \\\"origin\\\": \\\"openclaw_signal_detector\\\", \\\"weight\\\": 0.6, \\\"context\\\": \\\"Session has multiple file ops requiring tool discipline\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\",\n          \"{\\\"type\\\": \\\"MemoryGraphEvent\\\", \\\"ts\\\": 1718700005.0, \\\"signal\\\": \\\"repo_context\\\", \\\"origin\\\": \\\"openclaw_signal_detector\\\", \\\"weight\\\": 0.65, \\\"context\\\": \\\"Repo is ai-tool-test-lab, evomap-evolver-openclaw-v0 case\\\", \\\"mutation\\\": {\\\"target\\\": \\\"gene:gene_distilled_sample-safe-bundle\\\", \\\"action\\\": \\\"select\\\"}}\"\n        ]\n      },\n      \"/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a/.evolver/gep/events.jsonl\": {\n        \"action\": \"reset\",\n        \"content\": \"\"\n      },\n      \"/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a/.evolver/gep/failed_capsules.json\": {\n        \"action\": \"reset\",\n        \"content\": \"[]\\n\"\n      },\n      \"/tmp/atl-evomap-nightly-canary-sample-safe-bundle-phase9a/.evolver/gep/candidates.jsonl\": {\n        \"action\": \"reset\",\n        \"content\": \"\"\n      }\n    },\n    \"summary\": {\n      \"existing_gene_count\": 0,\n      \"existing_capsule_count\": 0,\n      \"new_gene_count\": 1,\n      \"new_capsule_count\": 1,\n      \"memory_graph_signals_added\": 5,\n      \"memory_graph_generic_signals\": 5,\n      \"memory_graph_domain_signals\": 0,\n      \"memory_graph_domain_rejected\": 0\n    }\n  }\n}\n",
+        "stderr_tail": ""
+      },
+      "status": "CANARY_PASS"
+    }
+  ],
+  "canary_summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "blocking_failures": 0,
+    "non_blocking_failures": 0,
+    "status": "CANARY_PASS"
+  },
+  "validators": [
+    {
+      "id": "phase5_local_evolution_kit",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "0m  templates/GENE_TEMPLATE.json exists\n\u001b[92mPASS\u001b[0m  templates/CAPSULE_TEMPLATE.json exists\n\u001b[92mPASS\u001b[0m  templates/MEMORY_GRAPH_SIGNAL_TEMPLATE.jsonl exists\n\u001b[94mINFO\u001b[0m  9. Checking inspect-bundle-output.json exists and ok=true...\n\u001b[92mPASS\u001b[0m  inspect-bundle-output.json ok=true\n\u001b[94mINFO\u001b[0m  10. Checking validate-bundle-output.json exists and ok=true...\n\u001b[92mPASS\u001b[0m  validate-bundle-output.json ok=true\n\u001b[92mPASS\u001b[0m  validate-bundle-output.json has 12+ checks — 12/12 pass\n\u001b[94mINFO\u001b[0m  11. Checking apply-bundle-dry-run-output.json exists...\n\u001b[92mPASS\u001b[0m  apply-dry-run mode='dry-run'\n\u001b[94mINFO\u001b[0m  12. Checking apply-bundle-yes-output.json exists...\n\u001b[92mPASS\u001b[0m  apply-yes mode='applied'\n\u001b[92mPASS\u001b[0m  apply-yes ok=true\n\u001b[94mINFO\u001b[0m  13. Checking apply-target-summary.json has valid counts...\n\u001b[92mPASS\u001b[0m  summary.gene_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.capsule_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.memory_graph_lines >= 5 — 5\n\u001b[94mINFO\u001b[0m  14. Checking data/cases.json phase contains ATL-EVOMAP-5...\n\u001b[92mPASS\u001b[0m  evomap case present in cases.json\n\u001b[92mPASS\u001b[0m  cases.json phase references ATL-EVOMAP-5 (current or phase_history) — ATL-EVOMAP-9B Curator-to-Nightly Integration\n\u001b[92mPASS\u001b[0m  cases.json status references 'local evolution kit completed' (current or via history) — curator nightly integration smoke pass\n\u001b[92mPASS\u001b[0m  cases.json phase_history has ATL-EVOMAP-5 entry\n\u001b[94mINFO\u001b[0m  15. Checking case README contains ATL-EVOMAP-5...\n\u001b[92mPASS\u001b[0m  case README contains ATL-EVOMAP-5\n\u001b[94mINFO\u001b[0m  16. Scanning for secret patterns in Phase 5 artifacts...\n\u001b[92mPASS\u001b[0m  no secret patterns in Phase 5 artifacts\n\u001b[94mINFO\u001b[0m  17. Checking no root .evolver/ or memory/ tracked by git...\n\u001b[92mPASS\u001b[0m  no root .evolver/ or memory/ tracked by git — clean\n============================================================\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 5 Local Evolution Kit)\nStatus: local evolution kit completed (PASS)\n",
+      "stderr_tail": ""
+    },
+    {
+      "id": "phase6a_hermes_systemd_bundle",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "counts...\n\u001b[92mPASS\u001b[0m  summary.gene_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.capsule_count >= 1 — 1\n\u001b[92mPASS\u001b[0m  summary.memory_graph_lines >= 5 — 5\n\u001b[92mPASS\u001b[0m  summary.gene_ids contains Hermes gene\n\u001b[92mPASS\u001b[0m  summary.capsule_ids contains Hermes capsule\n\u001b[94mINFO\u001b[0m  15. Checking case tools/ has 3 script copies...\n\u001b[92mPASS\u001b[0m  case tools/evomap_inspect_bundle.py exists\n\u001b[92mPASS\u001b[0m  case tools/evomap_validate_bundle.py exists\n\u001b[92mPASS\u001b[0m  case tools/evomap_apply_bundle.py exists\n\u001b[94mINFO\u001b[0m  16. Checking data/cases.json phase + phase_history for ATL-EVOMAP-6A...\n\u001b[92mPASS\u001b[0m  evomap case present in cases.json\n\u001b[92mPASS\u001b[0m  cases.json phase contains ATL-EVOMAP-6A (top-level or phase_history) — ATL-EVOMAP-9B Curator-to-Nightly Integration\n\u001b[92mPASS\u001b[0m  cases.json status contains 'hermes systemd bundle completed' (or phase_history has 6A) — curator nightly integration smoke pass\n\u001b[92mPASS\u001b[0m  cases.json final_status contains HERMES_SYSTEMD_BUNDLE_PASS (or phase_history has 6A) — CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS\n\u001b[92mPASS\u001b[0m  cases.json phase_history has ATL-EVOMAP-6A entry\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A result == PASS\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A has gene_id\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A has capsule_id\n\u001b[92mPASS\u001b[0m  phase_history ATL-EVOMAP-6A has evolver_smoke\n\u001b[94mINFO\u001b[0m  17. Checking case README contains ATL-EVOMAP-6A...\n\u001b[92mPASS\u001b[0m  case README contains ATL-EVOMAP-6A\n\u001b[92mPASS\u001b[0m  case README contains '6A' row in phase table\n\u001b[94mINFO\u001b[0m  18. Scanning for secret patterns in Phase 6A artifacts...\n\u001b[92mPASS\u001b[0m  no secret patterns in Phase 6A artifacts\n\u001b[94mINFO\u001b[0m  19. Checking no root .evolver/ or memory/ tracked by git...\n\u001b[92mPASS\u001b[0m  no root .evolver/ or memory/ tracked by git — clean\n============================================================\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 6A Hermes Systemd Bundle)\nStatus: hermes systemd bundle completed (PASS)\n",
+      "stderr_tail": ""
+    },
+    {
+      "id": "phase6b_telegram_router_bundle",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "\u001b[92mPASS\u001b[0m] 6. gene artifact contains expected gene id\n          got id='gene_distilled_telegram-message-router-failure'\n  [\u001b[92mPASS\u001b[0m] 7. capsule artifact contains expected capsule id\n          got id='capsule_telegram_message_router_failure_phase6b'\n  [\u001b[92mPASS\u001b[0m] 8. capsule execution_trace non-empty with >= 4 steps\n          len=4\n  [\u001b[92mPASS\u001b[0m] 9. bundle JSON valid with gene + capsule + schema_version\n          schema='atl-evomap-portable-bundle-v0.1'\n  [\u001b[92mPASS\u001b[0m] 10. inspect-bundle output ok == true\n          ok=True\n  [\u001b[92mPASS\u001b[0m] 11. validate-bundle output ok == true\n          ok=True, failures=0\n  [\u001b[92mPASS\u001b[0m] 12. apply dry-run output present and mode == dry-run\n          mode='dry-run', ok=True\n  [\u001b[92mPASS\u001b[0m] 13. apply --yes output present and mode == applied\n          mode='applied', ok=True\n  [\u001b[92mPASS\u001b[0m] 14. apply target summary: gene_count >= 1 and capsule_count >= 1\n          gene_count=1, capsule_count=1\n  [\u001b[92mPASS\u001b[0m] 15. case report exists\n          cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/ATL_EVOMAP_6B_TELEGRAM_ROUTER_BUNDLE_REPORT.md\n  [\u001b[92mPASS\u001b[0m] 15. top-level report exists\n          reports/ATL_EVOMAP_6B_TELEGRAM_ROUTER_BUNDLE_REPORT.md\n  [\u001b[92mPASS\u001b[0m] 16. case README exists\n          cases/evomap-evolver-openclaw-v0/phase6b-telegram-router-bundle/README.md\n  [\u001b[92mPASS\u001b[0m] 17. data/cases.json contains ATL-EVOMAP-6B in phase or phase_history\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20\n  [\u001b[92mPASS\u001b[0m] 18. main case README references ATL-EVOMAP-6B\n          main README len=70583\n  [\u001b[92mPASS\u001b[0m] 19. secret scan: no Telegram credential / recipient id / API key / Authorization / private key in committed files\n          scanned=16 files, hits=0\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 6B Telegram Message Router Failure Bundle)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+      "stderr_tail": ""
+    },
+    {
+      "id": "phase6c_codex_test_failure_bundle",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": " exists and contains 'capsule_codex_test_failure_loop_phase6c'\n          id=capsule_codex_test_failure_loop_phase6c, type=Capsule\n  [\u001b[92mPASS\u001b[0m] 14. capsule.execution_trace is non-empty list with >= 4 steps\n          type=list, len=4\n  [\u001b[92mPASS\u001b[0m] 15. bundle/codex-test-failure-loop.bundle.json exists and JSON is valid\n          schema_version=atl-evomap-portable-bundle-v0.1\n  [\u001b[92mPASS\u001b[0m] 16. inspect-codex-bundle-output.json exists and ok=true\n          ok=True\n  [\u001b[92mPASS\u001b[0m] 17. validate-codex-bundle-output.json exists and ok=true\n          ok=True, failures=[]\n  [\u001b[92mPASS\u001b[0m] 18. apply-codex-bundle-dry-run-output.json exists and ok=true & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 19. apply-codex-bundle-yes-output.json exists and ok=true & mode=generic_plus_domain_from_bundle & gene=1 & capsule=1 & 27 memory signals\n          ok=True, mode=generic_plus_domain_from_bundle, gene=1, cap=1, mem=27\n  [\u001b[92mPASS\u001b[0m] 20. apply-codex-target-summary.json: gene_count >= 1, capsule_count >= 1\n          gene_count=1, capsule_count=1\n  [\u001b[92mPASS\u001b[0m] 21. apply-codex-target-summary.json signals contain test_failure, repeated_test_failure, failing_assertion, fix_one_break_another, final_green_test_missing\n          all 5 required signals present in 25 distinct signals\n  [\u001b[92mPASS\u001b[0m] 22. evolver-run-codex-target-output.txt contains 'No hub match' or 'no_hub_url' (combined smoke no-Hub confirmation)\n          found in evolver run output\n  [\u001b[92mPASS\u001b[0m] 23. data/cases.json + main case README + secret scan + git status + 5 prior validators (composite)\n          data/cases.json_6c=True, main_README_6c=True, secret_scan=23 files, 0 hits, git_root_evolver_or_memory_tracked=False, 5_prior_validators=PASS\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 6C Codex Test Failure Loop Bundle)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+      "stderr_tail": ""
+    },
+    {
+      "id": "phase7a_domain_signal_injection",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "omain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 9. hermes-domain --yes: ok & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 10. hermes target summary contains systemd_failure / missing_env_var / port_not_listening\n          all 3 present in 17 signals\n  [\u001b[92mPASS\u001b[0m] 11. telegram-domain dry-run: ok & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 12. telegram-domain --yes: ok & mode=generic_plus_domain_from_bundle\n          ok=True, mode=generic_plus_domain_from_bundle\n  [\u001b[92mPASS\u001b[0m] 13. telegram target summary contains telegram_failure / proxy_mismatch / delivery_terminal_missing / sendmessage_timeout\n          all 4 present in 27 signals\n  [\u001b[92mPASS\u001b[0m] 14. domain-signal-extraction-summary: hermes+telegram injected, default preserved, no hub/approve/solidify\n          default=True hermes=True telegram=True hub=disabled\n  [\u001b[92mPASS\u001b[0m] 15. data/cases.json contains ATL-EVOMAP-7A in phase or phase_history\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20\n  [\u001b[92mPASS\u001b[0m] 16. main case README references ATL-EVOMAP-7A\n          main README len=70583\n  [\u001b[92mPASS\u001b[0m] 17. secret scan: no Telegram credential / recipient id / API key / Authorization / private key in committed files\n          scanned=24 files, hits=0\n  [\u001b[92mPASS\u001b[0m] 18. git status: no root .evolver/ or memory/ tracked\n          clean\n  [\u001b[92mPASS\u001b[0m] 19. Phase 5 validator ALL CHECKS PASSED (backward-compat)\n          returncode=0, output_tail=Status: local evolution kit completed (PASS)\n  [\u001b[92mPASS\u001b[0m] 20. Phase 6A + 6B validators ALL CHECKS PASSED (backward-compat)\n          6A_rc=0, 6B_rc=0\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 7A Domain-Specific Signal Injection)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+      "stderr_tail": ""
+    },
+    {
+      "id": "phase7b_cross_bundle_regression",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "plicate_gene_ids=[]\n  [\u001b[92mPASS\u001b[0m] 13. duplicate_capsule_ids == []\n          duplicate_capsule_ids=[]\n  [\u001b[92mPASS\u001b[0m] 14. required_openclaw_signals_present == true\n          missing=[]\n  [\u001b[92mPASS\u001b[0m] 15. required_hermes_signals_present == true\n          missing=[]\n  [\u001b[92mPASS\u001b[0m] 16. required_telegram_signals_present == true\n          missing=[]\n  [\u001b[92mPASS\u001b[0m] 17. dangerous_signals == []\n          dangerous_signals=[]\n  [\u001b[92mPASS\u001b[0m] 18. pollution_signals == []\n          pollution_signals=[]\n  [\u001b[92mPASS\u001b[0m] 19. cross-bundle-regression-summary.json exists with status & scoring & probes\n          status=PASS\n  [\u001b[92mPASS\u001b[0m] 20. evolver-run-cross-bundle-output.txt exists\n          cases/evomap-evolver-openclaw-v0/phase7b-cross-bundle-regression/artifacts/evolver-run-cross-bundle-output.txt\n  [\u001b[92mPASS\u001b[0m] 21. evolver-review-cross-bundle-output.txt exists\n          cases/evomap-evolver-openclaw-v0/phase7b-cross-bundle-regression/artifacts/evolver-review-cross-bundle-output.txt\n  [\u001b[92mPASS\u001b[0m] 22. combined smoke output contains 'No hub match' or 'no_hub_url' (no Hub confirmation)\n          found in evolver-run output\n  [\u001b[92mPASS\u001b[0m] 23. data/cases.json phase contains 'ATL-EVOMAP-7B' (top or history)\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration', history_count=20\n  [\u001b[92mPASS\u001b[0m] 24. main case README references ATL-EVOMAP-7B\n          main README len=70583\n  [\u001b[92mPASS\u001b[0m] 25. secret scan: no Telegram credential / recipient id / API key / cookie / Authorization / private key in committed files\n          scanned=26 files, hits=0\n  [\u001b[92mPASS\u001b[0m] 26. git status: no root .evolver/ or memory/ tracked\n          clean\n  [\u001b[92mPASS\u001b[0m] 27. prior validators (5, 6A, 6B, 7A) ALL CHECKS PASSED (backward-compat)\n          4/4 prior validators PASS\n\n\u001b[92mPASS\u001b[0m  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 7B Cross-Bundle Regression)\nStatus: curator nightly integration smoke pass (CURATOR_NIGHTLY_INTEGRATION_SMOKE_PASS)\n",
+      "stderr_tail": ""
+    },
+    {
+      "id": "phase9a_bundle_curator_skill",
+      "returncode": 0,
+      "status": "PASS",
+      "stdout_tail": "ejected=0\n  [PASS]  0. artifact: apply-generated-bundle-yes-output.json: ok=true, writes>=6, errors=0\n          ok=True, writes_executed=6, errors=0, plan_summary.new_gene_count=1\n  [PASS]  0. artifact: apply-generated-target-summary.json: gene>=1, capsule>=1\n          gene_count=1, capsule_count=1, distinct_signal_count=7\n  [PASS]  0. artifact: curator-selftest-unsafe-secret-output.json: ok=false, rejected\n          ok=False, mode='rejected'\n  [PASS]  0. artifact: curator-selftest-unsafe-id-output.json: ok=false, rejected\n          ok=False, mode='rejected'\n\n=== data/cases.json + main README 9A markers ===\n  [PASS]  0. data/cases.json: evomap-evolver-openclaw-v0 case present\n  [PASS]  0. data/cases.json: phase or phase_history contains ATL-EVOMAP-9A\n          top_phase='ATL-EVOMAP-9B Curator-to-Nightly Integration'\n  [PASS]  0. main case README contains ATL-EVOMAP-9A\n\n=== Git hygiene: no root .evolver/ or memory/ tracked ===\n  [PASS]  0. git ls-files succeeds\n  [PASS]  0. git ls-files: no root .evolver/ or memory/ tracked\n          425 tracked files, 0 bad paths\n\n=== Prior validators regression (5/6A/6B/6C/7A/7B/8A) ===\n  [PASS]  0. prior validator scripts/validate_evomap_phase5_local_evolution_kit.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase6a_hermes_systemd_bundle.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase6b_telegram_router_bundle.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase6c_codex_test_failure_bundle.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase7a_domain_signal_injection.py PASS\n  [PASS]  0. prior validator scripts/validate_evomap_phase7b_cross_bundle_regression.py PASS\n  [PASS]  0. python3 -m json.tool data/cases.json succeeds\n\n======================================================================\nPASSED: 51\nFAILED: 0\n\nPASS  ALL CHECKS PASSED\nCase: evomap-evolver-openclaw-v0 (Phase 9A Bundle Curator Skill)\nStatus: bundle curator skill completed (BUNDLE_CURATOR_SKILL_PASS)\n",
+      "stderr_tail": ""
+    }
+  ],
+  "hard_boundaries": {
+    "no_hub_connection": true,
+    "no_a2a_hub_url": true,
+    "no_evolver_loop": true,
+    "no_evolver_run": true,
+    "no_evolver_review": true,
+    "no_evolver_review_approve": true,
+    "no_evolver_solidify": true,
+    "no_auto_publish": true,
+    "no_credit_consumption": true,
+    "no_atp_autobuy": true,
+    "no_real_credentials_read": true,
+    "no_env_file_content_scanned": true,
+    "no_curl_or_http_calls": true,
+    "no_telegram_api": true,
+    "no_online_coding_apis": true,
+    "no_real_test_runners": true,
+    "no_real_cron_install": true,
+    "no_crontab_write": true,
+    "no_systemd_timer_create": true,
+    "no_evolver_package_source_modify": true,
+    "no_runtime_evolver_or_memory_tracked": true,
+    "stdlib_only": true
+  },
+  "manifest_path": "/mnt/d/AI/ai-tool-test-lab/cases/evomap-evolver-openclaw-v0/phase8a-nightly-validation-loop/validation-loop-manifest.json",
+  "source_base_commit": "f292757"
+}

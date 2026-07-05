@@ -1,0 +1,13 @@
+{
+  "ok": false,
+  "reason": "unsafe_fixture (authorization header value)",
+  "safety": {
+    "no_real_browser_launch": true,
+    "no_port_connection": true,
+    "no_http_request": true,
+    "no_curl_wget": true,
+    "no_env_scan": true,
+    "no_secret_echo": true,
+    "fixture_only": true
+  }
+}

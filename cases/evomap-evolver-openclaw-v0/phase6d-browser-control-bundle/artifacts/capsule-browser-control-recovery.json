@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.6.0",
+  "type": "Capsule",
+  "id": "capsule_browser_control_recovery_phase6d",
+  "gene": "gene_distilled_browser-control-recovery",
+  "status": "success",
+  "confidence": 0.84,
+  "visibility": "private",
+  "source": "manual_capsule_seed_phase6d",
+  "trigger": [
+    "browser_control_failure",
+    "browser_control_port_unavailable",
+    "browser_control_auth_missing",
+    "browser_launch_timeout",
+    "screenshot_missing",
+    "terminal_page_evidence_missing"
+  ],
+  "blast_radius": {
+    "files": 0,
+    "lines": 0
+  },
+  "execution_trace": [
+    {
+      "step": 1,
+      "stage": "build",
+      "command": "python3 scripts/browser_control_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/fixtures/browser-control-recovery-sample.txt",
+      "exit_code": 0,
+      "output_json": {
+        "ok": true,
+        "component": "openclaw-browser-control",
+        "gateway_status_alive": true,
+        "gateway_port_present": true,
+        "browser_control_expected_port_present": true,
+        "browser_control_enabled": true,
+        "browser_instance_initial_idle": true,
+        "browser_instance_expected_on_demand": true,
+        "attempt_count": 3,
+        "browser_control_failure": true,
+        "browser_control_port_unavailable": true,
+        "browser_control_auth_missing": true,
+        "browser_launch_timeout": true,
+        "browser_instance_not_running": true,
+        "navigation_timeout": true,
+        "screenshot_missing": true,
+        "page_snapshot_missing": true,
+        "fallback_bypass_attempted": true,
+        "fallback_allowed": false,
+        "terminal_page_evidence_missing": true,
+        "final_success_missing": true
+      }
+    },
+    {
+      "step": 2,
+      "stage": "validate",
+      "command": "python3 -m json.tool artifacts/browser-control-fixture-output.json",
+      "exit_code": 0,
+      "result": "json_parse_pass"
+    },
+    {
+      "step": 3,
+      "stage": "validate",
+      "command": "assert browser_control_failure == true and browser_launch_timeout == true and terminal_page_evidence_missing == true",
+      "exit_code": 0,
+      "result": "fixture_detected_expected_browser_control_failure_shape"
+    },
+    {
+      "step": 4,
+      "stage": "canary",
+      "command": "safety_check",
+      "exit_code": 0,
+      "result": {
+        "no_real_browser_launch": true,
+        "no_port_connection": true,
+        "no_http_request": true,
+        "no_curl_wget": true,
+        "no_env_scan": true,
+        "no_secret_echo": true,
+        "no_hub": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ]
+}

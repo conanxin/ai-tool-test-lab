@@ -1,0 +1,46 @@
+{
+  "ok": true,
+  "component": "openclaw-browser-control",
+  "gateway_status_alive": true,
+  "gateway_port_present": true,
+  "browser_control_expected_port_present": true,
+  "browser_control_enabled": true,
+  "browser_instance_initial_idle": true,
+  "browser_instance_expected_on_demand": true,
+  "attempt_count": 3,
+  "browser_control_failure": true,
+  "browser_control_port_unavailable": true,
+  "browser_control_auth_missing": true,
+  "browser_launch_timeout": true,
+  "browser_instance_not_running": true,
+  "navigation_timeout": true,
+  "screenshot_missing": true,
+  "page_snapshot_missing": true,
+  "fallback_bypass_attempted": true,
+  "fallback_allowed": false,
+  "terminal_page_evidence_missing": true,
+  "final_success_missing": true,
+  "failure_signatures": [
+    "browser_control_port_unavailable_18791",
+    "browser_control_auth_missing",
+    "browser_launch_timeout"
+  ],
+  "recommended_check_order": [
+    "verify browser-control feature is enabled before retrying",
+    "verify browser-control endpoint is listening without printing credentials",
+    "verify client-side auth token wiring without reading .env",
+    "distinguish normal idle browser state from failed on-demand launch",
+    "avoid curl/raw HTTP fallback for browser-control tasks",
+    "capture screenshot or page snapshot before declaring success",
+    "record terminal page evidence before marking done"
+  ],
+  "safety": {
+    "no_real_browser_launch": true,
+    "no_port_connection": true,
+    "no_http_request": true,
+    "no_curl_wget": true,
+    "no_env_scan": true,
+    "no_secret_echo": true,
+    "fixture_only": true
+  }
+}

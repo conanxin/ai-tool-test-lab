@@ -1,0 +1,41 @@
+{
+  "gene_count": 1,
+  "capsule_count": 1,
+  "memory_graph_lines": 29,
+  "distinct_signal_count": 27,
+  "gene_ids": [
+    "gene_distilled_browser-control-recovery"
+  ],
+  "capsule_ids": [
+    "capsule_browser_control_recovery_phase6d"
+  ],
+  "signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context",
+    "browser_control_failure",
+    "browser_control_port_unavailable",
+    "browser_launch_timeout",
+    "browser_instance_not_running",
+    "navigation_timeout",
+    "screenshot_missing",
+    "page_snapshot_missing",
+    "fallback_bypass_attempted",
+    "terminal_page_evidence_missing",
+    "final_success_missing",
+    "browser_control_failure:openclaw",
+    "browser_control_port_unavailable:18791",
+    "browser_launch_timeout:on-demand",
+    "browser_instance_not_running:idle-vs-failed-launch",
+    "navigation_timeout:no-page-load",
+    "screenshot_missing:no-artifact",
+    "page_snapshot_missing:no-artifact",
+    "fallback_bypass_attempted:curl-or-raw-http",
+    "terminal_page_evidence_missing:no-screenshot",
+    "final_success_missing:no-browser-evidence",
+    "session_context:browser-control",
+    "repo_context:ai-tool-test-lab"
+  ]
+}

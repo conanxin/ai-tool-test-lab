@@ -1,0 +1,81 @@
+COMPONENT: openclaw-browser-control
+SCOPE: local browser-control validation / recovery loop
+EXPECTED: browser-control request reaches terminal page evidence
+ACTUAL: browser-control request fails before screenshot/page evidence
+
+local context
+gateway_status: alive
+gateway_port: 127.0.0.1:18789
+browser_control_expected_port: 127.0.0.1:18791
+browser_control_enabled: true
+browser_instance_initial_state: idle
+browser_instance_expected_behavior: on-demand launch
+
+attempt #1
+action: browser_navigate
+target: intentionally omitted
+result: failed
+failure_type: browser_control_port_unavailable
+detail: connection refused to browser-control endpoint
+artifact: screenshot missing
+terminal_page_evidence: missing
+failure_signature: browser_control_port_unavailable_18791
+
+attempt #2
+action: browser_navigate
+target: intentionally omitted
+result: failed
+failure_type: browser_control_auth_missing
+detail: browser-control requires auth token but client request had no usable token
+artifact: page snapshot missing
+terminal_page_evidence: missing
+failure_signature: browser_control_auth_missing
+
+attempt #3
+action: browser_launch
+result: failed
+failure_type: browser_launch_timeout
+detail: on-demand browser instance failed to become ready
+browser_instance_final_state: not_running
+artifact: screenshot missing
+terminal_page_evidence: missing
+failure_signature: browser_launch_timeout
+
+bad fallback detected
+fallback_attempted: true
+fallback_type: raw_http_or_curl_style_bypass
+fallback_allowed: false
+reason: browser-control tasks must preserve browser evidence instead of bypassing tool path
+
+diagnosis
+repeated_attempt_count: 3
+browser_control_failure: true
+browser_control_port_unavailable: true
+browser_control_auth_missing: true
+browser_launch_timeout: true
+browser_instance_not_running: true
+navigation_timeout: true
+screenshot_missing: true
+fallback_bypass_attempted: true
+terminal_page_evidence_missing: true
+final_success_missing: true
+
+safe redaction notes
+target URL: intentionally omitted
+auth token value: intentionally omitted
+browser profile path: intentionally omitted
+no real browser was launched
+no real network request was made
+no real port was contacted
+no private page content is present
+
+Hard rules for any recovery script
+
+* Do not launch a real browser
+* Do not connect to browser-control port
+* Do not perform HTTP requests
+* Do not run curl or wget
+* Do not read .env
+* Do not print auth tokens
+* Do not infer private page content
+* Only parse this text fixture

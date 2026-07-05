@@ -1,0 +1,35 @@
+{
+  "overall_status": "PASS",
+  "schema_version": "atl-evomap-nightly-validation-v0.1",
+  "extended_by_phase": "ATL-EVOMAP-6D",
+  "blocking_total": 9,
+  "blocking_passed": 9,
+  "blocking_failed": 0,
+  "validator_count": 7,
+  "validators_passed": 7,
+  "bundle_inspect_count": 5,
+  "bundle_validate_count": 5,
+  "bundle_inspect_ids": [
+    "openclaw-tool-use-discipline.bundle",
+    "hermes-systemd-service-recovery.bundle",
+    "telegram-message-router-failure.bundle",
+    "codex-test-failure-loop.bundle",
+    "browser-control-recovery.bundle"
+  ],
+  "canary_total": 1,
+  "canary_passed": 1,
+  "canary_failed": 0,
+  "canary_status": "CANARY_PASS",
+  "canary_blocking_failures": 0,
+  "secret_scan_status": "PASS",
+  "secret_hits": 0,
+  "git_hygiene_status": "PASS",
+  "hard_boundaries_ok": true,
+  "hard_boundaries_count": 22,
+  "summary": {
+    "blocking_total": 9,
+    "passed": 9,
+    "failed": 0,
+    "non_blocking": 1
+  }
+}

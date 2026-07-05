@@ -1,0 +1,316 @@
+{
+  "schema_version": "atl-evomap-portable-bundle-v0.1",
+  "source_phase": "ATL-EVOMAP-6D",
+  "source_session": "/tmp/atl-evomap-phase6d-browser-control-target",
+  "target_gene_id": "gene_distilled_browser-control-recovery",
+  "target_capsule_id": "capsule_browser_control_recovery_phase6d",
+  "gene": {
+    "type": "Gene",
+    "id": "gene_distilled_browser-control-recovery",
+    "category": "repair",
+    "signals_match": [
+      "browser_control_failure",
+      "browser_control_port_unavailable",
+      "browser_control_auth_missing",
+      "browser_launch_timeout",
+      "browser_instance_not_running",
+      "navigation_timeout",
+      "screenshot_missing",
+      "page_snapshot_missing",
+      "fallback_bypass_attempted",
+      "terminal_page_evidence_missing",
+      "final_success_missing",
+      "session_context",
+      "repo_context",
+      "browser_control_failure:openclaw",
+      "browser_control_port_unavailable:18791",
+      "browser_control_auth_missing:token-required",
+      "browser_launch_timeout:on-demand",
+      "browser_instance_not_running:idle-vs-failed-launch",
+      "navigation_timeout:no-page-load",
+      "screenshot_missing:no-artifact",
+      "page_snapshot_missing:no-artifact",
+      "fallback_bypass_attempted:curl-or-raw-http",
+      "terminal_page_evidence_missing:no-screenshot",
+      "final_success_missing:no-browser-evidence",
+      "session_context:browser-control",
+      "repo_context:ai-tool-test-lab"
+    ],
+    "strategy": [
+      "Separate gateway health from browser-control readiness before retrying.",
+      "Verify browser-control endpoint availability without printing credentials.",
+      "Verify auth token wiring without reading .env or echoing token values.",
+      "Distinguish normal idle browser state from failed on-demand launch.",
+      "Do not bypass browser-control tasks with curl or raw HTTP fallbacks.",
+      "Require screenshot or page snapshot evidence before declaring success.",
+      "Record final terminal browser evidence in the run artifact before marking done."
+    ],
+    "constraints": {
+      "max_files": 8,
+      "forbidden_paths": [
+        ".git",
+        "node_modules",
+        ".evolver",
+        "memory",
+        ".env",
+        "real_runtime_root"
+      ],
+      "forbidden_actions": [
+        "launch_real_browser_from_fixture_parser",
+        "connect_browser_control_port_from_fixture_parser",
+        "call_http_from_fixture_parser",
+        "print_auth_token",
+        "read_env_file",
+        "curl_or_raw_http_bypass",
+        "claim_success_without_page_evidence"
+      ]
+    },
+    "summary": "Browser-control recovery discipline for OpenClaw-style browser automation failures: port/auth/launch/navigation/screenshot evidence, with anti-bypass and no-secret constraints."
+  },
+  "capsule": {
+    "schema_version": "1.6.0",
+    "type": "Capsule",
+    "id": "capsule_browser_control_recovery_phase6d",
+    "gene": "gene_distilled_browser-control-recovery",
+    "status": "success",
+    "confidence": 0.84,
+    "visibility": "private",
+    "source": "manual_capsule_seed_phase6d",
+    "trigger": [
+      "browser_control_failure",
+      "browser_control_port_unavailable",
+      "browser_control_auth_missing",
+      "browser_launch_timeout",
+      "screenshot_missing",
+      "terminal_page_evidence_missing"
+    ],
+    "blast_radius": {
+      "files": 0,
+      "lines": 0
+    },
+    "execution_trace": [
+      {
+        "step": 1,
+        "stage": "build",
+        "command": "python3 scripts/browser_control_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/fixtures/browser-control-recovery-sample.txt",
+        "exit_code": 0,
+        "output_json": {
+          "ok": true,
+          "component": "openclaw-browser-control",
+          "gateway_status_alive": true,
+          "gateway_port_present": true,
+          "browser_control_expected_port_present": true,
+          "browser_control_enabled": true,
+          "browser_instance_initial_idle": true,
+          "browser_instance_expected_on_demand": true,
+          "attempt_count": 3,
+          "browser_control_failure": true,
+          "browser_control_port_unavailable": true,
+          "browser_control_auth_missing": true,
+          "browser_launch_timeout": true,
+          "browser_instance_not_running": true,
+          "navigation_timeout": true,
+          "screenshot_missing": true,
+          "page_snapshot_missing": true,
+          "fallback_bypass_attempted": true,
+          "fallback_allowed": false,
+          "terminal_page_evidence_missing": true,
+          "final_success_missing": true
+        }
+      },
+      {
+        "step": 2,
+        "stage": "validate",
+        "command": "python3 -m json.tool artifacts/browser-control-fixture-output.json",
+        "exit_code": 0,
+        "result": "json_parse_pass"
+      },
+      {
+        "step": 3,
+        "stage": "validate",
+        "command": "assert browser_control_failure == true and browser_launch_timeout == true and terminal_page_evidence_missing == true",
+        "exit_code": 0,
+        "result": "fixture_detected_expected_browser_control_failure_shape"
+      },
+      {
+        "step": 4,
+        "stage": "canary",
+        "command": "safety_check",
+        "exit_code": 0,
+        "result": {
+          "no_real_browser_launch": true,
+          "no_port_connection": true,
+          "no_http_request": true,
+          "no_curl_wget": true,
+          "no_env_scan": true,
+          "no_secret_echo": true,
+          "no_hub": true,
+          "no_publish": true,
+          "no_approve": true,
+          "no_solidify": true
+        }
+      }
+    ]
+  },
+  "execution_trace": [
+    {
+      "step": 1,
+      "stage": "build",
+      "command": "python3 scripts/browser_control_recovery_fixture.py --input cases/evomap-evolver-openclaw-v0/phase6d-browser-control-bundle/fixtures/browser-control-recovery-sample.txt",
+      "exit_code": 0,
+      "output_json": {
+        "ok": true,
+        "component": "openclaw-browser-control",
+        "gateway_status_alive": true,
+        "gateway_port_present": true,
+        "browser_control_expected_port_present": true,
+        "browser_control_enabled": true,
+        "browser_instance_initial_idle": true,
+        "browser_instance_expected_on_demand": true,
+        "attempt_count": 3,
+        "browser_control_failure": true,
+        "browser_control_port_unavailable": true,
+        "browser_control_auth_missing": true,
+        "browser_launch_timeout": true,
+        "browser_instance_not_running": true,
+        "navigation_timeout": true,
+        "screenshot_missing": true,
+        "page_snapshot_missing": true,
+        "fallback_bypass_attempted": true,
+        "fallback_allowed": false,
+        "terminal_page_evidence_missing": true,
+        "final_success_missing": true
+      }
+    },
+    {
+      "step": 2,
+      "stage": "validate",
+      "command": "python3 -m json.tool artifacts/browser-control-fixture-output.json",
+      "exit_code": 0,
+      "result": "json_parse_pass"
+    },
+    {
+      "step": 3,
+      "stage": "validate",
+      "command": "assert browser_control_failure == true and browser_launch_timeout == true and terminal_page_evidence_missing == true",
+      "exit_code": 0,
+      "result": "fixture_detected_expected_browser_control_failure_shape"
+    },
+    {
+      "step": 4,
+      "stage": "canary",
+      "command": "safety_check",
+      "exit_code": 0,
+      "result": {
+        "no_real_browser_launch": true,
+        "no_port_connection": true,
+        "no_http_request": true,
+        "no_curl_wget": true,
+        "no_env_scan": true,
+        "no_secret_echo": true,
+        "no_hub": true,
+        "no_publish": true,
+        "no_approve": true,
+        "no_solidify": true
+      }
+    }
+  ],
+  "fixture_summary": {
+    "ok": true,
+    "component": "openclaw-browser-control",
+    "gateway_status_alive": true,
+    "gateway_port_present": true,
+    "browser_control_expected_port_present": true,
+    "browser_control_enabled": true,
+    "browser_instance_initial_idle": true,
+    "browser_instance_expected_on_demand": true,
+    "attempt_count": 3,
+    "browser_control_failure": true,
+    "browser_control_port_unavailable": true,
+    "browser_control_auth_missing": true,
+    "browser_launch_timeout": true,
+    "browser_instance_not_running": true,
+    "navigation_timeout": true,
+    "screenshot_missing": true,
+    "page_snapshot_missing": true,
+    "fallback_bypass_attempted": true,
+    "fallback_allowed": false,
+    "terminal_page_evidence_missing": true,
+    "final_success_missing": true,
+    "failure_signatures": [
+      "browser_control_port_unavailable_18791",
+      "browser_control_auth_missing",
+      "browser_launch_timeout"
+    ],
+    "recommended_check_order": [
+      "verify browser-control feature is enabled before retrying",
+      "verify browser-control endpoint is listening without printing credentials",
+      "verify client-side auth token wiring without reading .env",
+      "distinguish normal idle browser state from failed on-demand launch",
+      "avoid curl/raw HTTP fallback for browser-control tasks",
+      "capture screenshot or page snapshot before declaring success",
+      "record terminal page evidence before marking done"
+    ],
+    "safety": {
+      "no_real_browser_launch": true,
+      "no_port_connection": true,
+      "no_http_request": true,
+      "no_curl_wget": true,
+      "no_env_scan": true,
+      "no_secret_echo": true,
+      "fixture_only": true
+    }
+  },
+  "safety": {
+    "hub": "disabled",
+    "publish": "disabled",
+    "credits": 0,
+    "visibility": "private",
+    "no_failed_events": true,
+    "no_pollution_signals": true,
+    "no_real_browser_launch": true,
+    "no_port_connection": true,
+    "no_http_request": true,
+    "no_curl_wget": true,
+    "no_env_scan": true,
+    "no_secrets": true
+  },
+  "import_contract": {
+    "required_files": [
+      ".evolver/gep/genes.json",
+      ".evolver/gep/capsules.json",
+      "memory/evolution/memory_graph.jsonl"
+    ],
+    "optional_files": [
+      ".evolver/gep/events.jsonl",
+      ".evolver/gep/failed_capsules.json",
+      ".evolver/gep/candidates.jsonl"
+    ],
+    "required_in_genes": [
+      "genes[].id"
+    ],
+    "required_in_capsules": [
+      "capsules[].id",
+      "capsules[].gene",
+      "capsules[].execution_trace"
+    ],
+    "minimum_execution_trace_steps": 1,
+    "minimum_execution_trace_stages": [
+      "build",
+      "validate",
+      "canary"
+    ]
+  },
+  "kit_provenance": {
+    "phase_5_commit": "c1a6b9a",
+    "phase_6a_commit": "00caf1d",
+    "phase_6b_commit": "f72b0c1",
+    "phase_6c_commit": "f292757",
+    "phase_7a_commit": "3112f07",
+    "phase_7b_commit": "be84810",
+    "phase_8a_commit": "a56e756",
+    "phase_9a_commit": "7811e1b",
+    "phase_9b_commit": "b34c4a38bac09dabc1cbcd7315bb8d5f2d04c8b6",
+    "phase_6d_phase": "ATL-EVOMAP-6D"
+  }
+}

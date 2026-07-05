@@ -1,0 +1,87 @@
+{
+  "ok": true,
+  "mode": "applied",
+  "plan_summary": {
+    "existing_gene_count": 0,
+    "existing_capsule_count": 0,
+    "new_gene_count": 1,
+    "new_capsule_count": 1,
+    "memory_graph_signals_added": 29,
+    "memory_graph_generic_signals": 5,
+    "memory_graph_domain_signals": 24,
+    "memory_graph_domain_rejected": 2
+  },
+  "signal_injection_mode": "generic_plus_domain_from_bundle",
+  "generic_signals": [
+    "tool_bypass",
+    "repeated_tool_usage",
+    "protocol_drift",
+    "session_context",
+    "repo_context"
+  ],
+  "domain_signals": [
+    "browser_control_failure",
+    "browser_control_port_unavailable",
+    "browser_launch_timeout",
+    "browser_instance_not_running",
+    "navigation_timeout",
+    "screenshot_missing",
+    "page_snapshot_missing",
+    "fallback_bypass_attempted",
+    "terminal_page_evidence_missing",
+    "final_success_missing",
+    "session_context",
+    "repo_context",
+    "browser_control_failure:openclaw",
+    "browser_control_port_unavailable:18791",
+    "browser_launch_timeout:on-demand",
+    "browser_instance_not_running:idle-vs-failed-launch",
+    "navigation_timeout:no-page-load",
+    "screenshot_missing:no-artifact",
+    "page_snapshot_missing:no-artifact",
+    "fallback_bypass_attempted:curl-or-raw-http",
+    "terminal_page_evidence_missing:no-screenshot",
+    "final_success_missing:no-browser-evidence",
+    "session_context:browser-control",
+    "repo_context:ai-tool-test-lab"
+  ],
+  "domain_signals_rejected": [
+    {
+      "signal": "browser_control_auth_missing",
+      "reason": "contains_dangerous_substring:auth"
+    },
+    {
+      "signal": "browser_control_auth_missing:token-required",
+      "reason": "contains_dangerous_substring:token"
+    }
+  ],
+  "log": {
+    "writes_executed": [
+      {
+        "path": "/tmp/atl-evomap-phase6d-browser-control-target/.evolver/gep/genes.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6d-browser-control-target/.evolver/gep/capsules.json",
+        "action": "overwrite"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6d-browser-control-target/memory/evolution/memory_graph.jsonl",
+        "action": "append"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6d-browser-control-target/.evolver/gep/events.jsonl",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6d-browser-control-target/.evolver/gep/failed_capsules.json",
+        "action": "reset"
+      },
+      {
+        "path": "/tmp/atl-evomap-phase6d-browser-control-target/.evolver/gep/candidates.jsonl",
+        "action": "reset"
+      }
+    ],
+    "errors": []
+  }
+}
