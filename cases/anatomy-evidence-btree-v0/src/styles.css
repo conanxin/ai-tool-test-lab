@@ -1,0 +1,52 @@
+:root { color-scheme: light; font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans CJK SC", sans-serif; background: #f3f0e9; color: #26363b; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+button { cursor: pointer; border: 1px solid #88918c; border-radius: 6px; background: #294f52; color: #fff; font-weight: 650; padding: .68rem 1.1rem; }
+button:hover:not(:disabled) { filter: brightness(1.08); }
+button:focus-visible, input:focus-visible, .diagram:focus-visible { outline: 3px solid #4088a1; outline-offset: 3px; }
+button:disabled { opacity: .38; cursor: not-allowed; }
+a { color: #245e71; }
+.page { max-width: 1160px; margin: auto; padding: 32px 22px 38px; }
+.masthead { max-width: 820px; padding: 25px 0 30px; }
+.eyebrow, .small-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .15em; font-weight: 800; color: #687b7b; }
+h1 { font-family: Georgia, "Noto Serif CJK SC", serif; font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 600; letter-spacing: -.04em; margin: 12px 0; }
+h2 { margin: 5px 0 8px; font-family: Georgia, "Noto Serif CJK SC", serif; font-size: 1.65rem; font-weight: 600; }
+h3 { margin: 28px 0 8px; font-size: 1.02rem; }
+.lede { font-size: 1.05rem; line-height: 1.8; color: #526364; }
+.workspace { border: 1px solid #c8c5b9; background: #fffcf4; border-radius: 16px; box-shadow: 0 18px 42px #50605817; overflow: hidden; }
+.instrument-bar { background: linear-gradient(#e6e8df,#d9ddd3); border-bottom: 1px solid #bec7be; display:flex; gap:20px; align-items:center; justify-content:space-between; padding:20px 26px; }
+.instrument-dials { display:flex; gap: 10px; flex-wrap:wrap; }
+.instrument-dials div { background:#f5f6ee; border:1px solid #a2aaa0; border-radius:8px; min-width:84px; padding:8px 11px; text-align:center; display:grid; gap:4px; box-shadow: inset 0 0 0 2px #fff8; }
+.instrument-dials span { color:#687574; font-size:.68rem; }
+.instrument-dials strong { color:#2b5052; font-size:1rem; font-variant-numeric:tabular-nums; }
+.controls { display:flex; gap:18px; justify-content:space-between; align-items:end; padding:20px 26px 10px; flex-wrap:wrap; }
+.search-form { display:grid; gap:6px; }
+.search-form label { font-size:.8rem; font-weight:650; color:#4c5e5b; }
+.search-row, .step-buttons { display:flex; gap:8px; flex-wrap:wrap; }
+.search-row input { width:118px; min-height:44px; padding:8px 12px; background:#fff; border:1px solid #acb1a9; border-radius:6px; }
+.secondary { background:#ecf0ec; color:#28454a; }
+.subtle { background:transparent; color:#28454a; }
+.quick-actions { margin:0; padding:5px 26px 18px; font-size:.85rem; color:#687976; line-height:2.1; }
+.chip { background:#f2f0e5; color:#415b57; padding: 3px 8px; border-radius:20px; font-size:.78rem; border-color:#c8d0c5; }
+kbd { background:#f1f0e5; border:1px solid #c2c5ba; border-radius:3px; padding:0 5px; }
+.diagram { padding:0 10px; border-top:1px solid #e0ddd4; border-bottom:1px solid #e0ddd4; background:radial-gradient(circle at 50% 0%,#faf9f4,#e8eae4); overflow-x:auto; overflow-y:hidden; }
+.diagram svg { display:block; width: max(100%, 790px); height:auto; min-height:360px; }
+.readout { display:flex; gap:20px; align-items:center; padding:16px 26px; min-height:92px; }
+.readout-index { flex:none; font-size:.77rem; font-weight:800; background:#d9e9e7; color:#1a555b; padding:8px 10px; border-radius:6px; font-variant-numeric:tabular-nums; }
+.readout p { margin:0; line-height:1.65; font-size:.92rem; }
+.legend { border-top:1px solid #e3e0d6; padding:12px 26px; display:flex; flex-wrap:wrap; gap:18px; color:#667573; font-size:.78rem; }
+.legend span { display:inline-flex; align-items:center; gap:7px; }
+.legend-dot { display:inline-block; width:12px; height:12px; border-radius:3px; background:#c3cec6; border:1px solid #88938b; }
+.legend-dot.active { background:#51a7a9; border-color:#187276; }
+.legend-dot.route { background:#df9860; border-color:#a45f27; }
+.legend-dot.found { background:#7bba87; border-color:#44794e; }
+.notes { max-width:850px; padding:30px 4px; line-height:1.78; color:#44595a; }
+.notes p, .notes li { font-size:.95rem; }
+.source-list { padding-left:22px; }
+.source-list li { padding: 5px 0; }
+.source-list code { background:#e3e9e5; padding:3px 6px; border-radius:3px; color:#385953; font-size:.73rem; }
+.footnote { background:#e9ebe3; border-left:3px solid #8a9c8a; padding:12px 15px; }
+footer { border-top:1px solid #d4d8ce; padding:24px 0 5px; font-size:.75rem; color:#667876; }
+@media(max-width:680px) { .page { padding:12px 12px 30px; } .masthead {padding:20px 5px;} .instrument-bar { padding:17px 16px; align-items:start; flex-direction:column; } .instrument-dials {width:100%;} .instrument-dials div {flex:1;} .controls {padding:16px 16px 6px; align-items:stretch;} .search-form, .step-buttons {width:100%;} .search-row input {flex:1; min-width:72px; width:90px;} .search-row button {padding:.65rem .8rem;} .step-buttons button {flex:1;} .quick-actions { padding:4px 16px 14px; } .readout {padding:15px 16px; align-items:start; flex-direction:column; gap:8px;} .legend {padding:12px 16px; } }
+@media(prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; } }
