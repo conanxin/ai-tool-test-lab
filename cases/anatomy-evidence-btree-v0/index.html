@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="B-tree Evidence Lab: a transparent B-tree state model and mechanical-card-catalog visualization." />
+  <title>B-tree 索引档案柜 · Evidence-first Anatomy Lab</title>
+  <link rel="stylesheet" href="./src/styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <span class="eyebrow">CONAN XIN AI LAB · EXPERIMENT 01</span>
+      <h1>B-tree 索引档案柜</h1>
+      <p class="lede">不是预先录好的动画：每一步都来自一个真实运行的 B-tree 搜索模型。点击检索，再逐步观察索引如何沿多路节点缩小候选范围。</p>
+    </header>
+    <section class="workspace" aria-labelledby="work-title">
+      <div class="instrument-bar">
+        <div>
+          <p class="small-label">INSTRUMENT · SEARCH MODEL</p>
+          <h2 id="work-title">多路索引检索台</h2>
+        </div>
+        <div class="instrument-dials">
+          <div><span>最小度数</span><strong>t = 2</strong></div>
+          <div><span>节点数</span><strong id="node-count">—</strong></div>
+          <div><span>键数量</span><strong id="key-count">—</strong></div>
+        </div>
+      </div>
+      <div class="controls">
+        <form id="query-form" class="search-form">
+          <label for="query-key">目标键值（安全整数）</label>
+          <div class="search-row">
+            <input id="query-key" inputmode="numeric" type="number" step="1" min="-999" max="999" value="55" required />
+            <button id="search-btn" type="submit">检索</button>
+            <button id="insert-btn" type="button" class="secondary">插入</button>
+          </div>
+        </form>
+        <div class="step-buttons" aria-label="检索步骤控制">
+          <button id="prev-btn" type="button" class="secondary" disabled>← 上一步</button>
+          <button id="next-btn" type="button" class="secondary" disabled>下一步 →</button>
+          <button id="reset-btn" type="button" class="subtle">还原样例</button>
+        </div>
+      </div>
+      <p class="quick-actions">试试：<button type="button" class="chip" data-example="45">45 · 命中</button> <button type="button" class="chip" data-example="57">57 · 未命中</button>；检索后可用 <kbd>←</kbd> <kbd>→</kbd> 切换步骤。</p>
+      <div class="diagram" tabindex="0" aria-label="B-tree 多路检索机械示意，可使用左右方向键切换检索步骤">
+        <svg id="btree-svg" viewBox="0 0 760 420" role="img" aria-label="B-tree 节点、子节点连线和当前搜索位置"></svg>
+      </div>
+      <div class="readout" role="status" aria-live="polite" aria-atomic="true">
+        <span class="readout-index" id="trace-count">准备就绪</span>
+        <p id="trace-text">选择一个键值并检索。青色标出当前正在检查的节点，橙色表示下一条分支。</p>
+      </div>
+      <div class="legend" aria-label="图例">
+        <span><i class="legend-dot active"></i>当前检查节点</span>
+        <span><i class="legend-dot route"></i>沿该分支继续</span>
+        <span><i class="legend-dot found"></i>命中</span>
+      </div>
+    </section>
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">模型与证据</h2>
+      <p>每个节点保留有序键，查找依据键所在区间选择对应子节点。内部状态、命中结果与可视化共享同一实现；不是“先画路线再填数字”。</p>
+      <h3>演示假设</h3>
+      <p>最小度数 <code>t=2</code>、互不重复的安全整数键、单线程内存模型。未模拟数据库磁盘页、并发、删除、B+ 树叶链或性能时间。档案柜材质与运动轨迹均为教学隐喻，不属于真实索引硬件的结构复原。</p>
+      <h3>证据与状态</h3>
+      <ul class="source-list" id="source-list">
+        <li><code>SOURCE_BACKED · BT-01</code> NIST 对 B-tree 的平衡多路搜索定义：<a href="https://xlinux.nist.gov/dads/HTML/btree.html" target="_blank" rel="noopener noreferrer">NIST DADS</a></li>
+        <li><code>SOURCE_BACKED · BT-02</code> 搜索沿节点键和子节点选择路径：<a href="https://opendsa-server.cs.vt.edu/ODSA/Books/pubbook/odsa-all/fall-2019/Public_Instance/html/BTree.html" target="_blank" rel="noopener noreferrer">OpenDSA B-Trees</a></li>
+        <li><code>MODEL_ASSUMPTION · BT-03</code> 本演示的 t=2 和范围简化由实现指定，不代表实际服务使用此配置。</li>
+        <li><code>INTERPRETATION · BT-04</code> 所有外观是用于解释的机械隐喻。</li>
+      </ul>
+      <p class="footnote">这是面向 Anatomy Skill 的 <strong>语义基线 P0</strong>，目前使用自行实现的 SVG 档案柜而非上游 Anatomy 绘图库。官方 Anatomy 集成、浏览器截图与几何审查是下一阶段工作，不能视为已完成。</p>
+    </section>
+    <footer>Conan Xin AI Lab · <a href="https://github.com/conanxin/ai-tool-test-lab">Source & tests</a> · <a href="https://github.com/wheresryan22/anatomy">Original Anatomy Skill</a></footer>
+  </main>
+  <script type="module" src="./src/app.mjs"></script>
+</body>
+</html>

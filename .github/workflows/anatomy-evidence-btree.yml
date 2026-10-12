@@ -1,0 +1,21 @@
+name: anatomy-evidence-btree
+on:
+  push:
+    paths:
+      - 'cases/anatomy-evidence-btree-v0/**'
+      - '.github/workflows/anatomy-evidence-btree.yml'
+  pull_request:
+    paths:
+      - 'cases/anatomy-evidence-btree-v0/**'
+      - '.github/workflows/anatomy-evidence-btree.yml'
+jobs:
+  semantic-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reference model, provenance and static UI audit
+        working-directory: cases/anatomy-evidence-btree-v0
+        run: npm run check

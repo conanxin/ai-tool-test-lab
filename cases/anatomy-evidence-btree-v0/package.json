@@ -1,0 +1,13 @@
+{
+  "name": "anatomy-evidence-btree-v0",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Evidence-first B-tree explorable explanation: semantic baseline for an Anatomy Agent Skill experiment",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "audit": "node scripts/audit.mjs",
+    "check": "npm run test && npm run audit"
+  },
+  "engines": { "node": ">=20.10" }
+}
